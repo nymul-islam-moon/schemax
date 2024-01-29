@@ -1,0 +1,80 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "JobPosting",
+  "title": "Software Engineer",
+  "description": "<p>Google aspires to be an organization that reflects the globally diverse audience that our products and technology serve. We believe that in addition to hiring the best talent, a diversity of perspectives, ideas, and cultures leads to the creation of better products and services.</p>",
+  "identifier": {
+    "@type": "PropertyValue",
+    "name": "Google",
+    "value": "1234567"
+  },
+  "datePosted": "2017-01-18",
+  "validThrough": "2017-03-18T00:00",
+  "applicantLocationRequirements": {
+    "@type": "Country",
+    "name": "USA"
+  },
+  "employmentType": "CONTRACTOR",
+  "hiringOrganization": {
+    "@type": "Organization",
+    "name": "Google",
+    "sameAs": "https://www.google.com",
+    "logo": "https://www.example.com/images/logo.png"
+  },
+  "jobLocation": {
+    "@type": "Place",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1600 Amphitheatre Pkwy",
+      "addressLocality": "Mountain View",
+      "addressRegion": "CA",
+      "postalCode": "94043",
+      "addressCountry": "US"
+    }
+  },
+  "baseSalary": {
+    "@type": "MonetaryAmount",
+    "currency": "USD",
+    "value": {
+      "@type": "QuantitativeValue",
+      "value": 40.00,
+      "unitText": "HOUR"
+    }
+  },
+  "responsibilities": "Design, develop, test, deploy, maintain, and improve software applications.",
+  "qualifications": "Bachelor's degree in Computer Science or related field, 3+ years of software development experience, etc.",
+  "skills": "JavaScript, Python, Java, etc.",
+  "experienceRequirements" : {
+    "@type" : "OccupationalExperienceRequirements",
+    "monthsOfExperience" : "36"
+  },
+  "educationRequirements": [
+    {
+      "@type": "EducationalOccupationalCredential",
+      "credentialCategory": "bachelor degree" },
+    {
+      "@type": "EducationalOccupationalCredential",
+      "credentialCategory": "postgraduate degree"
+    }
+  ],
+  "workHours": "40 hours per week",
+  "jobBenefits": [
+    "Health insurance",
+    "Dental insurance",
+    "401(k) matching",
+    "Flexible work schedule"
+  ],
+  "industry": "Technology",
+  "incentiveCompensation": "Annual bonus based on performance",
+  "url": "https://www.example.com/job/software-engineer",
+  "jobLocationType": "Telecommute",  // Added jobLocationType
+  "jobStartDate": "2022-03-01",  // Added jobStartDate
+  "applicationDeadline": "2022-02-15",  // Added applicationDeadline
+  "employmentUnit": {
+    "@type": "Organization",
+    "name": "Software Division",
+    "sameAs": "https://www.example.com/software-division"
+  }
+}
+</script>

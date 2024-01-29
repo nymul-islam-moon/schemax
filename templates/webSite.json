@@ -1,0 +1,100 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://jay.holtslander.ca/#website",
+  "name": "Jay Holtslander",
+  "url": "https://jay.holtslander.ca",
+  "headline": "Like a page title",
+  "description": "Personal website of Jay Holtslander. Co-founder of CodeCore Bootcamp.",
+  "image": "https://jay.holtslander.ca/facebook.jpg",
+  "inLanguage": "en-CA",
+  "author": {
+    "@type": "Person",
+    "name": "Jay Holtslander"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "ThinkwithGoogle",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.thinkwithgoogle.com/_qs/static/img/global/twg-logo-small.jpg",
+      "height": 60,
+      "width": 107
+    }
+  },
+  "mainEntity": {
+    "@type": "LocalBusiness",
+    "name": "Jay Holtslander",
+    "image": "http://placehold.it/512",
+    "priceRange": "$$",
+    "telephone": "555-321-7654",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "#600 - 55 Water Street",
+      "addressLocality": "Vancouver",
+      "addressRegion": "British Columbia",
+      "addressCountry": "Canada",
+      "postalCode": "1209"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.5",
+      "reviewCount": 50
+    }
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://jay.holtslander.ca/?s={search_term}",
+    "query-input": "required name=search_term"
+  },
+  "keywords": [
+    "Social Networking",
+    "Social Media",
+    "News",
+    "Web",
+    "Technology",
+    "Web 2.0",
+    "Tech",
+    "Information",
+    "Blog",
+    "Facebook",
+    "YouTube",
+    "Google",
+    "Top"
+  ],
+  "hasPart": [
+    {
+      "@type": "WebPageElement",
+      "@id": "#header",
+      "headline": "headline-string",
+      "potentialAction": {
+        "@type": "Action",
+        "name": "Contact",
+        "target": "http://google.ca/"
+      }
+    },
+    {
+      "@type": "WebPageElement",
+      "@id": "#sidebar",
+      "citation": [
+        "https://domain.com/link",
+        "https://domain2.com/link2",
+        "https://domain2.com/link3"
+      ],
+      "comment": [
+        "This is a user comment that may appear in the sidebar.",
+        "This is another user comment that may be there as well."
+      ]
+    },
+    {
+      "@type": "WebPageElement",
+      "@id": "#footer",
+      "copyrightHolder": "Jay Holtslander",
+      "publisher": "Jay Holtslander",
+      "copyrightYear": 2017
+    }
+  ]
+}
+}
+</script>

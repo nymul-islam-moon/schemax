@@ -1,0 +1,119 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://example.com/article"
+  },
+  "headline": "Title of a News Article",
+  "description": "A concise summary of the news article. A short teaser for the article.",
+  "image": [
+    "https://example.com/photos/1x1/photo.jpg",
+    "https://example.com/photos/4x3/photo.jpg",
+    "https://example.com/photos/16x9/photo.jpg"
+  ],
+  "datePublished": "2015-02-05T08:00:00+08:00",
+  "dateModified": "2015-02-06T10:30:00+08:00",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Jane Doe",
+      "url": "https://example.com/profile/janedoe123",
+      "sameAs": "https://www.linkedin.com/in/janedoe"
+    },
+    {
+      "@type": "Person",
+      "name": "John Doe",
+      "url": "https://example.com/profile/johndoe123",
+      "sameAs": "https://www.linkedin.com/in/johndoe"
+    }
+  ],
+  "publisher": {
+    "@type": "Organization",
+    "name": "Publisher Name",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://example.com/logo.jpg"
+    },
+    "url": "https://example.com/publisher",
+    "sameAs": [
+      "https://www.facebook.com/publisher",
+      "https://twitter.com/publisher"
+    ]
+  },
+  "articleBody": "The main content of the news article goes here.",
+  "keywords": "news, important events, updates, current affairs, breaking news, global events, political developments",
+  "articleSection": "Politics",
+  "commentCount": 10,
+  "wordCount": 800,
+  "thumbnailUrl": "https://example.com/thumbnail.jpg",
+  "isAccessibleForFree": true,
+  "copyrightHolder": {
+    "@type": "Organization",
+    "name": "Copyright Holder Name",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://example.com/copyright-logo.jpg"
+    }
+  },
+  "potentialAction": {
+    "@type": "ReadAction",
+    "target": [
+      "https://example.com/article"
+    ]
+  },
+  "isPartOf": {
+    "@type": "CreativeWork",
+    "name": "Example News Portal",
+    "url": "https://example.com/news-portal"
+  },
+  "mentions": [
+    {
+      "@type": "Organization",
+      "name": "Mentioned Organization",
+      "url": "https://mentioned-organization.com"
+    }
+  ],
+  "publisherImprint": {
+    "@type": "Organization",
+    "name": "Publisher Imprint",
+    "url": "https://example.com/imprint"
+  },
+  "alternateName": "Shorter Title",
+  "dateCreated": "2015-02-03T08:00:00+08:00",
+  "comment": "https://example.com/blog-comments",
+  "interactionStatistic": {
+    "@type": "InteractionCounter",
+    "interactionType": {
+      "@type": "LikeAction"
+    },
+    "userInteractionCount": 1200
+  },
+  "blogPost": {
+    "@type": "BlogPosting",
+    "inLanguage": "en-US",
+    "discussionUrl": "https://example.com/discussion",
+    "articleSection": "Technology",
+    "alternativeHeadline": "Alternate Headline for SEO"
+  },
+  "isBasedOn": [
+    {
+      "@type": "CreativeWork",
+      "name": "Related Article 1",
+      "url": "https://example.com/related-article-1"
+    },
+    {
+      "@type": "CreativeWork",
+      "name": "Related Article 2",
+      "url": "https://example.com/related-article-2"
+    }
+  ],
+  "genre": ["News", "Opinion", "Analysis"],
+  "educationalUse": "Informative",
+  "about": {
+    "@type": "Thing",
+    "name": "Main Topic"
+  }
+}
+</script>

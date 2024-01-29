@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$USER_HOME$/Desktop/Google Schema/.idea/Google Schema.iml" filepath="$USER_HOME$/Desktop/Google Schema/.idea/Google Schema.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Schema.iml" filepath="$PROJECT_DIR$/.idea/Schema.iml" />
+      <module fileurl="file://$USER_HOME$/Desktop/Schemas/.idea/Schemas.iml" filepath="$USER_HOME$/Desktop/Schemas/.idea/Schemas.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../SocialX/.idea/SocialX.iml" filepath="$PROJECT_DIR$/../SocialX/.idea/SocialX.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../../webapick/wp-content/plugins/disco/.idea/disco.iml" filepath="$PROJECT_DIR$/../../../../webapick/wp-content/plugins/disco/.idea/disco.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../test/.idea/test.iml" filepath="$PROJECT_DIR$/../test/.idea/test.iml" />
+    </modules>
+  </component>
+</project>
