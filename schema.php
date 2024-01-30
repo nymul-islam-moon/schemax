@@ -39,11 +39,51 @@ along with {Schema}. If not, see {URI to Plugin License}.
 
 defined('ABSPATH') or die('Hay, You can not access the area');
 
+require_once ''
+
 const SCHEMA_PLUGIN_PATH = __FILE__;
 
-function schema() {
+if ( ! class_exists( 'Schema' ) ) {  // Check if the 'Schema' class does not exist
+	class Schema {
+		function __construct() {
+			add_action('wp_head', array( 'Schema', 'run') );
+		}
 
-    
+		public static function run() {
+
+			$filePath = dirname( SCHEMA_PLUGIN_PATH ) . '/templates';
+
+		    if ( is_product() ) {
+		        $filePath = $filePath . '/product.json';
+
+		        if ( file_exists( $filePath ) ) {
+			        $fileData = file_get_contents( $filePath );
+
+			        echo "<script type='application/ld+json'>$fileData</script>";
+		        }
+		    }
+		}
+	}
+	Schema::run();
+}
+
+
+
+
+
+//function schema() {
+
+//    $filePath = dirname( SCHEMA_PLUGIN_PATH ) . '/templates';
+//
+//    if ( is_product() ) {
+//        $filePath = $filePath . '/product.json';
+//
+//        if ( file_exists( $filePath ) ) {
+//
+//        }
+//
+//    }
+
 
 //    $fileData = null;
 //
@@ -59,7 +99,7 @@ function schema() {
 //    }else {
 //        echo "<script type='application/ld+json'>not product</script>";
 //    }
-    echo "<script type='application/ld+json'>schema-plugin</script>";
-}
+//    echo "<script type='application/ld+json'>schema-plugin</script>";
+//}
 
-add_action('wp_head', 'schema');
+//add_action('wp_head', 'schema');
