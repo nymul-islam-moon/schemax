@@ -1,0 +1,17 @@
+{
+    "name": "mac/schema",
+    "type": "wordpress-plugin",
+    "autoload": {
+        "psr-4": {
+            "Mac\\Schema\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Nymul Islam Moon",
+            "email": "nymulislam.webappick@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

@@ -37,33 +37,28 @@ You should have received a copy of the GNU General Public License
 along with {Schema}. If not, see {URI to Plugin License}.
 */
 
-/**
- * Todo :
- * 1. if woo-commerce not installed plugin will not installed
- */
-
-
 defined('ABSPATH') or die('Hay, You can not access the area');
 
 const SCHEMA_PLUGIN_PATH = __FILE__;
 
-
 function schema() {
 
-    $filePath = dirname(SCHEMA_PLUGIN_PATH ) . '/templates/product.json';
+    
 
-    $fileData = null;
-
-    if ( ! file_exists( $filePath ) ) {
-        $fileData = 'file not found';
-    } else {
-        $fileData = file_get_contents( $filePath );
-    }
-    if (is_product()) {
-        echo "<script type='application/ld+json'>$fileData</script>";
-    }else {
-        echo "<script type='application/ld+json'>not product</script>";
-    }
+//    $fileData = null;
+//
+//    $filePath = dirname(SCHEMA_PLUGIN_PATH ) . '/templates/product.json';
+//
+//    if ( ! file_exists( $filePath ) ) {
+//        $fileData = 'file not found';
+//    } else {
+//        $fileData = file_get_contents( $filePath );
+//    }
+//    if (is_product()) {
+//        echo "<script type='application/ld+json'>$fileData</script>";
+//    }else {
+//        echo "<script type='application/ld+json'>not product</script>";
+//    }
     echo "<script type='application/ld+json'>schema-plugin</script>";
 }
 
