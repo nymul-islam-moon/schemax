@@ -1,9 +1,10 @@
 {
     "name": "mac/schema",
+    "description": "dev",
     "type": "wordpress-plugin",
     "autoload": {
         "psr-4": {
-            "Schema\\Src": "src/"
+            "Schema\\": "src/"
         }
     },
     "authors": [

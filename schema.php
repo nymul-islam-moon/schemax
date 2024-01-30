@@ -22,7 +22,7 @@
  * Update URI:        https://example.com/my-plugin/
  */
 
-/*
+/**
 {Schema} is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 of the License, or
@@ -39,67 +39,64 @@ along with {Schema}. If not, see {URI to Plugin License}.
 
 defined('ABSPATH') or die('Hay, You can not access the area');
 
-require_once ''
+require_once __DIR__ . '/vendor/autoload.php';
 
-const SCHEMA_PLUGIN_PATH = __FILE__;
+use Schema\Src;
 
 if ( ! class_exists( 'Schema' ) ) {  // Check if the 'Schema' class does not exist
-	class Schema {
-		function __construct() {
-			add_action('wp_head', array( 'Schema', 'run') );
+	final class Schema {
+
+		/**
+		 * Plugin version
+		 *
+		 * @var string
+		 */
+		const version = '1.0.0';
+
+		/**
+		 * Class construcotr
+		 */
+		public function __construct() {
+			$this->define_constants();
+            add_action( 'plugins_loaded', [ $this, 'activate' ] );
+//			register_activation_hook( __FILE__, [ $this, 'activate' ] );
 		}
 
-		public static function run() {
 
-			$filePath = dirname( SCHEMA_PLUGIN_PATH ) . '/templates';
-
-		    if ( is_product() ) {
-		        $filePath = $filePath . '/product.json';
-
-		        if ( file_exists( $filePath ) ) {
-			        $fileData = file_get_contents( $filePath );
-
-			        echo "<script type='application/ld+json'>$fileData</script>";
-		        }
-		    }
+		/**
+		 * Define the required plugin constants
+		 *
+		 * @return void
+		 */
+		public function define_constants() {
+			define( 'SCHEMA_PLUGIN_PATH', __FILE__ );
 		}
+		/**
+		 * Do stuff upon plugin activation
+		 *
+		 * @return void
+		 */
+		public function activate() {
+
+			flush_rewrite_rules();
+
+			add_action( 'init', [ $this, 'init_plugin' ] );
+		}
+
+		/**
+		 * Initialize the plugin
+		 *
+		 * @return void
+		 */
+		public function init_plugin() {
+
+			$installer = new Schema\Init();
+            $installer->run();
+		}
+
 	}
-	Schema::run();
+	function schema() {
+		return new Schema();
+	}
+	schema();
 }
-
-
-
-
-
-//function schema() {
-
-//    $filePath = dirname( SCHEMA_PLUGIN_PATH ) . '/templates';
-//
-//    if ( is_product() ) {
-//        $filePath = $filePath . '/product.json';
-//
-//        if ( file_exists( $filePath ) ) {
-//
-//        }
-//
-//    }
-
-
-//    $fileData = null;
-//
-//    $filePath = dirname(SCHEMA_PLUGIN_PATH ) . '/templates/product.json';
-//
-//    if ( ! file_exists( $filePath ) ) {
-//        $fileData = 'file not found';
-//    } else {
-//        $fileData = file_get_contents( $filePath );
-//    }
-//    if (is_product()) {
-//        echo "<script type='application/ld+json'>$fileData</script>";
-//    }else {
-//        echo "<script type='application/ld+json'>not product</script>";
-//    }
-//    echo "<script type='application/ld+json'>schema-plugin</script>";
-//}
-
-//add_action('wp_head', 'schema');
