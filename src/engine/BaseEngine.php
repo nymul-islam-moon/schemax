@@ -4,21 +4,28 @@ namespace Schema\Engine;
 
 class BaseEngine {
 
-    protected $templatePath, $fileName, $schemaUpdatedData = 'nymul-islam';
+//    protected $schema_path, $schema_data;
 
-    function __construct() {
-        $this->templatePath = dirname( SCHEMA_PLUGIN_PATH ) . 'templates/';
-        add_action( 'wp_head', [ $this, 'attach_to_wp_head' ] );
-    }
+//    public function __construct() {
+//    }
 
-    public function schema() {
-        $fileData = file_get_contents( $this->templatePath . $this->fileName );
+//    protected function read_schema( $schema_name ) {
+//        $this->schema_path = dirname( SCHEMA_PLUGIN_PATH ) . '/templates/';
+//        $schema_data = file_get_contents( $this->schema_path . $schema_name );
+//        $schema_data_decoded = json_decode( $schema_data, true );
+//        return $schema_data_decoded;
+//    }
 
-        return $fileData;
-    }
+//    protected function update_schema( $schema_name ) {
+//        $schema_arr = $this->read_schema( $schema_name );
+//        $updated_schema_data = json_encode( $schema_arr );
+//
+//        return $updated_schema_data;
+//    }
 
-    protected function attach_to_wp_head() {
-        echo "nymul-islam";
-//        echo "<script type='application/ld+json'>$this->schemaUpdatedData</script>>";
-    }
+//    protected static function attach_schema( $schema_name ) {
+////        $instant = new self();
+////        $updated_data = $instant->update_schema( $schema_name );
+//        echo "<script type='application/ld+json'>test</script>";
+//    }
 }
