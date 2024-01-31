@@ -3,6 +3,8 @@
 namespace Schema;
 //use Schema\Engine;
 
+use Schema\Engine\Product;
+
 class Init {
 
 	public function __construct() {
@@ -11,7 +13,9 @@ class Init {
 
 	public function run() {
         if ( is_product() ) {
-            Engine\Product::attach_schema();
+            global $post;
+            $product_object = new Product($post->ID);
+            $product_object::attach_schema();
         }
 	}
 }

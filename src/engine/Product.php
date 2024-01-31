@@ -4,20 +4,35 @@ namespace Schema\Engine;
 
 class Product extends BaseEngine {
 
-    public $product_id, $current_product, $schema_name;
+    public $product, $schema_name;
 
-    public function __construct()
+    public function __construct( $product_id = null )
     {
+        global $product;
+        if($product instanceof  \WC_Product) {
+            $this->product = $product;
+        }else{
+            $this->product = wc_get_product($product_id);
+        }
+
         $this->schema_name = 'product.json';
         $this->schema_path = dirname( SCHEMA_PLUGIN_PATH ) . '/templates/';
-        global $product;
-        $this->current_product = $product;
-        $this->product_id = $product->get_id();
     }
 
     public function name() {
-        $product = wc_get_product( $this->product_id );
-        return $product ? $product->get_name() : 'Default Product Name';
+        return $this->product ? $this->product->get_name() : '';
+    }
+
+    public function description() {
+        return $this->product ? $this->product->get_description() : '';
+    }
+
+    public function image() {
+        if ($this->product) {
+            $image_id = $this->product->get_image_id();
+            return wp_get_attachment_image_url($image_id, 'full');
+        }
+        return '';
     }
 
     public function read_schema() {
@@ -31,6 +46,8 @@ class Product extends BaseEngine {
         $schema_arr = $this->read_schema();
 
         $schema_arr['name'] = $this->name();
+        $schema_arr['description'] = $this->description();
+        $schema_arr['image'] = $this->image();
 
         $updated_schema_data = json_encode( $schema_arr );
 
@@ -40,7 +57,7 @@ class Product extends BaseEngine {
     public static function attach_schema() {
         $instant = new self();
         $updated_data = $instant->update_schema();
-        echo "<script type='application/ld+json'>$updated_data</script>";
+        echo "<script src='schemax' type='application/ld+json'>$updated_data</script>";
     }
 
 }
