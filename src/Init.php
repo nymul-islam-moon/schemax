@@ -1,8 +1,6 @@
 <?php
 
 namespace Schema;
-//use Schema\Engine;
-
 use Schema\Engine\Product;
 
 class Init {
@@ -14,8 +12,8 @@ class Init {
 	public function run() {
         if ( is_product() ) {
             global $post;
-            $product_object = new Product($post->ID);
-            $product_object::attach_schema();
+            $product_object = new Product( $post->ID );
+            $product_object->attach_schema();
         }
 	}
 }
