@@ -16,8 +16,8 @@ class Product extends BaseEngine {
         }
 
 //        error_log( print_r( wp_get_post_terms($this->product->get_id(), 'product_cat'), true ) );
+//        error_log( print_r( $this->product->get_weight(), true ) );
 //        error_log( print_r( $this->product, true ) );
-
         $this->schema_service = new Service();
         $this->schema_name = 'product.json';
     }
@@ -27,7 +27,7 @@ class Product extends BaseEngine {
         $schema_arr['name']             = $this->name();
         $schema_arr['description']      = $this->description();
         $schema_arr['review']           = $this->review();
-        $schema_arr['aggregateRating']  = $this->aggregate_rating();
+        $schema_arr['aggregateRating']  = $this->aggregateRating();
         $schema_arr['brand']            = $this->brand();
         $schema_arr['image']            = $this->image();
         $schema_arr['offers']           = $this->offers();
@@ -52,8 +52,8 @@ class Product extends BaseEngine {
         );
 
         $review_arr = get_comments( $args );
-
-        foreach ( $review_arr as $review ) {
+        $review_data[] = array();
+        foreach ( $review_arr as $key => $review ) {
             $singleReviewData = [
                 '@type'             => 'Review',
                 'reviewRating'      => [
@@ -67,13 +67,13 @@ class Product extends BaseEngine {
                 ],
                 'comment'   => $review->comment_content ?? ''
             ];
-            $review_data[] = $singleReviewData;
+            $review_data[ $key ] = $singleReviewData;
         }
 
         return $review_data;
     }
 
-    public function aggregate_rating() {
+    public function aggregateRating() {
 
         $args = array(
             'post_id' => $this->product ? $this->product->get_id() : '',
@@ -107,7 +107,6 @@ class Product extends BaseEngine {
     }
 
     public function offers() {
-
         $offers = [
             "@type"                 => "Offer",
             "price"                 => $this->product->get_regular_price() ? $this->product->get_regular_price() : '',
@@ -125,10 +124,10 @@ class Product extends BaseEngine {
             "gtin8"                 => "",
             "gtin13"                => "",
             "gtin14"                => "",
-            "weight"                => $this->weight(),
+            "weight"                => $this->product->has_weight() ? $this->weight() : '',
             "depth"                 => $this->depth(),
-            "width"                 => $this->width(),
-            "height"                => $this->height(),
+            "width"                 => isset( $this->width()['value'] ) ? $this->width() : '',
+            "height"                => isset( $this->height()['value'] ) ? $this->height() : '',
             "shippingDetails"       => $this->shippingDetails()
         ];
 
@@ -222,8 +221,8 @@ class Product extends BaseEngine {
 
         $weight = [
             "@type"     => "QuantitativeValue",
-            "value"     => "",
-            "unitCode"  => ""
+            "value"     => $this->product->get_weight(),
+            "unitCode"  => get_option('woocommerce_weight_unit')
         ];
 
         return $weight;
@@ -243,8 +242,8 @@ class Product extends BaseEngine {
     public function width() {
         $width = [
             "@type" => "QuantitativeValue",
-            "value" => "",
-            "unitCode" => ""
+            "value" => $this->product->get_width(),
+            "unitCode" => get_option('woocommerce_dimension_unit')
         ];
 
         return $width;
@@ -253,22 +252,25 @@ class Product extends BaseEngine {
     public function height() {
         $height = [
             "@type" => "QuantitativeValue",
-            "value" => "",
-            "unitCode" => ""
+            "value" => $this->product->get_height(),
+            "unitCode" => get_option('woocommerce_dimension_unit')
         ];
 
         return $height;
     }
 
     public function shippingDetails() {
-
-        $shippingDetails = [
+//        error_log( print_r( \WC()->shipping->get_shipping_methods(), true ) );
+        // if shipping Details array found just put the data array  and assigned part info the foreach loop
+        $data = [
             "@type"         => "OfferShippingDetails",
             "shippingRate"  => $this->shippingDetails_shippingRate(),
             "shippingDestination" => $this->shippingDetails_shippingDestination(),
             "deliveryTime"      => $this->shippingDetails_deliveryTime(),
             "taxShippingDetails"    => $this->shippingDetails_taxShippingDetails()
         ];
+
+        $shippingDetails[] = $data;
 
         return $shippingDetails;
     }
@@ -284,7 +286,6 @@ class Product extends BaseEngine {
     }
 
     public function shippingDetails_shippingDestination() {
-
         $shippingDestination = [
             "@type" => "DefinedRegion",
             "addressCountry" => ""
@@ -314,13 +315,22 @@ class Product extends BaseEngine {
     }
 
     public function shippingDetails_taxShippingDetails_shippingRate() {
-
         $shippingRate = [
             "@type" => "MonetaryAmount",
             "currency" => "",
             "value" => ""
         ];
         return $shippingRate;
+    }
+
+    public function shippingDetails_deliveryTime_handlingTime() {
+        $handlingTime = [
+            "@type"     => "QuantitativeValue",
+            "minValue"  => "",
+            "maxValue"  => "",
+            "unitCode"  => "DAY"
+        ];
+        return $handlingTime;
     }
 
     public function shippingDetails_deliveryTime_transitTime() {
