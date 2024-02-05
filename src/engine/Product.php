@@ -270,7 +270,7 @@ class Product {
             "unitCode"  => get_option('woocommerce_dimension_unit')
         ];
 
-        return apply_filters( "schemax_{$this->schema_type}_offers_width", $width, $this->product );;
+        return apply_filters( "schemax_{$this->schema_type}_offers_width", $width, $this->product );
     }
 
     public function offers_height() {
@@ -280,7 +280,7 @@ class Product {
             "unitCode"  => get_option('woocommerce_dimension_unit')
         ];
 
-        return $height;
+        return apply_filters( "schemax_{$this->schema_type}_offers_width", $height, $this->product );
     }
 
     public function offers_shippingDetails() {
@@ -380,6 +380,6 @@ class Product {
 
     public function attach_schema() {
         $updated_data = $this->update_schema();
-        echo "<script src='schemax' type='application/ld+json'>$updated_data</script>";
+        echo "<script src='schemax' type='application/ld+json' schema_type='product'>$updated_data</script>";
     }
 }
