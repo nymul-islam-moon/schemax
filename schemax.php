@@ -43,7 +43,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Schema\Src;
 
-if ( ! class_exists( 'Schema' ) ) {  // Check if the 'Schema' class does not exist
+if ( ! class_exists( 'Schema' ) ) {
 	final class Schema {
 
 		/**
@@ -54,14 +54,13 @@ if ( ! class_exists( 'Schema' ) ) {  // Check if the 'Schema' class does not exi
 		const version = '1.0.0';
 
 		/**
-		 * Class construcotr
+		 * Class constructor
 		 */
 		public function __construct() {
 			$this->define_constants();
             add_action( 'plugins_loaded', [ $this, 'activate' ] );
 //			register_activation_hook( __FILE__, [ $this, 'activate' ] );
 		}
-
 
 		/**
 		 * Define the required plugin constants
@@ -71,6 +70,7 @@ if ( ! class_exists( 'Schema' ) ) {  // Check if the 'Schema' class does not exi
 		public function define_constants() {
 			define( 'SCHEMA_PLUGIN_PATH', __FILE__ );
 		}
+
 		/**
 		 * Do stuff upon plugin activation
 		 *
