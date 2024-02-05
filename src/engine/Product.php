@@ -232,15 +232,15 @@ class Product {
         $categoryObj = wp_get_post_terms($this->product->get_id(), 'product_cat');
 
         $category = [
-            "term_id" => $categoryObj[0]->term_id,
-            "name" => $categoryObj[0]->name,
-            "slug" => $categoryObj[0]->slug,
-            "term_group" => $categoryObj[0]->term_group,
-            "term_taxonomy_id" => $categoryObj[0]->term_taxonomy_id,
-            "taxonomy" => $categoryObj[0]->taxonomy,
-            "description" => $categoryObj[0]->description,
-            "parent" => $categoryObj[0]->parent,
-            "count" => $categoryObj[0]->count,
+            "term_id"           => $categoryObj[0]->term_id,
+            "name"              => $categoryObj[0]->name,
+            "slug"              => $categoryObj[0]->slug,
+            "term_group"        => $categoryObj[0]->term_group,
+            "term_taxonomy_id"  => $categoryObj[0]->term_taxonomy_id,
+            "taxonomy"          => $categoryObj[0]->taxonomy,
+            "description"       => $categoryObj[0]->description,
+            "parent"            => $categoryObj[0]->parent,
+            "count"             => $categoryObj[0]->count,
         ];
 
         return $category;
@@ -270,9 +270,9 @@ class Product {
 
     public function offers_width() {
         $width = [
-            "@type" => "QuantitativeValue",
-            "value" => $this->product->get_width(),
-            "unitCode" => get_option('woocommerce_dimension_unit')
+            "@type"     => "QuantitativeValue",
+            "value"     => $this->product->get_width(),
+            "unitCode"  => get_option('woocommerce_dimension_unit')
         ];
 
         return $width;
@@ -280,9 +280,9 @@ class Product {
 
     public function offers_height() {
         $height = [
-            "@type" => "QuantitativeValue",
-            "value" => $this->product->get_height(),
-            "unitCode" => get_option('woocommerce_dimension_unit')
+            "@type"     => "QuantitativeValue",
+            "value"     => $this->product->get_height(),
+            "unitCode"  => get_option('woocommerce_dimension_unit')
         ];
 
         return $height;
@@ -290,10 +290,10 @@ class Product {
 
     public function offers_shippingDetails() {
 
-        $shippingDetails[] = array();
+        $shippingDetails[]  = array();
 
-        $data_store = \WC_Data_Store::load( 'shipping-zone' );
-        $raw_zones = $data_store->get_zones();
+        $data_store         = \WC_Data_Store::load( 'shipping-zone' );
+        $raw_zones          = $data_store->get_zones();
         foreach ( $raw_zones as $raw_zone ) {
             $zones[] = new \WC_Shipping_Zone( $raw_zone );
         }
@@ -301,10 +301,10 @@ class Product {
 
         foreach ( $zones as $key => $zone ) {
             $data = [
-                    "@type"         => "OfferShippingDetails",
-                    "shippingRate"  => $this->shippingDetails_shippingRate(),
-                    "shippingDestination" => $this->shippingDetails_shippingDestination( $zone->get_zone_name() ),
-                    "deliveryTime"      => $this->shippingDetails_deliveryTime(),
+                    "@type"                 => "OfferShippingDetails",
+                    "shippingRate"          => $this->shippingDetails_shippingRate(),
+                    "shippingDestination"   => $this->shippingDetails_shippingDestination( $zone->get_zone_name() ),
+                    "deliveryTime"          => $this->shippingDetails_deliveryTime(),
                     "taxShippingDetails"    => $this->shippingDetails_taxShippingDetails()
             ];
             $shippingDetails[ $key ] = $data;
@@ -317,9 +317,9 @@ class Product {
 
     public function shippingDetails_shippingRate() {
         $shippingRate = [
-            "@type" => "MonetaryAmount",
-            "currency" => "",
-            "value" => ""
+            "@type"     => "MonetaryAmount",
+            "currency"  => "",
+            "value"     => ""
         ];
 
         return $shippingRate;
@@ -328,8 +328,8 @@ class Product {
     public function shippingDetails_shippingDestination( $zone_location ) {
 
         $shippingDestination = [
-            "@type" => "DefinedRegion",
-            "addressCountry" => $zone_location
+            "@type"             => "DefinedRegion",
+            "addressCountry"    => $zone_location
         ];
 
         return $shippingDestination;
