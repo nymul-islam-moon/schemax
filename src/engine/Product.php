@@ -1,11 +1,11 @@
 <?php
 
 namespace Schema\Engine;
-use Schema\Engine\Service;
 
 class Product {
 
     public $product, $schema_name, $schema_service;
+    private  $schema_type = 'product';
 
     public function __construct( $product_id = null ) {
         global $product;
@@ -15,11 +15,6 @@ class Product {
             $this->product = wc_get_product( $product_id );
         }
 
-//        error_log( print_r( wp_get_post_terms($this->product->get_id(), 'product_cat'), true ) );
-//        error_log( print_r( \WC()->cart->get_shipping_packages(), true ) );
-
-//        error_log( print_r( \WC_Data_Store::load( 'shipping-zone' )->WC_Coupon_Data_Store_CPT(), true ) );
-//        error_log( print_r( $this->product, true ) );
         $this->schema_service = new Service();
         $this->schema_name = 'product.json';
     }
@@ -35,7 +30,7 @@ class Product {
         $schema_arr['offers']           = $this->offers();
 
         $updated_schema_data            = json_encode( $schema_arr );
-        return $updated_schema_data;
+        return apply_filters( "schemax_{$this->schema_type}_offers_width", $updated_schema_data, $this->product );
     }
 
     /**
@@ -265,7 +260,7 @@ class Product {
             "unitCode"  => get_option('woocommerce_dimension_unit')
         ];
 
-        return $depth;
+        return apply_filters( "schemax_{$this->schema_type}_offers_width", $depth, $this->product );
     }
 
     public function offers_width() {
@@ -275,7 +270,7 @@ class Product {
             "unitCode"  => get_option('woocommerce_dimension_unit')
         ];
 
-        return $width;
+        return apply_filters( "schemax_{$this->schema_type}_offers_width", $width, $this->product );;
     }
 
     public function offers_height() {
@@ -290,27 +285,26 @@ class Product {
 
     public function offers_shippingDetails() {
 
-        $shippingDetails[]  = array();
+        $shippingDetails = array();
 
-        $data_store         = \WC_Data_Store::load( 'shipping-zone' );
-        $raw_zones          = $data_store->get_zones();
-        foreach ( $raw_zones as $raw_zone ) {
-            $zones[] = new \WC_Shipping_Zone( $raw_zone );
-        }
-        $zones[] = new \WC_Shipping_Zone( 0 ); // ADD ZONE "0" MANUALLY
+        $shipping_class_id = $this->product->get_shipping_class_id();
 
-        foreach ( $zones as $key => $zone ) {
-            $data = [
-                    "@type"                 => "OfferShippingDetails",
-                    "shippingRate"          => $this->shippingDetails_shippingRate(),
-                    "shippingDestination"   => $this->shippingDetails_shippingDestination( $zone->get_zone_name() ),
-                    "deliveryTime"          => $this->shippingDetails_deliveryTime(),
-                    "taxShippingDetails"    => $this->shippingDetails_taxShippingDetails()
+        $shipping_zones = \WC_Shipping_Zones::get_zones();
+
+        foreach ($shipping_zones as $zone_id => $zone_data) {
+
+            $zone             = new \WC_Shipping_Zone($zone_id);
+            $shipping_methods = $zone->get_shipping_methods(true);
+
+            $data                      = [
+                "@type" => "OfferShippingDetails",
+                "shippingRate" => '',//$this->shippingDetails_shippingRate(),
+                "shippingDestination" => $this->shippingDetails_shippingDestination( $zone_data['zone_name'] ),
+                "deliveryTime" => '',//$this->shippingDetails_deliveryTime(),
+                "taxShippingDetails" => '', //$this->shippingDetails_taxShippingDetails()
             ];
-            $shippingDetails[ $key ] = $data;
+            $shippingDetails[] = $data;
         }
-
-
 
         return $shippingDetails;
     }
@@ -331,7 +325,6 @@ class Product {
             "@type"             => "DefinedRegion",
             "addressCountry"    => $zone_location
         ];
-
         return $shippingDestination;
     }
 
