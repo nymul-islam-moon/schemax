@@ -119,13 +119,13 @@ class Website {
 
         $hasPart = [
             [
-                "@type" => "WebPageElement",
-                "@id" => "#header",
-                "headline" => "",
-                "potentialAction" => [
-                    "@type" => "Action",
-                    "name" => "Contact",
-                    "target" => "http://google.ca/"
+                "@type"     => "WebPageElement",
+                "@id"       => "#header",
+                "headline"  => "",
+                "potentialAction"   => [
+                    "@type"                 => "Action",
+                    "name"                  => "Contact",
+                    "target"                => "http://google.ca/"
                 ]
             ]
         ];
