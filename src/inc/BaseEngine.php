@@ -1,6 +1,6 @@
 <?php
 
-namespace Schema\Engine;
+namespace Schema\Inc;
 
 class BaseEngine {
 

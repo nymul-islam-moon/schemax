@@ -1,11 +1,13 @@
 <?php
 
 namespace Schema\Engine;
+use Schema\Inc\Service;
+
 
 class Product {
 
-    public $product, $schema_name, $schema_service;
-    private  $schema_type = 'product';
+    public $product;
+    private $schema_type, $schema_name, $schema_service;
 
     public function __construct( $product_id = null ) {
         global $product;
@@ -14,12 +16,18 @@ class Product {
         }else{
             $this->product = wc_get_product( $product_id );
         }
-
-        $this->schema_service = new Service();
-        $this->schema_name = 'product.json';
+//        error_log( print_r( $this->product->get_tax_class(), true ) );
+        $this->schema_service   = new Service();
+        $this->schema_name      = 'product.json';
+        $this->schema_type      = 'product';
     }
 
-    public function update_schema() {
+    /**
+     * Update the product schema using the realtime data
+     *
+     * @return mixed|null
+     */
+    protected function update_schema() {
         $schema_arr                     = $this->schema_service->read_schema( $this->schema_name );
         $schema_arr['name']             = $this->name();
         $schema_arr['description']      = $this->description();
@@ -38,7 +46,7 @@ class Product {
      *
      * @return string
      */
-    public function name() {
+    protected function name() {
         return $this->product ? $this->product->get_name() : '';
     }
 
@@ -47,25 +55,24 @@ class Product {
      *
      * @return string
      */
-    public function description() {
+    protected function description() {
         return $this->product ? $this->product->get_description() : '';
     }
-
 
     /**
      * Return the review array
      *
      * @return array
      */
-    public function review() {
+    protected function review() {
 
         $args = array(
             'post_id'   => $this->product ? $this->product->get_id() : '',
             'status'    => 'approve'
         );
 
-        $review_arr = get_comments( $args );
-        $review_data[] = array();
+        $review_arr     = get_comments( $args );
+        $review_data[]  = array();
         foreach ( $review_arr as $key => $review ) {
             $singleReviewData = [
                 '@type'             => 'Review',
@@ -86,7 +93,7 @@ class Product {
         return $review_data;
     }
 
-    public function aggregateRating() {
+    protected function aggregateRating() {
 
         $args = array(
             'post_id' => $this->product ? $this->product->get_id() : '',
@@ -103,7 +110,12 @@ class Product {
         return $aggregate_rating;
     }
 
-    public function image() {
+    /**
+     * Image for Update method
+     *
+     * @return false|string
+     */
+    protected function image() {
         if ( $this->product ) {
             $image_id = $this->product->get_image_id();
             return wp_get_attachment_image_url( $image_id, 'full' );
@@ -111,7 +123,12 @@ class Product {
         return '';
     }
 
-    public function brand() {
+    /**
+     * Brand name for Update method
+     *
+     * @return string[]
+     */
+    protected function brand() {
         $brand = [
             "@type" => "Thing",
             "name"  => ""
@@ -119,7 +136,12 @@ class Product {
         return $brand;
     }
 
-    public function offers() {
+    /**
+     * Offer data for update method
+     *
+     * @return array
+     */
+    protected function offers() {
 
         $offers = [
             "@type"                 => "Offer",
@@ -148,7 +170,7 @@ class Product {
         return $offers;
     }
 
-    public function offers_priceSpecification() {
+    protected function offers_priceSpecification() {
 
         $priceSpecification = [
             "@type"                 => "PriceSpecification",
@@ -160,7 +182,7 @@ class Product {
         return $priceSpecification;
     }
 
-    public function tax() {
+    protected function tax() {
         $wc_tax     = new \WC_Tax();
 
         $tax_rates  = $wc_tax::get_rates( $this->product->get_tax_class() );
@@ -178,15 +200,15 @@ class Product {
         return $tax;
     }
 
-    public function offers_priceValidUntil() {
+    protected function offers_priceValidUntil() {
         return 'working in progress';
     }
 
-    public function offers_priceValidFrom() {
+    protected function offers_priceValidFrom() {
         return 'working in progress';
     }
 
-    public function offers_saller() {
+    protected function offers_saller() {
         $saller = [
             "@type"         => 'Organization',
             "name"          => '',
@@ -196,7 +218,7 @@ class Product {
         return $saller;
     }
 
-    public function offers_itemCondition() {
+    protected function offers_itemCondition() {
         $itemCondition = get_post_meta( $this->product->get_id(), 'item_condition', true );
 
         if ( ! empty( $itemCondition ) ) {
@@ -211,7 +233,7 @@ class Product {
      *
      * @return string[]
      */
-    public function ContactPoint() {
+    protected function ContactPoint() {
         $contactPoint = [
             "@type"             => "ContactPoint",
             "contactType"       => "",
@@ -222,7 +244,7 @@ class Product {
         return $contactPoint;
     }
 
-    public function offers_category() {
+    protected function offers_category() {
 
         $categoryObj = wp_get_post_terms($this->product->get_id(), 'product_cat');
 
@@ -241,7 +263,7 @@ class Product {
         return $category;
     }
 
-    public function offers_weight() {
+    protected function offers_weight() {
 
         $weight = [
             "@type"     => "QuantitativeValue",
@@ -252,7 +274,7 @@ class Product {
         return $weight;
     }
 
-    public function offers_depth() {
+    protected function offers_depth() {
 
         $depth = [
             "@type"     => "QuantitativeValue",
@@ -263,7 +285,7 @@ class Product {
         return apply_filters( "schemax_{$this->schema_type}_offers_width", $depth, $this->product );
     }
 
-    public function offers_width() {
+    protected function offers_width() {
         $width = [
             "@type"     => "QuantitativeValue",
             "value"     => $this->product->get_width(),
@@ -273,7 +295,7 @@ class Product {
         return apply_filters( "schemax_{$this->schema_type}_offers_width", $width, $this->product );
     }
 
-    public function offers_height() {
+    protected function offers_height() {
         $height = [
             "@type"     => "QuantitativeValue",
             "value"     => $this->product->get_height(),
@@ -283,7 +305,7 @@ class Product {
         return apply_filters( "schemax_{$this->schema_type}_offers_width", $height, $this->product );
     }
 
-    public function offers_shippingDetails() {
+    protected function offers_shippingDetails() {
 
         $shippingDetails = array();
 
@@ -309,7 +331,7 @@ class Product {
         return $shippingDetails;
     }
 
-    public function shippingDetails_shippingRate() {
+    protected function shippingDetails_shippingRate() {
         $shippingRate = [
             "@type"     => "MonetaryAmount",
             "currency"  => "",
@@ -319,7 +341,7 @@ class Product {
         return $shippingRate;
     }
 
-    public function shippingDetails_shippingDestination( $zone_location ) {
+    protected function shippingDetails_shippingDestination( $zone_location ) {
 
         $shippingDestination = [
             "@type"             => "DefinedRegion",
@@ -328,7 +350,7 @@ class Product {
         return $shippingDestination;
     }
 
-    public function shippingDetails_deliveryTime() {
+    protected function shippingDetails_deliveryTime() {
 
         $deliveryTime = [
             "@type"         => "ShippingDeliveryTime",
@@ -339,7 +361,7 @@ class Product {
         return $deliveryTime;
     }
 
-    public function shippingDetails_taxShippingDetails() {
+    protected function shippingDetails_taxShippingDetails() {
         $taxShippingDetails = [
             "@type"         => "OfferShippingDetails",
             "shippingRate"  => $this->shippingDetails_taxShippingDetails_shippingRate(),
@@ -348,7 +370,7 @@ class Product {
         return $taxShippingDetails;
     }
 
-    public function shippingDetails_taxShippingDetails_shippingRate() {
+    protected function shippingDetails_taxShippingDetails_shippingRate() {
         $shippingRate = [
             "@type"     => "MonetaryAmount",
             "currency"  => "",
@@ -357,7 +379,7 @@ class Product {
         return $shippingRate;
     }
 
-    public function shippingDetails_deliveryTime_handlingTime() {
+    protected function shippingDetails_deliveryTime_handlingTime() {
         $handlingTime = [
             "@type"     => "QuantitativeValue",
             "minValue"  => "",
@@ -367,7 +389,7 @@ class Product {
         return $handlingTime;
     }
 
-    public function shippingDetails_deliveryTime_transitTime() {
+    protected function shippingDetails_deliveryTime_transitTime() {
         $transitTime = [
             "@type"     => "QuantitativeValue",
             "minValue"  => "",
