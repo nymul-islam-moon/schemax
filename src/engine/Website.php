@@ -6,12 +6,18 @@ use Schema\Inc\Service;
 
 class Website {
 
-    private $schema_type, $schema_name, $schema_service;
+    private $schema_type, $schema_name, $schema_service, $product;
 
     public function __construct() {
+
+        global $product;
+
         $this->schema_service   = new Service();
         $this->schema_name      = 'webSite.json';
         $this->schema_type      = 'website';
+
+//        error_log( print_r( get_bloginfo(), true ) );
+
     }
 
     protected function update_schema() {
@@ -25,11 +31,11 @@ class Website {
         $schema_arr['image']            = 'working progress';
         $schema_arr['inLanguage']       = 'working progress';
         $schema_arr['author']           = ! empty( $this->author()['name'] ) ? $this->author() : '' ;
-        $schema_arr['publisher']        = $this->publisher();
-        $schema_arr['mainEntity']       = $this->mainEntity();
-        $schema_arr['potentialAction']  = $this->potentialAction();
-        $schema_arr['keywords']         = $this->keywords(());
-        $schema_arr['hasPart']          = 'working progress';
+        $schema_arr['publisher']        = ! empty( $this->publisher()['name'] ) ? $this->publisher() : '';
+        $schema_arr['mainEntity']       = ! empty( $this->mainEntity()['name'] ) ? $this->mainEntity() : '';
+        $schema_arr['potentialAction']  = ! empty( $this->potentialAction()['target'] ) ? $this->potentialAction() : '';
+        $schema_arr['keywords']         = ! empty( $this->keywords() ) ? $this->keywords() : '';
+        $schema_arr['hasPart']          = $this->hasPart();
 
         $updated_schema_data            = json_encode( $schema_arr );
         return apply_filters( "schemax_{$this->schema_type}_offers_width", $updated_schema_data );
@@ -107,6 +113,24 @@ class Website {
         ];
 
         return $keywords;
+    }
+
+    protected function hasPart() {
+
+        $hasPart = [
+            [
+                "@type" => "WebPageElement",
+                "@id" => "#header",
+                "headline" => "headline-string",
+                "potentialAction" => [
+                    "@type" => "Action",
+                    "name" => "Contact",
+                    "target" => "http://google.ca/"
+                ]
+            ]
+        ];
+
+        return $hasPart;
     }
 
     public function attach_schema() {
