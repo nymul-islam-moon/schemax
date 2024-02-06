@@ -35,7 +35,7 @@ class Website {
         $schema_arr['mainEntity']       = ! empty( $this->mainEntity()['name'] ) ? $this->mainEntity() : '';
         $schema_arr['potentialAction']  = ! empty( $this->potentialAction()['target'] ) ? $this->potentialAction() : '';
         $schema_arr['keywords']         = ! empty( $this->keywords() ) ? $this->keywords() : '';
-        $schema_arr['hasPart']          = $this->hasPart();
+        $schema_arr['hasPart']          = ! empty( $this->hasPart()[0]['headline'] ) ? $this->hasPart() : '';
 
         $updated_schema_data            = json_encode( $schema_arr );
         return apply_filters( "schemax_{$this->schema_type}_offers_width", $updated_schema_data );
@@ -76,7 +76,7 @@ class Website {
 
     protected function mainEntity() {
         $mainEntity = [
-            "@type"             => "",
+            "@type"             => "LocalBusiness",
             "name"              => "",
             "image"             => "",
             "priceRange"        => "",
@@ -121,7 +121,7 @@ class Website {
             [
                 "@type" => "WebPageElement",
                 "@id" => "#header",
-                "headline" => "headline-string",
+                "headline" => "",
                 "potentialAction" => [
                     "@type" => "Action",
                     "name" => "Contact",
