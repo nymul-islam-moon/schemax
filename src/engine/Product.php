@@ -16,7 +16,7 @@ class Product {
         }else{
             $this->product = wc_get_product( $product_id );
         }
-//        error_log( print_r( $this->product->get_tax_class(), true ) );
+        error_log( print_r( $this->product, true ) );
         $this->schema_service   = new Service();
         $this->schema_name      = 'product.json';
         $this->schema_type      = 'product';
@@ -29,8 +29,8 @@ class Product {
      */
     protected function update_schema() {
         $schema_arr                     = $this->schema_service->read_schema( $this->schema_name );
-        $schema_arr['name']             = $this->name();
-        $schema_arr['description']      = $this->description();
+        $schema_arr['name']             = ! empty( $this->name() ) ? $this->name() : '';
+        $schema_arr['description']      = ! empty( $this->description() ) ? $this->description() : '';
         $schema_arr['review']           = $this->review();
         $schema_arr['aggregateRating']  = $this->aggregateRating();
         $schema_arr['image']            = $this->image();
@@ -47,7 +47,7 @@ class Product {
      * @return string
      */
     protected function name() {
-        return $this->product ? $this->product->get_name() : '';
+        return apply_filters( "schemax_{$this->schema_type}_offers_width", $this->product->get_name(), $this->product );
     }
 
     /**
@@ -56,7 +56,7 @@ class Product {
      * @return string
      */
     protected function description() {
-        return $this->product ? $this->product->get_description() : '';
+        return apply_filters( "schemax_{$this->schema_type}_offers_width", $this->product->get_description(), $this->product );
     }
 
     /**
@@ -74,18 +74,18 @@ class Product {
         $review_arr     = get_comments( $args );
         $review_data[]  = array();
         foreach ( $review_arr as $key => $review ) {
-            $singleReviewData = [
+            $singleReviewData   = [
                 '@type'             => 'Review',
                 'reviewRating'      => [
-                    '@type'         => 'Rating',
-                    'ratingValue'   => get_comment_meta( $review->comment_ID, 'rating', true ),
+                    '@type'                 => 'Rating',
+                    'ratingValue'           => get_comment_meta( $review->comment_ID, 'rating', true ),
                     'bestRating'    => 5
                 ],
-                'author'    => [
-                    '@type' => 'Person',
-                    'name'  => $review->comment_author ?? ''
+                'author'            => [
+                    '@type'                 => 'Person',
+                    'name'                  => $review->comment_author ?? ''
                 ],
-                'comment'   => $review->comment_content ?? ''
+                'comment'           => $review->comment_content ?? ''
             ];
             $review_data[ $key ] = $singleReviewData;
         }
