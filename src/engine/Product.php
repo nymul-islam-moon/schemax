@@ -11,6 +11,7 @@ class Product
     public $product;
     private $schema_type, $schema_name, $schema_service;
     private $product_type;
+    public $schema_structure = [];
 
     public function __construct($product_id = null)
     {
@@ -21,7 +22,6 @@ class Product
             $this->product = wc_get_product($product_id);
         }
         $this->product_type = $this->product->get_type();
-//        error_log( print_r( $this->product_type, true ) );
 
         $this->schema_service = new Service();
         $this->schema_name    = 'product.json';
@@ -34,12 +34,11 @@ class Product
      * @return mixed|null
      */
     protected function update_schema(): string {
-        $updated_schema_data = null;
-        $schema_arr                         = $this->schema_service->read_schema($this->schema_name);
+        $this->schema_structure                         = $this->schema_service->read_schema( $this->schema_name );
 
         if ($this->product_type == 'simple') {
 
-            $updated_schema_data            = json_encode( $this->single_product( $schema_arr ) );
+            $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
 
         } else if ($this->product_type == 'variable') {
             $children                       = $this->product->get_children();
@@ -48,7 +47,7 @@ class Product
 
                 $this->product              = wc_get_product( $variation_id );
 
-                $variable_product_arr[]     = $this->single_product( $schema_arr );
+                $variable_product_arr[]     = $this->single_product( $this->schema_structure );
             }
 
             $updated_schema_data = json_encode( $variable_product_arr );
@@ -59,12 +58,13 @@ class Product
 
                 $this->product              = wc_get_product( $grouped_id );
 
-                $grouped_product_arr[]      = $this->single_product( $schema_arr );
+                $grouped_product_arr[]      = $this->single_product( $this->schema_structure );
             }
 
             $updated_schema_data            = json_encode( $grouped_product_arr );
-        }
+        } else {
 
+        }
 
         return apply_filters("schemax_{$this->schema_type}_update_schema", $updated_schema_data, $this->product);
     }
@@ -77,13 +77,46 @@ class Product
      */
     protected function single_product( array $product_arr ): array {
 
-        $product_arr['name']             = !empty($this->name()) ? $this->name() : '';
-        $product_arr['description']      = !empty($this->description()) ? $this->description() : '';
-        $product_arr['review']           = $this->review();
-        $product_arr['aggregateRating']  = $this->aggregateRating();
-        $product_arr['image']            = $this->image();
-        $product_arr['brand']            = $this->brand();
-        $product_arr['offers']           = $this->offers();
+        if ( isset( $product_arr['name'] ) ) {
+            $product_arr['name'] = !empty($this->name()) ? $this->name() : '';
+        }
+
+        if ( isset( $product_arr['description'] ) ) {
+            $product_arr['description'] = !empty($this->description()) ? $this->description() : '';
+        }
+
+        if ( isset( $product_arr['review'] ) ) {
+            if ( ! empty ( $this->review() ) ) {
+                $product_arr['review'] = $this->review();
+            } else {
+                unset( $product_arr['review'] );
+            }
+        }
+
+        if ( isset( $product_arr['aggregateRating'] ) && isset( $product_arr['review'] )) {
+            if ( !empty( $this->review() ) ) {
+                $product_arr['aggregateRating'] = $this->aggregateRating();
+            } else {
+                unset( $product_arr['aggregateRating'] );
+            }
+        }
+
+        if ( isset( $product_arr['image'] ) ) {
+            if ( ! empty( $this->image() ) ) {
+                $product_arr['image'] = $this->image();
+            } else {
+                unset( $product_arr['image'] );
+            }
+        }
+
+
+        if ( ! empty( $this->brand() ) ) {
+            $product_arr['brand'] = $this->brand();
+        } else {
+            unset( $product_arr['brand'] );
+        }
+
+        $product_arr['offers']           = $this->offers( $product_arr['offers'] );
 
         return $product_arr;
     }
@@ -117,26 +150,32 @@ class Product
             'status'    => 'approve'
         );
 
-        $review_arr    = get_comments($args);
-        $review_data[] = array();
-        foreach ($review_arr as $key => $review) {
-            $singleReviewData   = [
-                '@type'             => 'Review',
-                'reviewRating'      => [
-                    '@type'             => 'Rating',
-                    'ratingValue'       => get_comment_meta($review->comment_ID, 'rating', true),
-                    'bestRating'        => 5
-                ],
-                'author'            => [
-                    '@type'             => 'Person',
-                    'name'              => $review->comment_author ?? ''
-                ],
-                'comment'           => $review->comment_content ?? ''
-            ];
-            $review_data[$key]  = $singleReviewData;
+        $review_arr    = get_comments( $args );
+
+        $review_data = null;
+        if ( ! empty( $review_arr ) ) {
+
+            foreach ($review_arr as $key => $review) {
+                $singleReviewData   = [
+                    '@type'             => 'Review',
+                    'reviewRating'      => [
+                        '@type'             => 'Rating',
+                        'ratingValue'       => get_comment_meta($review->comment_ID, 'rating', true),
+                        'bestRating'        => 5
+                    ],
+                    'author'            => [
+                        '@type'             => 'Person',
+                        'name'              => $review->comment_author ?? ''
+                    ],
+                    'comment'           => $review->comment_content ?? ''
+                ];
+                $review_data[$key]  = $singleReviewData;
+            }
+
+            return apply_filters("schemax_{$this->schema_type}", $review_data, $this->product);
         }
 
-        return $review_data;
+        return [];
     }
 
     /**
@@ -180,12 +219,16 @@ class Product
      *
      * @return string[]
      */
-    protected function brand()
-    {
+    protected function brand(): array {
         $brand = [
             "@type"     => "Thing",
             "name"      => ""
         ];
+
+        if ( empty ( $brand['name'] ) ) {
+            return [];
+        }
+
         return $brand;
     }
 
@@ -194,14 +237,15 @@ class Product
      *
      * @return array
      */
-    protected function offers(): array {
+    protected function offers( array $offers_arr ): array {
 
+        /**
         $offers = [
             "@type"                 => "Offer",
             "price"                 => $this->product->get_regular_price() ? $this->product->get_regular_price() : '',
             "priceCurrency"         => get_woocommerce_currency() ? get_woocommerce_currency() : '',
             "priceSpecification"    => $this->offers_priceSpecification(),
-            "priceValidUntil"       => $this->offers_priceValidUntil(),
+            "priceValidUntil"       => ! empty( $this->offers_priceValidUntil() ) ? $this->offers_priceValidUntil() : '',
             "priceValidFrom"        => $this->offers_priceValidFrom(),
             "availability"          => $this->product->get_stock_status() ? $this->product->get_stock_status() : '',
             "quantity"              => $this->product->get_stock_quantity() != null ? $this->product->get_stock_quantity() : '',
@@ -219,8 +263,29 @@ class Product
             "height"                => !empty($this->offers_height()['value']) ? $this->offers_height() : '',
             "shippingDetails"       => $this->offers_shippingDetails()
         ];
+        */
+//        error_log( print_r( $this->product->get_regular_price(), true ) );
+        if ( isset( $offers_arr['price'] ) ) {
+            $offers_arr['price']            = $this->product->get_regular_price() ?? '';
+        }
 
-        return $offers;
+        if ( isset( $offers_arr['priceCurrency'] ) ) {
+            $offers_arr['priceCurrency']    = get_woocommerce_currency() ?? '';
+        }
+        
+        $offers_arr['priceSpecification'] = $this->offers_priceSpecification( $offers_arr['priceSpecification'] );
+
+//        $offers_arr['priceCurrency'] = ! empty ( get_woocommerce_currency() ) ? get_woocommerce_currency() : '';
+//
+//        if(get_woocommerce_currency()) {
+//            $offers_arr['priceCurrency'] = get_woocommerce_currency();
+//        }
+//        $price_specification = $this->offers_priceSpecification();
+//        if($price_specification) {
+//            $offers['priceSpecification'] = $price_specification;
+//        }
+
+        return $offers_arr;
     }
 
     /**
@@ -228,16 +293,18 @@ class Product
      *
      * @return array
      */
-    protected function offers_priceSpecification()
+    protected function offers_priceSpecification( array $priceSpecification )
     {
 
-        $priceSpecification = [
-            "@type"                     => "PriceSpecification",
-            "price"                     => $this->product->get_sale_price() ? $this->product->get_sale_price() : '',
-            "valueAddedTaxIncluded"     => $this->product->get_tax_status() ? $this->product->get_tax_status() : '',
-            "taxPercentage"             => !empty($this->tax()['tax_rates'][1]['rate']) ? $this->tax()['tax_rates'][1]['rate'] : '',
-            "taxFixedAmount"            => !empty($this->tax()['tax_rates'][1]['rate']) ? ($this->tax()['tax_rates'][1]['rate'] / 100) * $this->tax()['price'] : ''
-        ];
+        if( $this->product->get_tax_status() == 'taxable' ) {
+            $priceSpecification = [
+                "price"                     => $this->product->get_sale_price(),
+                "valueAddedTaxIncluded"     => (boolean) $this->product->get_tax_status(),
+                "taxPercentage"             => !empty($this->tax()['tax_rates'][1]['rate']) ? $this->tax()['tax_rates'][1]['rate'] : '',
+                "taxFixedAmount"            => !empty($this->tax()['tax_rates'][1]['rate']) ? ($this->tax()['tax_rates'][1]['rate'] / 100) * $this->tax()['price'] : ''
+            ];
+        }
+
         return $priceSpecification;
     }
 
@@ -272,7 +339,7 @@ class Product
      */
     protected function offers_priceValidUntil()
     {
-        return 'working in progress';
+        return $this->product->get_date_on_sale_to();
     }
 
     /**
@@ -282,7 +349,7 @@ class Product
      */
     protected function offers_priceValidFrom()
     {
-        return 'working in progress';
+        return $this->product->get_date_on_sale_from();
     }
 
     protected function offers_saller()
