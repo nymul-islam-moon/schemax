@@ -113,27 +113,27 @@ class Product
      */
     protected function review(): array {
         $args = array(
-            'post_id' => $this->product ? $this->product->get_id() : '',
-            'status' => 'approve'
+            'post_id'   => $this->product ? $this->product->get_id() : '',
+            'status'    => 'approve'
         );
 
         $review_arr    = get_comments($args);
         $review_data[] = array();
         foreach ($review_arr as $key => $review) {
-            $singleReviewData  = [
-                '@type' => 'Review',
-                'reviewRating' => [
-                    '@type' => 'Rating',
-                    'ratingValue' => get_comment_meta($review->comment_ID, 'rating', true),
-                    'bestRating' => 5
+            $singleReviewData   = [
+                '@type'             => 'Review',
+                'reviewRating'      => [
+                    '@type'             => 'Rating',
+                    'ratingValue'       => get_comment_meta($review->comment_ID, 'rating', true),
+                    'bestRating'        => 5
                 ],
-                'author' => [
-                    '@type' => 'Person',
-                    'name' => $review->comment_author ?? ''
+                'author'            => [
+                    '@type'             => 'Person',
+                    'name'              => $review->comment_author ?? ''
                 ],
-                'comment' => $review->comment_content ?? ''
+                'comment'           => $review->comment_content ?? ''
             ];
-            $review_data[$key] = $singleReviewData;
+            $review_data[$key]  = $singleReviewData;
         }
 
         return $review_data;
@@ -147,15 +147,15 @@ class Product
     protected function aggregateRating(): array {
 
         $args         = array(
-            'post_id' => $this->product ? $this->product->get_id() : '',
-            'count' => true
+            'post_id'   => $this->product ? $this->product->get_id() : '',
+            'count'     => true
         );
         $review_count = get_comments($args);
 
         $aggregate_rating = [
-            "@type" => "AggregateRating",
-            "ratingValue" => $this->product->get_average_rating(),
-            "reviewCount" => $review_count
+            "@type"             => "AggregateRating",
+            "ratingValue"       => $this->product->get_average_rating(),
+            "reviewCount"       => $review_count
         ];
 
         return $aggregate_rating;
@@ -183,8 +183,8 @@ class Product
     protected function brand()
     {
         $brand = [
-            "@type" => "Thing",
-            "name" => ""
+            "@type"     => "Thing",
+            "name"      => ""
         ];
         return $brand;
     }
@@ -232,11 +232,11 @@ class Product
     {
 
         $priceSpecification = [
-            "@type" => "PriceSpecification",
-            "price" => $this->product->get_sale_price() ? $this->product->get_sale_price() : '',
-            "valueAddedTaxIncluded" => $this->product->get_tax_status() ? $this->product->get_tax_status() : '',
-            "taxPercentage" => !empty($this->tax()['tax_rates'][1]['rate']) ? $this->tax()['tax_rates'][1]['rate'] : '',
-            "taxFixedAmount" => !empty($this->tax()['tax_rates'][1]['rate']) ? ($this->tax()['tax_rates'][1]['rate'] / 100) * $this->tax()['price'] : ''
+            "@type"                     => "PriceSpecification",
+            "price"                     => $this->product->get_sale_price() ? $this->product->get_sale_price() : '',
+            "valueAddedTaxIncluded"     => $this->product->get_tax_status() ? $this->product->get_tax_status() : '',
+            "taxPercentage"             => !empty($this->tax()['tax_rates'][1]['rate']) ? $this->tax()['tax_rates'][1]['rate'] : '',
+            "taxFixedAmount"            => !empty($this->tax()['tax_rates'][1]['rate']) ? ($this->tax()['tax_rates'][1]['rate'] / 100) * $this->tax()['price'] : ''
         ];
         return $priceSpecification;
     }
@@ -248,18 +248,18 @@ class Product
      */
     protected function tax()
     {
-        $wc_tax = new \WC_Tax();
+        $wc_tax     = new \WC_Tax();
 
-        $tax_rates = $wc_tax::get_rates($this->product->get_tax_class());
-        $price     = $this->product->get_price();
-        $taxes     = $wc_tax::calc_tax($price, $tax_rates, false);
-        $tax_total = $wc_tax::get_tax_total($taxes);
+        $tax_rates  = $wc_tax::get_rates($this->product->get_tax_class());
+        $price      = $this->product->get_price();
+        $taxes      = $wc_tax::calc_tax($price, $tax_rates, false);
+        $tax_total  = $wc_tax::get_tax_total($taxes);
 
         $tax = [
-            "tax_rates" => $tax_rates,
-            "price" => $price,
-            "taxes" => $taxes,
-            "tax_total" => $tax_total
+            "tax_rates"     => $tax_rates,
+            "price"         => $price,
+            "taxes"         => $taxes,
+            "tax_total"     => $tax_total
         ];
 
         return $tax;
@@ -288,10 +288,10 @@ class Product
     protected function offers_saller()
     {
         $saller = [
-            "@type" => 'Organization',
-            "name" => '',
-            "url" => '',
-            "contactPoint" => $this->ContactPoint(),
+            "@type"         => 'Organization',
+            "name"          => '',
+            "url"           => '',
+            "contactPoint"  => $this->ContactPoint(),
         ];
         return $saller;
     }
@@ -315,11 +315,11 @@ class Product
     protected function ContactPoint()
     {
         $contactPoint = [
-            "@type" => "ContactPoint",
-            "contactType" => "",
-            "telephone" => "",
-            "availableLanguage" => "",
-            "url" => ""
+            "@type"                 => "ContactPoint",
+            "contactType"           => "",
+            "telephone"             => "",
+            "availableLanguage"     => "",
+            "url"                   => ""
         ];
         return $contactPoint;
     }
@@ -330,15 +330,15 @@ class Product
         $categoryObj = wp_get_post_terms($this->product->get_id(), 'product_cat');
 
         $category = [
-            "term_id" => $categoryObj[0]->term_id,
-            "name" => $categoryObj[0]->name,
-            "slug" => $categoryObj[0]->slug,
-            "term_group" => $categoryObj[0]->term_group,
-            "term_taxonomy_id" => $categoryObj[0]->term_taxonomy_id,
-            "taxonomy" => $categoryObj[0]->taxonomy,
-            "description" => $categoryObj[0]->description,
-            "parent" => $categoryObj[0]->parent,
-            "count" => $categoryObj[0]->count,
+            "term_id"               => $categoryObj[0]->term_id,
+            "name"                  => $categoryObj[0]->name,
+            "slug"                  => $categoryObj[0]->slug,
+            "term_group"            => $categoryObj[0]->term_group,
+            "term_taxonomy_id"      => $categoryObj[0]->term_taxonomy_id,
+            "taxonomy"              => $categoryObj[0]->taxonomy,
+            "description"           => $categoryObj[0]->description,
+            "parent"                => $categoryObj[0]->parent,
+            "count"                 => $categoryObj[0]->count,
         ];
 
         return $category;
@@ -348,9 +348,9 @@ class Product
     {
 
         $weight = [
-            "@type" => "QuantitativeValue",
-            "value" => $this->product->get_weight(),
-            "unitCode" => get_option('woocommerce_weight_unit')
+            "@type"         => "QuantitativeValue",
+            "value"         => $this->product->get_weight(),
+            "unitCode"      => get_option('woocommerce_weight_unit')
         ];
 
         return $weight;
@@ -360,9 +360,9 @@ class Product
     {
 
         $depth = [
-            "@type" => "QuantitativeValue",
-            "value" => $this->product->get_length(),
-            "unitCode" => get_option('woocommerce_dimension_unit')
+            "@type"         => "QuantitativeValue",
+            "value"         => $this->product->get_length(),
+            "unitCode"      => get_option('woocommerce_dimension_unit')
         ];
 
         return apply_filters("schemax_{$this->schema_type}_offers_depth", $depth, $this->product);
@@ -371,9 +371,9 @@ class Product
     protected function offers_width()
     {
         $width = [
-            "@type" => "QuantitativeValue",
-            "value" => $this->product->get_width(),
-            "unitCode" => get_option('woocommerce_dimension_unit')
+            "@type"         => "QuantitativeValue",
+            "value"         => $this->product->get_width(),
+            "unitCode"      => get_option('woocommerce_dimension_unit')
         ];
 
         return apply_filters("schemax_{$this->schema_type}_offers_width", $width, $this->product);
@@ -382,9 +382,9 @@ class Product
     protected function offers_height()
     {
         $height = [
-            "@type" => "QuantitativeValue",
-            "value" => $this->product->get_height(),
-            "unitCode" => get_option('woocommerce_dimension_unit')
+            "@type"         => "QuantitativeValue",
+            "value"         => $this->product->get_height(),
+            "unitCode"      => get_option('woocommerce_dimension_unit')
         ];
 
         return apply_filters("schemax_{$this->schema_type}_offers_width", $height, $this->product);
@@ -393,25 +393,25 @@ class Product
     protected function offers_shippingDetails()
     {
 
-        $shippingDetails = array();
+        $shippingDetails    = array();
 
-        $shipping_class_id = $this->product->get_shipping_class_id();
+        $shipping_class_id  = $this->product->get_shipping_class_id();
 
-        $shipping_zones = \WC_Shipping_Zones::get_zones();
+        $shipping_zones     = \WC_Shipping_Zones::get_zones();
 
         foreach ($shipping_zones as $zone_id => $zone_data) {
 
-            $zone             = new \WC_Shipping_Zone($zone_id);
-            $shipping_methods = $zone->get_shipping_methods(true);
+            $zone               = new \WC_Shipping_Zone($zone_id);
+            $shipping_methods   = $zone->get_shipping_methods(true);
 
-            $data              = [
-                "@type" => "OfferShippingDetails",
-                "shippingRate" => '',//$this->shippingDetails_shippingRate(),
-                "shippingDestination" => $this->shippingDetails_shippingDestination($zone_data['zone_name']),
-                "deliveryTime" => '',//$this->shippingDetails_deliveryTime(),
-                "taxShippingDetails" => '', //$this->shippingDetails_taxShippingDetails()
+            $data = [
+                "@type"                 => "OfferShippingDetails",
+                "shippingRate"          => '',//$this->shippingDetails_shippingRate(),
+                "shippingDestination"   => $this->shippingDetails_shippingDestination($zone_data['zone_name']),
+                "deliveryTime"          => '',//$this->shippingDetails_deliveryTime(),
+                "taxShippingDetails"    => '', //$this->shippingDetails_taxShippingDetails()
             ];
-            $shippingDetails[] = $data;
+            $shippingDetails[]  = $data;
         }
 
         return $shippingDetails;
@@ -420,9 +420,9 @@ class Product
     protected function shippingDetails_shippingRate()
     {
         $shippingRate = [
-            "@type" => "MonetaryAmount",
-            "currency" => "",
-            "value" => ""
+            "@type"         => "MonetaryAmount",
+            "currency"      => "",
+            "value"         => ""
         ];
 
         return $shippingRate;
@@ -432,8 +432,8 @@ class Product
     {
 
         $shippingDestination = [
-            "@type" => "DefinedRegion",
-            "addressCountry" => $zone_location
+            "@type"             => "DefinedRegion",
+            "addressCountry"    => $zone_location
         ];
         return $shippingDestination;
     }
@@ -442,9 +442,9 @@ class Product
     {
 
         $deliveryTime = [
-            "@type" => "ShippingDeliveryTime",
-            "handlingTime" => $this->shippingDetails_deliveryTime_handlingTime(),
-            "transitTime" => $this->shippingDetails_deliveryTime_transitTime()
+            "@type"             => "ShippingDeliveryTime",
+            "handlingTime"      => $this->shippingDetails_deliveryTime_handlingTime(),
+            "transitTime"       => $this->shippingDetails_deliveryTime_transitTime()
         ];
 
         return $deliveryTime;
@@ -453,8 +453,8 @@ class Product
     protected function shippingDetails_taxShippingDetails()
     {
         $taxShippingDetails = [
-            "@type" => "OfferShippingDetails",
-            "shippingRate" => $this->shippingDetails_taxShippingDetails_shippingRate(),
+            "@type"             => "OfferShippingDetails",
+            "shippingRate"      => $this->shippingDetails_taxShippingDetails_shippingRate(),
         ];
 
         return $taxShippingDetails;
@@ -463,9 +463,9 @@ class Product
     protected function shippingDetails_taxShippingDetails_shippingRate()
     {
         $shippingRate = [
-            "@type" => "MonetaryAmount",
-            "currency" => "",
-            "value" => ""
+            "@type"         => "MonetaryAmount",
+            "currency"      => "",
+            "value"         => ""
         ];
         return $shippingRate;
     }
@@ -473,10 +473,10 @@ class Product
     protected function shippingDetails_deliveryTime_handlingTime()
     {
         $handlingTime = [
-            "@type" => "QuantitativeValue",
-            "minValue" => "",
-            "maxValue" => "",
-            "unitCode" => "DAY"
+            "@type"         => "QuantitativeValue",
+            "minValue"      => "",
+            "maxValue"      => "",
+            "unitCode"      => "DAY"
         ];
         return $handlingTime;
     }
@@ -484,10 +484,10 @@ class Product
     protected function shippingDetails_deliveryTime_transitTime()
     {
         $transitTime = [
-            "@type" => "QuantitativeValue",
-            "minValue" => "",
-            "maxValue" => "",
-            "unitCode" => ""
+            "@type"             => "QuantitativeValue",
+            "minValue"          => "",
+            "maxValue"          => "",
+            "unitCode"          => ""
         ];
 
         return $transitTime;
