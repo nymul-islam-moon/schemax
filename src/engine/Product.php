@@ -69,39 +69,39 @@ class Product
     protected function single_product( array $product_arr ): array {
 
         if ( isset( $product_arr['name'] ) ) {
-            $product_arr['name'] = !empty($this->name()) ? $this->name() : '';
+            $product_arr['name']                = !empty($this->name()) ? $this->name() : '';
         }
 
         if ( isset( $product_arr['description'] ) ) {
-            $product_arr['description'] = !empty($this->description()) ? $this->description() : '';
+            $product_arr['description']         = !empty($this->description()) ? $this->description() : '';
         }
 
         if ( isset( $product_arr['review'] ) && ! empty ( $this->review() ) ) {
-                $product_arr['review'] = $this->review();
+                $product_arr['review']          = $this->review();
         } else {
             unset( $product_arr['review'] );
         }
 
         if ( isset( $product_arr['aggregateRating'] ) && isset( $product_arr['review'] ) && !empty( $this->review() ) ) {
-            $product_arr['aggregateRating'] = $this->aggregateRating();
+            $product_arr['aggregateRating']     = $this->aggregateRating();
         } else {
             unset( $product_arr['aggregateRating'] );
         }
 
         if ( isset( $product_arr['image'] )  && !empty( $this->image() ) ) {
-            $product_arr['image'] = $this->image();
+            $product_arr['image']               = $this->image();
         } else {
             unset( $product_arr['image'] );
         }
 
         if ( isset( $product_arr['brand'] ) && !empty( $this->brand() ) ) {
-            $product_arr['brand'] = $this->brand();
+            $product_arr['brand']               = $this->brand();
         } else {
             unset( $product_arr['brand'] );
         }
 
         if ( isset( $product_arr['offers'] ) ) {
-            $product_arr['offers']           = $this->offers( $product_arr['offers'] );
+            $product_arr['offers']              = $this->offers( $product_arr['offers'] );
         } else {
             unset( $product_arr['offers'] );
         }
