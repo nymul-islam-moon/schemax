@@ -9,9 +9,7 @@ class Product
 {
 
     public $product;
-    private $schema_type, $schema_name, $schema_service;
-    private $product_type;
-    public $schema_structure = [];
+    private $schema_type, $schema_name, $schema_service, $product_type, $schema_structure;
 
     public function __construct($product_id = null)
     {
@@ -35,33 +33,25 @@ class Product
      * @return mixed|null
      */
     protected function update_schema(): string {
-        $this->schema_structure                         = $this->schema_service->read_schema( $this->schema_name );
+        $this->schema_structure             = $this->schema_service->read_schema( $this->schema_name );
 
         if ($this->product_type == 'simple') {
-
             $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
-
         } else if ($this->product_type == 'variable') {
             $children                       = $this->product->get_children();
             $variable_product_arr           = [];
             foreach ($children as $variation_id) {
-
                 $this->product              = wc_get_product( $variation_id );
-
                 $variable_product_arr[]     = $this->single_product( $this->schema_structure );
             }
-
-            $updated_schema_data = json_encode( $variable_product_arr );
+            $updated_schema_data            = json_encode( $variable_product_arr );
         } else if ( $this->product_type = 'grouped' ) {
             $children                       = $this->product->get_children();
             $grouped_product_arr            = [];
             foreach ($children as $grouped_id) {
-
                 $this->product              = wc_get_product( $grouped_id );
-
                 $grouped_product_arr[]      = $this->single_product( $this->schema_structure );
             }
-
             $updated_schema_data            = json_encode( $grouped_product_arr );
         } else {
 
