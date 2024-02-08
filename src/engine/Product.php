@@ -193,8 +193,7 @@ class Product
      *
      * @return false|string
      */
-    protected function image()
-    {
+    protected function image(): string {
         if ($this->product) {
             $image_id = $this->product->get_image_id();
             return wp_get_attachment_image_url($image_id, 'full');
@@ -254,16 +253,16 @@ class Product
         */
 
         if ( isset( $offers_arr['price'] ) ) {
-            $offers_arr['price']            = $this->product->get_regular_price() ?? '';
+            $offers_arr['price']                        = $this->product->get_regular_price() ?? '';
         }
 
         if ( isset( $offers_arr['priceCurrency'] ) ) {
-            $offers_arr['priceCurrency']    = get_woocommerce_currency() ?? '';
+            $offers_arr['priceCurrency']                = get_woocommerce_currency() ?? '';
         }
 
         if ( isset( $offers_arr['priceSpecification'] ) ) {
             if ( !empty( $this->offers_priceSpecification( $offers_arr['priceSpecification'] ) ) ) {
-                $offers_arr['priceSpecification'] = $this->offers_priceSpecification( $offers_arr['priceSpecification'] );
+                $offers_arr['priceSpecification']       = $this->offers_priceSpecification( $offers_arr['priceSpecification'] );
             } else {
                 unset( $offers_arr['priceSpecification'] );
             }
@@ -272,91 +271,91 @@ class Product
         }
 
         if ( isset( $offers_arr['priceValidUntil'] ) && !empty( $this->offers_priceValidUntil ) ) {
-            $offers_arr['priceValidUntil'] = $this->offers_priceValidUntil();
+            $offers_arr['priceValidUntil']              = $this->offers_priceValidUntil();
         } else {
             unset( $offers_arr['priceValidUntil'] );
         }
 
         if ( isset( $offers_arr['availability'] ) && $this->product->get_stock_status() ) {
-            $offers_arr['availability'] = $this->product->get_stock_status();
+            $offers_arr['availability']                 = $this->product->get_stock_status();
         } else {
             unset( $offers_arr['availability'] );
         }
 
         if ( isset( $offers_arr['quantity'] ) && !empty( $this->product->get_stock_quantity() ) ) {
-            $offers_arr['quantity'] = $this->product->get_stock_quantity();
+            $offers_arr['quantity']                     = $this->product->get_stock_quantity();
         } else {
             unset( $offers_arr['quantity'] );
         }
 
         if ( isset( $offers_arr['url'] ) && !empty( $this->product->get_permalink() ) ){
-            $offers_arr['url'] = $this->product->get_permalink();
+            $offers_arr['url']                          = $this->product->get_permalink();
         } else {
             unset( $offers_arr['url'] );
         }
 
         if ( isset( $offers_arr['seller'] ) && !empty( $this->offers_seller() ) ) {
-            $offers_arr['seller'] = $this->offers_seller();
+            $offers_arr['seller']                       = $this->offers_seller();
         } else {
             unset( $offers_arr['seller'] );
         }
 
         if ( isset( $offers_arr['itemCondition'] ) && !empty( $this->offers_itemCondition() ) ) {
-            $offers_arr['itemCondition'] = $this->offers_itemCondition();
+            $offers_arr['itemCondition']                = $this->offers_itemCondition();
         } else {
             unset( $offers_arr['itemCondition'] );
         }
 
         if ( isset( $offers_arr['category'] ) && !empty( $this->offers_category() ) ) {
-            $offers_arr['category'] = $this->offers_category()['name'];
+            $offers_arr['category']                     = $this->offers_category()['name'];
         } else {
             unset( $offers_arr['category'] );
         }
 
         if ( isset( $offers_arr['mpn'] ) && !empty( $this->offers_mpn() ) ) {
-            $offers_arr['mpn'] = '';
+            $offers_arr['mpn']                          = '';
         } else {
             unset( $offers_arr['mpn'] );
         }
 
         if ( isset( $offers_arr['gtin8'] ) && !empty( $this->offers_gtin8() ) ) {
-            $offers_arr['gtin8'] = '';
+            $offers_arr['gtin8']                        = '';
         } else {
             unset( $offers_arr['gtin8'] );
         }
 
         if ( isset( $offers_arr['gtin13'] ) && !empty( $this->offers_gtin13() ) ) {
-            $offers_arr['gtin13'] = '';
+            $offers_arr['gtin13']                       = '';
         } else {
             unset( $offers_arr['gtin13'] );
         }
 
         if ( isset( $offers_arr['gtin14'] ) && !empty( $this->offers_gtin14() ) ) {
-            $offers_arr['gtin14'] = '';
+            $offers_arr['gtin14']                       = '';
         } else {
             unset( $offers_arr['gtin14'] );
         }
 
         if ( isset( $offers_arr['weight'] ) && ! empty( $this->offers_weight() ) ) {
-            $offers_arr['weight'] = $this->offers_weight();
+            $offers_arr['weight']                       = $this->offers_weight();
         } else {
             unset( $offers_arr['weight'] );
         }
 
         if ( isset( $offers_arr['depth'] ) && !empty( $this->offers_depth() ) ) {
-            $offers_arr['depth'] = $this->offers_depth();
+            $offers_arr['depth']                        = $this->offers_depth();
         } else {
             unset( $offers_arr['depth'] );
         }
 
         if ( isset( $offers_arr['width'] ) && !empty( $this->offers_width() ) ) {
-            $offers_arr['width'] = $this->offers_width();
+            $offers_arr['width']                        = $this->offers_width();
         } else {
             unset( $offers_arr['width'] );
         }
 
         if ( isset( $offers_arr['height'] ) && !empty( $this->offers_height() ) ) {
-            $offers_arr['height'] = $this->offers_height();
+            $offers_arr['height']                       = $this->offers_height();
         } else {
             unset( $offers_arr['height'] );
         }
