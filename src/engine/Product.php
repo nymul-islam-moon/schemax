@@ -601,8 +601,7 @@ class Product
         return apply_filters("schemax_{$this->schema_type}_offers_width", $height, $this->product);
     }
 
-    protected function offers_shippingDetails()
-    {
+    protected function offers_shippingDetails(): array {
 
         $shippingDetails    = array();
 
