@@ -23,6 +23,7 @@ class Product
         }
         $this->product_type = $this->product->get_type();
 
+
         $this->schema_service = new Service();
         $this->schema_name    = 'product.json';
         $this->schema_type    = 'product';
@@ -85,38 +86,35 @@ class Product
             $product_arr['description'] = !empty($this->description()) ? $this->description() : '';
         }
 
-        if ( isset( $product_arr['review'] ) ) {
-            if ( ! empty ( $this->review() ) ) {
+        if ( isset( $product_arr['review'] ) && ! empty ( $this->review() ) ) {
                 $product_arr['review'] = $this->review();
-            } else {
-                unset( $product_arr['review'] );
-            }
+        } else {
+            unset( $product_arr['review'] );
         }
 
-        if ( isset( $product_arr['aggregateRating'] ) && isset( $product_arr['review'] )) {
-            if ( !empty( $this->review() ) ) {
-                $product_arr['aggregateRating'] = $this->aggregateRating();
-            } else {
-                unset( $product_arr['aggregateRating'] );
-            }
+        if ( isset( $product_arr['aggregateRating'] ) && isset( $product_arr['review'] ) && !empty( $this->review() ) ) {
+            $product_arr['aggregateRating'] = $this->aggregateRating();
+        } else {
+            unset( $product_arr['aggregateRating'] );
         }
 
-        if ( isset( $product_arr['image'] ) ) {
-            if ( ! empty( $this->image() ) ) {
-                $product_arr['image'] = $this->image();
-            } else {
-                unset( $product_arr['image'] );
-            }
+        if ( isset( $product_arr['image'] )  && !empty( $this->image() ) ) {
+            $product_arr['image'] = $this->image();
+        } else {
+            unset( $product_arr['image'] );
         }
 
-
-        if ( ! empty( $this->brand() ) ) {
+        if ( isset( $product_arr['brand'] ) && !empty( $this->brand() ) ) {
             $product_arr['brand'] = $this->brand();
         } else {
             unset( $product_arr['brand'] );
         }
 
-        $product_arr['offers']           = $this->offers( $product_arr['offers'] );
+        if ( isset( $product_arr['offers'] ) ) {
+            $product_arr['offers']           = $this->offers( $product_arr['offers'] );
+        } else {
+            unset( $product_arr['offers'] );
+        }
 
         return $product_arr;
     }
@@ -264,7 +262,7 @@ class Product
             "shippingDetails"       => $this->offers_shippingDetails()
         ];
         */
-//        error_log( print_r( $this->product->get_regular_price(), true ) );
+
         if ( isset( $offers_arr['price'] ) ) {
             $offers_arr['price']            = $this->product->get_regular_price() ?? '';
         }
@@ -272,37 +270,133 @@ class Product
         if ( isset( $offers_arr['priceCurrency'] ) ) {
             $offers_arr['priceCurrency']    = get_woocommerce_currency() ?? '';
         }
-        
-        $offers_arr['priceSpecification'] = $this->offers_priceSpecification( $offers_arr['priceSpecification'] );
 
-//        $offers_arr['priceCurrency'] = ! empty ( get_woocommerce_currency() ) ? get_woocommerce_currency() : '';
-//
-//        if(get_woocommerce_currency()) {
-//            $offers_arr['priceCurrency'] = get_woocommerce_currency();
-//        }
-//        $price_specification = $this->offers_priceSpecification();
-//        if($price_specification) {
-//            $offers['priceSpecification'] = $price_specification;
-//        }
+        if ( isset( $offers_arr['priceSpecification'] ) ) {
+            if ( !empty( $this->offers_priceSpecification( $offers_arr['priceSpecification'] ) ) ) {
+                $offers_arr['priceSpecification'] = $this->offers_priceSpecification( $offers_arr['priceSpecification'] );
+            } else {
+                unset( $offers_arr['priceSpecification'] );
+            }
+        } else {
+            unset( $offers_arr['priceSpecification'] );
+        }
+
+        if ( isset( $offers_arr['priceValidUntil'] ) && !empty( $this->offers_priceValidUntil ) ) {
+            $offers_arr['priceValidUntil'] = $this->offers_priceValidUntil();
+        } else {
+            unset( $offers_arr['priceValidUntil'] );
+        }
+
+        if ( isset( $offers_arr['availability'] ) && $this->product->get_stock_status() ) {
+            $offers_arr['availability'] = $this->product->get_stock_status();
+        } else {
+            unset( $offers_arr['availability'] );
+        }
+
+        if ( isset( $offers_arr['quantity'] ) && !empty( $this->product->get_stock_quantity() ) ) {
+            $offers_arr['quantity'] = $this->product->get_stock_quantity();
+        } else {
+            unset( $offers_arr['quantity'] );
+        }
+
+        if ( isset( $offers_arr['url'] ) && !empty( $this->product->get_permalink() ) ){
+            $offers_arr['url'] = $this->product->get_permalink();
+        } else {
+            unset( $offers_arr['url'] );
+        }
+
+        if ( isset( $offers_arr['seller'] ) && !empty( $this->offers_seller() ) ) {
+            $offers_arr['seller'] = $this->offers_seller();
+        } else {
+            unset( $offers_arr['seller'] );
+        }
+
+        if ( isset( $offers_arr['itemCondition'] ) && !empty( $this->offers_itemCondition() ) ) {
+            $offers_arr['itemCondition'] = $this->offers_itemCondition();
+        } else {
+            unset( $offers_arr['itemCondition'] );
+        }
+
+        if ( isset( $offers_arr['category'] ) && !empty( $this->offers_category() ) ) {
+            $offers_arr['category'] = $this->offers_category()['name'];
+        } else {
+            unset( $offers_arr['category'] );
+        }
+
+        if ( isset( $offers_arr['mpn'] ) && !empty( $this->offers_mpn() ) ) {
+            $offers_arr['mpn'] = '';
+        } else {
+            unset( $offers_arr['mpn'] );
+        }
+
+        if ( isset( $offers_arr['gtin8'] ) && !empty( $this->offers_gtin8() ) ) {
+            $offers_arr['gtin8'] = '';
+        } else {
+            unset( $offers_arr['gtin8'] );
+        }
+
+        if ( isset( $offers_arr['gtin13'] ) && !empty( $this->offers_gtin13() ) ) {
+            $offers_arr['gtin13'] = '';
+        } else {
+            unset( $offers_arr['gtin13'] );
+        }
+
+        if ( isset( $offers_arr['gtin14'] ) && !empty( $this->offers_gtin14() ) ) {
+            $offers_arr['gtin14'] = '';
+        } else {
+            unset( $offers_arr['gtin14'] );
+        }
+
+        if ( isset( $offers_arr['weight'] ) && ! empty( $this->offers_weight() ) ) {
+            $offers_arr['weight'] = $this->offers_weight();
+        } else {
+            unset( $offers_arr['weight'] );
+        }
+
+        if ( isset( $offers_arr['depth'] ) && !empty( $this->offers_depth() ) ) {
+            $offers_arr['depth'] = $this->offers_depth();
+        } else {
+            unset( $offers_arr['depth'] );
+        }
+
+        if ( isset( $offers_arr['width'] ) && !empty( $this->offers_width() ) ) {
+            $offers_arr['width'] = $this->offers_width();
+        } else {
+            unset( $offers_arr['width'] );
+        }
+
+        if ( isset( $offers_arr['height'] ) && !empty( $this->offers_height() ) ) {
+            $offers_arr['height'] = $this->offers_height();
+        } else {
+            unset( $offers_arr['height'] );
+        }
 
         return $offers_arr;
     }
 
     /**
-     * Get the priceSpecification information for the Offers method
+     * Get the PriceSpecification information
      *
+     * @param array $priceSpecification
      * @return array
      */
-    protected function offers_priceSpecification( array $priceSpecification )
-    {
+    protected function offers_priceSpecification( array $priceSpecification ): array {
 
-        if( $this->product->get_tax_status() == 'taxable' ) {
-            $priceSpecification = [
-                "price"                     => $this->product->get_sale_price(),
-                "valueAddedTaxIncluded"     => (boolean) $this->product->get_tax_status(),
-                "taxPercentage"             => !empty($this->tax()['tax_rates'][1]['rate']) ? $this->tax()['tax_rates'][1]['rate'] : '',
-                "taxFixedAmount"            => !empty($this->tax()['tax_rates'][1]['rate']) ? ($this->tax()['tax_rates'][1]['rate'] / 100) * $this->tax()['price'] : ''
-            ];
+        $priceSpecification = [];
+
+        $priceSpecification['price'] = ! empty( $this->product->get_sale_price() ) ? $this->product->get_sale_price() : '';
+
+        if ( empty( $priceSpecification['price'] ) ) {
+            return [];
+        }
+
+        $priceSpecification['valueAddedTaxIncluded'] = $this->product->get_tax_status() == 'taxable' ? true : '';
+
+        if ( !empty( $priceSpecification['valueAddedTaxIncluded'] ) ) {
+            $priceSpecification["taxPercentage"]  = !empty($this->tax()['tax_rates'][1]['rate']) ? $this->tax()['tax_rates'][1]['rate'] : '';
+            $priceSpecification["taxFixedAmount"]  = !empty($this->tax()['tax_rates'][1]['rate']) ? ($this->tax()['tax_rates'][1]['rate'] / 100) * $this->tax()['price'] : '';
+        } else {
+            unset( $priceSpecification['valueAddedTaxIncluded'], $priceSpecification['taxPercentage'], $priceSpecification['taxFixedAmount'] );
         }
 
         return $priceSpecification;
@@ -322,14 +416,12 @@ class Product
         $taxes      = $wc_tax::calc_tax($price, $tax_rates, false);
         $tax_total  = $wc_tax::get_tax_total($taxes);
 
-        $tax = [
+        return [
             "tax_rates"     => $tax_rates,
             "price"         => $price,
             "taxes"         => $taxes,
             "tax_total"     => $tax_total
         ];
-
-        return $tax;
     }
 
     /**
@@ -352,22 +444,30 @@ class Product
         return $this->product->get_date_on_sale_from();
     }
 
-    protected function offers_saller()
-    {
-        $saller = [
+    /**
+     * Get the offer seller information
+     *
+     * @return array
+     */
+    protected function offers_seller(): array {
+        $seller = [
             "@type"         => 'Organization',
             "name"          => '',
             "url"           => '',
             "contactPoint"  => $this->ContactPoint(),
         ];
-        return $saller;
+
+        if ( empty( $seller['name'] ) ) {
+            return [];
+        }
+
+        return $seller;
     }
 
-    protected function offers_itemCondition()
-    {
+    protected function offers_itemCondition(): string {
         $itemCondition = get_post_meta($this->product->get_id(), 'item_condition', true);
 
-        if (!empty($itemCondition)) {
+        if ( !empty( $itemCondition ) ) {
             return $itemCondition;
         }
 
@@ -391,8 +491,12 @@ class Product
         return $contactPoint;
     }
 
-    protected function offers_category()
-    {
+    /**
+     * Get The Product Category information
+     *
+     * @return array
+     */
+    protected function offers_category(): array {
 
         $categoryObj = wp_get_post_terms($this->product->get_id(), 'product_cat');
 
@@ -408,17 +512,46 @@ class Product
             "count"                 => $categoryObj[0]->count,
         ];
 
+
+
+        if ( empty( $category['name'] ) ) {
+            return [];
+        }
         return $category;
     }
 
-    protected function offers_weight()
-    {
+    /**
+     * Get Offers mpn value
+     *
+     * @return string
+     */
+    protected function offers_mpn(): string { // TODO Operation not implemented
+        return '';
+    }
+
+    protected function offers_gtin8(): string { // TODO Operation not implemented
+        return '';
+    }
+
+    protected function offers_gtin13(): string { // TODO Operation not implemented
+        return '';
+    }
+
+    protected function offers_gtin14(): string { // TODO Operation not implemented
+        return '';
+    }
+
+    protected function offers_weight(): array {
 
         $weight = [
             "@type"         => "QuantitativeValue",
             "value"         => $this->product->get_weight(),
             "unitCode"      => get_option('woocommerce_weight_unit')
         ];
+
+        if ( empty( $weight['value'] ) ) {
+            return [];
+        }
 
         return $weight;
     }
@@ -432,6 +565,10 @@ class Product
             "unitCode"      => get_option('woocommerce_dimension_unit')
         ];
 
+        if ( empty( $depth['value'] ) ) {
+            return [];
+        }
+
         return apply_filters("schemax_{$this->schema_type}_offers_depth", $depth, $this->product);
     }
 
@@ -443,16 +580,23 @@ class Product
             "unitCode"      => get_option('woocommerce_dimension_unit')
         ];
 
+        if ( empty( $width['value'] ) ) {
+            return [];
+        }
+
         return apply_filters("schemax_{$this->schema_type}_offers_width", $width, $this->product);
     }
 
-    protected function offers_height()
-    {
+    protected function offers_height(): array {
         $height = [
             "@type"         => "QuantitativeValue",
             "value"         => $this->product->get_height(),
             "unitCode"      => get_option('woocommerce_dimension_unit')
         ];
+
+        if ( empty( $height['value'] ) ) {
+            return [];
+        }
 
         return apply_filters("schemax_{$this->schema_type}_offers_width", $height, $this->product);
     }

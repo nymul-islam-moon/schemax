@@ -54,7 +54,7 @@
     },
     "priceValidUntil": "2024-12-31T23:59:59",
     "availability": "https://schema.org/InStock",
-    "quantity": 100,
+    "quantity": 9999,
     "url": "https://example.com/product-url",
     "seller": {
       "@type": "Organization",
