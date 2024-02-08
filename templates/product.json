@@ -130,6 +130,7 @@
           }
         }
       }
-    ]
+    ],
+    "hasMerchantReturnPolicy" : "TODO : https://schema.org/MerchantReturnPolicy"
   }
 }

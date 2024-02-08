@@ -294,8 +294,8 @@ class Product
             unset( $offers_arr['url'] );
         }
 
-        if ( isset( $offers_arr['seller'] ) && !empty( $this->offers_seller() ) ) {
-            $offers_arr['seller']                       = $this->offers_seller();
+        if ( isset( $offers_arr['seller'] ) && !empty( $this->offers_seller( $offers_arr['seller'] ) ) ) {
+            $offers_arr['seller']                       = $this->offers_seller( $offers_arr['seller'] );
         } else {
             unset( $offers_arr['seller'] );
         }
@@ -358,6 +358,12 @@ class Product
             $offers_arr['height']                       = $this->offers_height();
         } else {
             unset( $offers_arr['height'] );
+        }
+
+        if ( isset( $offers_arr['shippingDetails'] ) && !empty( $this->offers_shippingDetails() ) ) {
+            $offers_arr['shippingDetails'] = $this->offers_shippingDetails();
+        } else {
+            unset( $offers_arr['shippingDetails'] );
         }
 
         return $offers_arr;
@@ -438,13 +444,25 @@ class Product
      *
      * @return array
      */
-    protected function offers_seller(): array {
-        $seller = [
-            "@type"         => 'Organization',
-            "name"          => '',
-            "url"           => '',
-            "contactPoint"  => $this->ContactPoint(),
-        ];
+    protected function offers_seller( array $seller ): array {
+
+        if ( isset( $seller['name'] ) && !empty( get_bloginfo('name') ) ) {
+            $seller['name'] = get_bloginfo('name');
+        }else {
+            unset( $seller['name'] );
+        }
+
+        if ( isset( $seller['url'] ) && !empty( home_url() ) ) {
+            $seller['url'] = home_url();
+        }else {
+            unset( $seller['url'] );
+        }
+
+        if ( isset( $seller['contactPoint'] ) && !empty( $this->offers_seller_ContactPoint() ) ) {
+            $seller['contactPoint']  = $this->offers_seller_ContactPoint();
+        } else {
+            unset( $seller['contactPoint'] );
+        }
 
         if ( empty( $seller['name'] ) ) {
             return [];
@@ -468,7 +486,7 @@ class Product
      *
      * @return string[]
      */
-    protected function ContactPoint()
+    protected function offers_seller_ContactPoint()
     {
         $contactPoint = [
             "@type"                 => "ContactPoint",
@@ -477,6 +495,11 @@ class Product
             "availableLanguage"     => "",
             "url"                   => ""
         ];
+
+        if ( empty( $contactPoint['telephone'] ) ) {
+            return [];
+        }
+
         return $contactPoint;
     }
 
@@ -590,7 +613,9 @@ class Product
         return apply_filters("schemax_{$this->schema_type}_offers_width", $height, $this->product);
     }
 
-    protected function offers_shippingDetails(): array {
+    protected function offers_shippingDetails(): array { // TODO this method is incomplete for lacking of necessary information
+
+        return [];
 
         $shippingDetails    = array();
 
@@ -627,7 +652,7 @@ class Product
         return $shippingRate;
     }
 
-    protected function shippingDetails_shippingDestination($zone_location)
+    protected function shippingDetails_shippingDestination( $zone_location )
     {
 
         $shippingDestination = [
