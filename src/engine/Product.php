@@ -17,16 +17,16 @@ class Product
     {
         global $product;
         if ($product instanceof \WC_Product) {
-            $this->product = $product;
+            $this->product      = $product;
         } else {
-            $this->product = wc_get_product($product_id);
+            $this->product      = wc_get_product($product_id);
         }
-        $this->product_type = $this->product->get_type();
+        $this->product_type     = $this->product->get_type();
 
 
-        $this->schema_service = new Service();
-        $this->schema_name    = 'product.json';
-        $this->schema_type    = 'product';
+        $this->schema_service   = new Service();
+        $this->schema_name      = 'product.json';
+        $this->schema_type      = 'product';
     }
 
     /**
