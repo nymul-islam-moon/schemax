@@ -382,6 +382,7 @@ class Product
         $priceSpecification['valueAddedTaxIncluded'] = $this->product->get_tax_status() == 'taxable' ? true : '';
 
         if ( !empty( $priceSpecification['valueAddedTaxIncluded'] ) ) {
+
             $priceSpecification["taxPercentage"]  = !empty($this->tax()['tax_rates'][1]['rate']) ? $this->tax()['tax_rates'][1]['rate'] : '';
             $priceSpecification["taxFixedAmount"]  = !empty($this->tax()['tax_rates'][1]['rate']) ? ($this->tax()['tax_rates'][1]['rate'] / 100) * $this->tax()['price'] : '';
         } else {
@@ -396,14 +397,13 @@ class Product
      *
      * @return array
      */
-    protected function tax()
-    {
+    protected function tax(): array {
         $wc_tax     = new \WC_Tax();
 
-        $tax_rates  = $wc_tax::get_rates($this->product->get_tax_class());
+        $tax_rates  = $wc_tax::get_rates( $this->product->get_tax_class() );
         $price      = $this->product->get_price();
-        $taxes      = $wc_tax::calc_tax($price, $tax_rates, false);
-        $tax_total  = $wc_tax::get_tax_total($taxes);
+        $taxes      = $wc_tax::calc_tax( $price, $tax_rates, false );
+        $tax_total  = $wc_tax::get_tax_total( $taxes );
 
         return [
             "tax_rates"     => $tax_rates,
