@@ -11,16 +11,15 @@ class Product
     public $product;
     private $schema_type, $schema_name, $schema_service, $product_type, $schema_structure;
 
-    public function __construct($product_id = null)
+    public function __construct( $product_id = null )
     {
         global $product;
-        if ($product instanceof \WC_Product) {
+        if ( $product instanceof \WC_Product ) {
             $this->product      = $product;
         } else {
             $this->product      = wc_get_product($product_id);
         }
         $this->product_type     = $this->product->get_type();
-
 
         $this->schema_service   = new Service();
         $this->schema_name      = 'product.json';
@@ -76,26 +75,26 @@ class Product
             $product_arr['description']         = !empty($this->description()) ? $this->description() : '';
         }
 
-        if ( isset( $product_arr['review'] ) && ! empty ( $this->review() ) ) {
-                $product_arr['review']          = $this->review();
+        if ( isset( $product_arr['review'] ) && ! empty ( $this->review( $product_arr['review'] ) ) ) {
+                $product_arr['review']          = $this->review( $product_arr['review'] );
         } else {
             unset( $product_arr['review'] );
         }
 
-        if ( isset( $product_arr['aggregateRating'] ) && isset( $product_arr['review'] ) && !empty( $this->review() ) ) {
-            $product_arr['aggregateRating']     = $this->aggregateRating();
+        if ( isset( $product_arr['aggregateRating'] ) && isset( $product_arr['review'] ) && !empty( $this->review( $product_arr['review'] ) ) && !empty( $product_arr['aggregateRating'] ) ) {
+            $product_arr['aggregateRating']     = $this->aggregateRating( $product_arr['aggregateRating'] );
         } else {
             unset( $product_arr['aggregateRating'] );
         }
 
-        if ( isset( $product_arr['image'] )  && !empty( $this->image() ) ) {
-            $product_arr['image']               = $this->image();
+        if ( isset( $product_arr['image'] )  && !empty( $this->image( $product_arr['image'] ) ) ) {
+            $product_arr['image']               = $this->image( $product_arr['image'] );
         } else {
             unset( $product_arr['image'] );
         }
 
-        if ( isset( $product_arr['brand'] ) && !empty( $this->brand() ) ) {
-            $product_arr['brand']               = $this->brand();
+        if ( isset( $product_arr['brand'] ) && !empty( $this->brand( $product_arr['brand'] ) ) ) {
+            $product_arr['brand']               = $this->brand( $product_arr['brand'] );
         } else {
             unset( $product_arr['brand'] );
         }
@@ -128,11 +127,13 @@ class Product
     }
 
     /**
-     * Return the review array
+     * Get the review information
      *
+     * @param array $review    | Review Schema Structure
      * @return array
      */
-    protected function review(): array {
+    protected function review( array $review ): array {
+
         $args = array(
             'post_id'   => $this->product ? $this->product->get_id() : '',
             'status'    => 'approve'
@@ -140,24 +141,35 @@ class Product
 
         $review_arr    = get_comments( $args );
 
-        $review_data = null;
+        $review_data = [];
+
         if ( ! empty( $review_arr ) ) {
 
-            foreach ($review_arr as $key => $review) {
-                $singleReviewData   = [
-                    '@type'             => 'Review',
-                    'reviewRating'      => [
-                        '@type'             => 'Rating',
-                        'ratingValue'       => get_comment_meta($review->comment_ID, 'rating', true),
-                        'bestRating'        => 5
-                    ],
-                    'author'            => [
-                        '@type'             => 'Person',
-                        'name'              => $review->comment_author ?? ''
-                    ],
-                    'comment'           => $review->comment_content ?? ''
-                ];
-                $review_data[$key]  = $singleReviewData;
+            foreach ( $review_arr as $key => $item ) {
+                $review_structure = $review[0];
+                if ( isset( $review_structure['reviewRating'] ) && !empty( $this->review_reviewRating( $review_structure['reviewRating'], $item->comment_ID ) ) ) {
+                    $review_structure['reviewRating'] = $this->review_reviewRating( $review_structure['reviewRating'], $item->comment_ID );
+                } else {
+                    continue;
+                }
+
+                if ( isset( $review_structure['author'] ) && !empty( $item->comment_author ) ) {
+                    $review_structure['author'] = $item->comment_author;
+                } else {
+                    unset( $review_structure['author'] );
+                }
+
+                if ( isset( $review_structure['comment'] ) && !empty( $item->comment_content ) ) {
+                    $review_structure['comment'] = $item->comment_content;
+                } else {
+                    unset( $review_structure['comment'] );
+                }
+
+                $review_data[] = $review_structure;
+            }
+
+            if ( empty( $review_data ) ) {
+                return [];
             }
 
             return apply_filters("schemax_{$this->schema_type}", $review_data, $this->product);
@@ -167,11 +179,32 @@ class Product
     }
 
     /**
-     * Get the Aggregate Rating
+     * Get the ReviewRating information
      *
+     * @param array $reviewRating
+     * @param int $commentId
      * @return array
      */
-    protected function aggregateRating(): array {
+    protected function review_reviewRating( array $reviewRating, int $commentId ): array {
+
+        if ( isset( $reviewRating['ratingValue'] ) && get_comment_meta( $commentId , 'rating', true) ) {
+            $reviewRating['ratingValue'] = (int) get_comment_meta( $commentId, 'rating', true );
+        }
+
+        if ( empty( $reviewRating['ratingValue'] ) ) {
+            return [];
+        }
+
+        return $reviewRating;
+    }
+
+    /**
+     * Get the Aggregate Rating
+     *
+     * @param array $aggregateRating
+     * @return array
+     */
+    protected function aggregateRating( array $aggregateRating ): array {
 
         $args         = array(
             'post_id'   => $this->product ? $this->product->get_id() : '',
@@ -179,21 +212,38 @@ class Product
         );
         $review_count = get_comments($args);
 
-        $aggregate_rating = [
-            "@type"             => "AggregateRating",
-            "ratingValue"       => $this->product->get_average_rating(),
-            "reviewCount"       => $review_count
-        ];
+        if ( isset( $aggregateRating['ratingValue'] ) && !empty( $this->product->get_average_rating() ) ) {
+            $aggregateRating["ratingValue"]       = (float) $this->product->get_average_rating();
+        }
 
-        return $aggregate_rating;
+        if ( isset( $aggregateRating['reviewCount'] ) && !empty( $review_count ) ) {
+            $aggregateRating['reviewCount'] =  (int) $review_count;
+        }
+
+        if ( !empty( $aggregateRating['ratingValue'] ) && !empty( $aggregateRating['reviewCount'] ) ) {
+            return $aggregateRating;
+        }
+
+        return [];
     }
 
     /**
-     * Image for Update method
-     *
-     * @return false|string
+     * @return string
      */
-    protected function image(): string {
+    protected function image( array $images ): array {
+
+        // Get the URL of the main product image
+        if ($this->product->get_image_id()) {
+            $images[] = wp_get_attachment_url( $this->product->get_image_id() );
+        }
+
+        // Get the URLs of the additional gallery images
+        $gallery_image_ids = $this->product->get_gallery_image_ids();
+
+        foreach ($gallery_image_ids as $image_id) {
+            $images[] = wp_get_attachment_url($image_id);
+        }
+
         if ($this->product) {
             $image_id = $this->product->get_image_id();
             return wp_get_attachment_image_url($image_id, 'full');
@@ -206,11 +256,9 @@ class Product
      *
      * @return string[]
      */
-    protected function brand(): array {
-        $brand = [
-            "@type"     => "Thing",
-            "name"      => ""
-        ];
+    protected function brand( array $brand ): array {
+
+        $brand['name']  = get_bloginfo('name');
 
         if ( empty ( $brand['name'] ) ) {
             return [];
