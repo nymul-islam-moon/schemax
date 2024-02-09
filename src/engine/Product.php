@@ -301,7 +301,7 @@ class Product
             unset( $offers_arr['hasMerchantReturnPolicy'] );
         }
 
-        if ( isset( $offers_arr['priceValidUntil'] ) && !empty( $this->offers_priceValidUntil ) ) {
+        if ( isset( $offers_arr['priceValidUntil'] ) && !empty( $this->offers_priceValidUntil() ) ) {
             $offers_arr['priceValidUntil']              = $this->offers_priceValidUntil();
         } else {
             unset( $offers_arr['priceValidUntil'] );
