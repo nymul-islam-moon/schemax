@@ -11,6 +11,11 @@ class Product
     public $product;
     private $schema_type, $schema_name, $schema_service, $product_type, $schema_structure;
 
+    /**
+     * Construct for the Product Class
+     *
+     * @param $product_id
+     */
     public function __construct( $product_id = null )
     {
         global $product;
@@ -107,7 +112,7 @@ class Product
             unset( $product_arr['offers'] );
         }
 
-        return $product_arr;
+        return apply_filters("schemax_{$this->schema_type}_single_product", $product_arr, $this->product);
     }
 
     /**
@@ -174,7 +179,7 @@ class Product
                 return [];
             }
 
-            return apply_filters("schemax_{$this->schema_type}", $review_data, $this->product);
+            return apply_filters("schemax_{$this->schema_type}_review", $review_data, $this->product);
         }
 
         return [];
@@ -197,7 +202,7 @@ class Product
             return [];
         }
 
-        return $reviewRating;
+        return apply_filters("schemax_{$this->schema_type}_review_reviewRating", $reviewRating, $this->product);
     }
 
     /**
@@ -223,7 +228,7 @@ class Product
         }
 
         if ( !empty( $aggregateRating['ratingValue'] ) && !empty( $aggregateRating['reviewCount'] ) ) {
-            return $aggregateRating;
+            return apply_filters("schemax_{$this->schema_type}_aggregateRating", $aggregateRating, $this->product);
         }
 
         return [];
@@ -245,7 +250,7 @@ class Product
         }
 
         if ( ! empty( $images ) ) {
-            return $images;
+            return apply_filters("schemax_{$this->schema_type}_image", $images, $this->product);
         }
 
         return [];
@@ -263,8 +268,7 @@ class Product
         if ( empty ( $brand['name'] ) ) {
             return [];
         }
-
-        return $brand;
+        return apply_filters("schemax_{$this->schema_type}_brand", $brand, $this->product);
     }
 
     /**
