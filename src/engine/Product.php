@@ -61,6 +61,8 @@ class Product
             $updated_schema_data            = json_encode( $this->schema_structure );
         } else if ( $this->product->is_downloadable() ) {
             $updated_schema_data            = json_encode( $this->schema_structure );
+        } else {
+            $updated_schema_data            = json_encode( $this->schema_structure );
         }
 
         return apply_filters("schemax_{$this->schema_type}_update_schema", $updated_schema_data, $this->product);
@@ -83,7 +85,7 @@ class Product
         }
 
         if ( isset( $product_arr['review'] ) && ! empty ( $this->review( $product_arr['review'] ) ) ) {
-                $product_arr['review']          = $this->review( $product_arr['review'] );
+            $product_arr['review']              = $this->review( $product_arr['review'] );
         } else {
             unset( $product_arr['review'] );
         }
@@ -146,33 +148,33 @@ class Product
             'status'    => 'approve'
         );
 
-        $review_arr    = get_comments( $args );
+        $review_arr     = get_comments( $args );
 
-        $review_data = [];
+        $review_data    = [];
 
         if ( ! empty( $review_arr ) ) {
 
             foreach ( $review_arr as $key => $item ) {
-                $review_structure = $review[0];
+                $review_structure   = $review[0];
                 if ( isset( $review_structure['reviewRating'] ) && !empty( $this->review_reviewRating( $review_structure['reviewRating'], $item->comment_ID ) ) ) {
-                    $review_structure['reviewRating'] = $this->review_reviewRating( $review_structure['reviewRating'], $item->comment_ID );
+                    $review_structure['reviewRating']       = $this->review_reviewRating( $review_structure['reviewRating'], $item->comment_ID );
                 } else {
                     continue;
                 }
 
                 if ( isset( $review_structure['author'] ) && !empty( $item->comment_author ) ) {
-                    $review_structure['author']['name'] = $item->comment_author;
+                    $review_structure['author']['name']     = $item->comment_author;
                 } else {
                     unset( $review_structure['author'] );
                 }
 
                 if ( isset( $review_structure['comment'] ) && !empty( $item->comment_content ) ) {
-                    $review_structure['comment'] = $item->comment_content;
+                    $review_structure['comment']            = $item->comment_content;
                 } else {
                     unset( $review_structure['comment'] );
                 }
 
-                $review_data[] = $review_structure;
+                $review_data[]                              = $review_structure;
             }
 
             if ( empty( $review_data ) ) {
@@ -220,11 +222,11 @@ class Product
         $review_count = get_comments($args);
 
         if ( isset( $aggregateRating['ratingValue'] ) && !empty( $this->product->get_average_rating() ) ) {
-            $aggregateRating["ratingValue"]       = (float) $this->product->get_average_rating();
+            $aggregateRating["ratingValue"]         = (float) $this->product->get_average_rating();
         }
 
         if ( isset( $aggregateRating['reviewCount'] ) && !empty( $review_count ) ) {
-            $aggregateRating['reviewCount'] =  (int) $review_count;
+            $aggregateRating['reviewCount']         =  (int) $review_count;
         }
 
         if ( !empty( $aggregateRating['ratingValue'] ) && !empty( $aggregateRating['reviewCount'] ) ) {
@@ -240,10 +242,6 @@ class Product
     protected function image( array $images ): array {
 
         $gallery_image_ids = $this->product->get_gallery_image_ids();
-//
-//        if ( $this->product->get_image_id() ) {
-//            $images[] = wp_get_attachment_url( $this->product->get_image_id() );
-//        }
 
         foreach ($gallery_image_ids as $image_id) {
             $images[] = wp_get_attachment_url($image_id);
@@ -298,7 +296,7 @@ class Product
         }
 
         if ( isset( $offers_arr['hasMerchantReturnPolicy'] ) && !empty( $this->offers_hasMerchantReturnPolicy( $offers_arr['hasMerchantReturnPolicy'] ) ) ) {
-            $offers_arr['hasMerchantReturnPolicy'] = $this->offers_hasMerchantReturnPolicy( $offers_arr['hasMerchantReturnPolicy'] );
+            $offers_arr['hasMerchantReturnPolicy']      = $this->offers_hasMerchantReturnPolicy( $offers_arr['hasMerchantReturnPolicy'] );
         } else {
             unset( $offers_arr['hasMerchantReturnPolicy'] );
         }
