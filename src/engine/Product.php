@@ -52,8 +52,10 @@ class Product
                 $grouped_product_arr[]      = $this->single_product( $this->schema_structure );
             }
             $updated_schema_data            = json_encode( $grouped_product_arr );
-        } else {
-
+        } else if ( $this->product->is_virtual() ) {
+            $updated_schema_data            = json_encode( $this->schema_structure );
+        } else if ( $this->product->is_downloadable() ) {
+            $updated_schema_data            = json_encode( $this->schema_structure );
         }
 
         return apply_filters("schemax_{$this->schema_type}_update_schema", $updated_schema_data, $this->product);
@@ -266,37 +268,12 @@ class Product
     }
 
     /**
-     * Offer data for update method
+     * Get offers information
      *
+     * @param array $offers_arr
      * @return array
      */
     protected function offers( array $offers_arr ): array {
-
-        /**
-        $offers = [
-            "@type"                 => "Offer",
-            "price"                 => $this->product->get_regular_price() ? $this->product->get_regular_price() : '',
-            "priceCurrency"         => get_woocommerce_currency() ? get_woocommerce_currency() : '',
-            "priceSpecification"    => $this->offers_priceSpecification(),
-            "priceValidUntil"       => ! empty( $this->offers_priceValidUntil() ) ? $this->offers_priceValidUntil() : '',
-            "priceValidFrom"        => $this->offers_priceValidFrom(),
-            "availability"          => $this->product->get_stock_status() ? $this->product->get_stock_status() : '',
-            "quantity"              => $this->product->get_stock_quantity() != null ? $this->product->get_stock_quantity() : '',
-            "url"                   => $this->product->get_permalink() ? $this->product->get_permalink() : '',
-            "seller"                => $this->offers_saller(),
-            "itemCondition"         => $this->offers_itemCondition(),
-            "category"              => !empty($this->offers_category()['name']) ? $this->offers_category()['name'] : '',
-            "mpn"                   => "working in progress",
-            "gtin8"                 => "working in progress",
-            "gtin13"                => "working in progress",
-            "gtin14"                => "working in progress",
-            "weight"                => $this->product->has_weight() ? $this->offers_weight() : '',
-            "depth"                 => !empty($this->offers_depth()['value']) ? $this->offers_depth() : '',
-            "width"                 => !empty($this->offers_width()['value']) ? $this->offers_width() : '',
-            "height"                => !empty($this->offers_height()['value']) ? $this->offers_height() : '',
-            "shippingDetails"       => $this->offers_shippingDetails()
-        ];
-        */
 
         if ( isset( $offers_arr['price'] ) ) {
             $offers_arr['price']                        = $this->product->get_regular_price() ?? '';
