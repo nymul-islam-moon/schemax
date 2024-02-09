@@ -43,6 +43,14 @@
       "taxPercentage": 7.5,
       "taxFixedAmount": 2.5
     },
+    "hasMerchantReturnPolicy": {
+      "@type": "MerchantReturnPolicy",
+      "applicableCountry": "CH",
+      "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+      "merchantReturnDays": 60,
+      "returnMethod": "https://schema.org/ReturnByMail",
+      "returnFees": "https://schema.org/FreeReturn"
+    },
     "priceValidUntil": "2024-12-31T23:59:59",
     "availability": "https://schema.org/InStock",
     "quantity": 9999,

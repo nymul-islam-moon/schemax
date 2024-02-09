@@ -27,9 +27,9 @@ class Product
     }
 
     /**
-     * Update the product schema using the realtime data
+     * Update Schema
      *
-     * @return mixed|null
+     * @return string
      */
     protected function update_schema(): string {
         $this->schema_structure             = $this->schema_service->read_schema( $this->schema_name );
@@ -154,7 +154,7 @@ class Product
                 }
 
                 if ( isset( $review_structure['author'] ) && !empty( $item->comment_author ) ) {
-                    $review_structure['author'] = $item->comment_author;
+                    $review_structure['author']['name'] = $item->comment_author;
                 } else {
                     unset( $review_structure['author'] );
                 }
@@ -232,23 +232,21 @@ class Product
      */
     protected function image( array $images ): array {
 
-        // Get the URL of the main product image
-        if ($this->product->get_image_id()) {
-            $images[] = wp_get_attachment_url( $this->product->get_image_id() );
-        }
-
-        // Get the URLs of the additional gallery images
         $gallery_image_ids = $this->product->get_gallery_image_ids();
+//
+//        if ( $this->product->get_image_id() ) {
+//            $images[] = wp_get_attachment_url( $this->product->get_image_id() );
+//        }
 
         foreach ($gallery_image_ids as $image_id) {
             $images[] = wp_get_attachment_url($image_id);
         }
 
-        if ($this->product) {
-            $image_id = $this->product->get_image_id();
-            return wp_get_attachment_image_url($image_id, 'full');
+        if ( ! empty( $images ) ) {
+            return $images;
         }
-        return '';
+
+        return [];
     }
 
     /**
@@ -316,6 +314,12 @@ class Product
             }
         } else {
             unset( $offers_arr['priceSpecification'] );
+        }
+
+        if ( isset( $offers_arr['hasMerchantReturnPolicy'] ) && !empty( $this->offers_hasMerchantReturnPolicy( $offers_arr['hasMerchantReturnPolicy'] ) ) ) {
+            $offers_arr['hasMerchantReturnPolicy'] = $this->offers_hasMerchantReturnPolicy( $offers_arr['hasMerchantReturnPolicy'] );
+        } else {
+            unset( $offers_arr['hasMerchantReturnPolicy'] );
         }
 
         if ( isset( $offers_arr['priceValidUntil'] ) && !empty( $this->offers_priceValidUntil ) ) {
@@ -446,6 +450,22 @@ class Product
         return $priceSpecification;
     }
 
+    protected function offers_hasMerchantReturnPolicy ( array $hasMerchantReturnPolicy ): array { // TODO this method is incomplete for lake of information
+
+        $privacy_policy_page_id = (int) get_option('wp_page_for_privacy_policy');
+
+        if ( $privacy_policy_page_id ) {
+            $privacy_policy_page = get_post( $privacy_policy_page_id );
+            $privacy_policy_content = apply_filters('the_content', $privacy_policy_page->post_content);
+            $privacy_policy_title = get_the_title($privacy_policy_page_id);
+
+        } else {
+            echo 'No Privacy Policy page set.';
+        }
+
+        return [];
+    }
+
     /**
      * Get the Tax information
      *
@@ -474,7 +494,7 @@ class Product
      */
     protected function offers_priceValidUntil()
     {
-        return $this->product->get_date_on_sale_to();
+        return $this->product->date_on_sale_to();
     }
 
     /**
@@ -571,8 +591,6 @@ class Product
             "parent"                => $categoryObj[0]->parent,
             "count"                 => $categoryObj[0]->count,
         ];
-
-
 
         if ( empty( $category['name'] ) ) {
             return [];
