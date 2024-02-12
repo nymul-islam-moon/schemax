@@ -30,7 +30,7 @@ class Product
         $this->schema_name      = 'product.json';
         $this->schema_type      = 'product';
 
-        error_log( print_r( $this->product, true ) );
+//        error_log( print_r( $this->product->needs_shipping(), true ) );
     }
 
     /**
@@ -239,7 +239,7 @@ class Product
     }
 
     /**
-     * @return string
+     * @return array
      */
     protected function image( $images ) {
 
@@ -393,7 +393,7 @@ class Product
             unset( $offers_arr['height'] );
         }
 
-        if ( isset( $offers_arr['shippingDetails'] ) && !empty( $this->offers_shippingDetails( $offers_arr['shippingDetails'] ) ) ) {
+        if ( isset( $offers_arr['shippingDetails'] ) && !empty( $this->product->needs_shipping() ) && !empty( $this->offers_shippingDetails( $offers_arr['shippingDetails'] ) ) ) {
             $offers_arr['shippingDetails'] = $this->offers_shippingDetails( $offers_arr['shippingDetails'] );
         } else {
             unset( $offers_arr['shippingDetails'] );
@@ -654,7 +654,7 @@ class Product
     }
 
     protected function offers_shippingDetails( $shippingDetails ) { // TODO this method is incomplete for lacking of necessary information
-
+        return [];
         $shipping_class_id  = $this->product->get_shipping_class_id();
 
         $shipping_zones     = \WC_Shipping_Zones::get_zones();
