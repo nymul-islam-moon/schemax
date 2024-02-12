@@ -3,7 +3,6 @@
 namespace Schema\Engine;
 
 use Schema\Inc\Service;
-use tad\WPBrowser\Generators\Date;
 
 
 class Product
@@ -31,7 +30,7 @@ class Product
         $this->schema_name      = 'product.json';
         $this->schema_type      = 'product';
 
-//        error_log( print_r( $this->product->get_date_on_sale_to(), true ) );
+        error_log( print_r( $this->product, true ) );
     }
 
     /**
@@ -39,7 +38,7 @@ class Product
      *
      * @return string
      */
-    protected function update_schema(): string {
+    protected function update_schema() {
         $this->schema_structure             = $this->schema_service->read_schema( $this->schema_name );
 
         if ($this->product_type == 'simple') {
@@ -77,7 +76,7 @@ class Product
      * @param array $product_arr
      * @return array
      */
-    protected function single_product( array $product_arr ): array {
+    protected function single_product( $product_arr ) {
 
         if ( isset( $product_arr['name'] ) ) {
             $product_arr['name']                = !empty($this->name()) ? $this->name() : '';
@@ -125,7 +124,7 @@ class Product
      *
      * @return string
      */
-    protected function name(): string {
+    protected function name() {
         return apply_filters("schemax_{$this->schema_type}", $this->product->get_name(), $this->product);
     }
 
@@ -134,7 +133,7 @@ class Product
      *
      * @return string
      */
-    protected function description(): string {
+    protected function description() {
         return apply_filters("schemax_{$this->schema_type}", $this->product->get_description(), $this->product);
     }
 
@@ -144,7 +143,7 @@ class Product
      * @param array $review    | Review Schema Structure
      * @return array
      */
-    protected function review( array $review ): array {
+    protected function review( $review ) {
 
         $args = array(
             'post_id'   => $this->product ? $this->product->get_id() : '',
@@ -197,7 +196,7 @@ class Product
      * @param int $commentId
      * @return array
      */
-    protected function review_reviewRating( array $reviewRating, int $commentId ): array {
+    protected function review_reviewRating( $reviewRating, $commentId ) {
 
         if ( isset( $reviewRating['ratingValue'] ) && get_comment_meta( $commentId , 'rating', true) ) {
             $reviewRating['ratingValue'] = (int) get_comment_meta( $commentId, 'rating', true );
@@ -216,7 +215,7 @@ class Product
      * @param array $aggregateRating
      * @return array
      */
-    protected function aggregateRating( array $aggregateRating ): array {
+    protected function aggregateRating( $aggregateRating ) {
 
         $args         = array(
             'post_id'   => $this->product ? $this->product->get_id() : '',
@@ -242,7 +241,7 @@ class Product
     /**
      * @return string
      */
-    protected function image( array $images ): array {
+    protected function image( $images ) {
 
         $gallery_image_ids = $this->product->get_gallery_image_ids();
 
@@ -262,7 +261,7 @@ class Product
      *
      * @return string[]
      */
-    protected function brand( array $brand ): array {
+    protected function brand( $brand ) {
 
         $brand['name']  = get_bloginfo('name');
 
@@ -278,7 +277,7 @@ class Product
      * @param array $offers_arr
      * @return array
      */
-    protected function offers( array $offers_arr ): array {
+    protected function offers( $offers_arr ) {
 
         if ( isset( $offers_arr['price'] ) ) {
             $offers_arr['price']                        = $this->product->get_regular_price() ?? '';
@@ -394,8 +393,8 @@ class Product
             unset( $offers_arr['height'] );
         }
 
-        if ( isset( $offers_arr['shippingDetails'] ) && !empty( $this->offers_shippingDetails() ) ) {
-            $offers_arr['shippingDetails'] = $this->offers_shippingDetails();
+        if ( isset( $offers_arr['shippingDetails'] ) && !empty( $this->offers_shippingDetails( $offers_arr['shippingDetails'] ) ) ) {
+            $offers_arr['shippingDetails'] = $this->offers_shippingDetails( $offers_arr['shippingDetails'] );
         } else {
             unset( $offers_arr['shippingDetails'] );
         }
@@ -409,7 +408,7 @@ class Product
      * @param array $priceSpecification
      * @return array
      */
-    protected function offers_priceSpecification( array $priceSpecification ): array {
+    protected function offers_priceSpecification( $priceSpecification ) {
 
         $priceSpecification = [];
 
@@ -432,7 +431,7 @@ class Product
         return $priceSpecification;
     }
 
-    protected function offers_hasMerchantReturnPolicy ( array $hasMerchantReturnPolicy ): array { // TODO this method is incomplete for lake of information
+    protected function offers_hasMerchantReturnPolicy ( $hasMerchantReturnPolicy ) { // TODO this method is incomplete for lake of information
 
         $privacy_policy_page_id = (int) get_option('wp_page_for_privacy_policy');
 
@@ -453,7 +452,7 @@ class Product
      *
      * @return array
      */
-    protected function tax(): array {
+    protected function tax() {
         $wc_tax     = new \WC_Tax();
 
         $tax_rates  = $wc_tax::get_rates( $this->product->get_tax_class() );
@@ -474,7 +473,7 @@ class Product
      *
      * @return String
      */
-    protected function offers_priceValidUntil(): string {
+    protected function offers_priceValidUntil() {
         return $this->product->get_date_on_sale_to();
     }
 
@@ -483,7 +482,7 @@ class Product
      *
      * @return string
      */
-    protected function offers_priceValidFrom(): string {
+    protected function offers_priceValidFrom() {
         return $this->product->get_date_on_sale_from();
     }
 
@@ -493,7 +492,7 @@ class Product
      * @param array $seller
      * @return array
      */
-    protected function offers_seller( array $seller ): array {
+    protected function offers_seller(  $seller ) {
 
         if ( isset( $seller['name'] ) && !empty( get_bloginfo('name') ) ) {
             $seller['name'] = get_bloginfo('name');
@@ -520,7 +519,7 @@ class Product
         return $seller;
     }
 
-    protected function offers_itemCondition(): string {
+    protected function offers_itemCondition() {
         $itemCondition = get_post_meta($this->product->get_id(), 'item_condition', true);
 
         if ( !empty( $itemCondition ) ) {
@@ -536,7 +535,7 @@ class Product
      * @param array $contactPoint
      * @return array
      */
-    protected function offers_seller_ContactPoint( array $contactPoint ): array {
+    protected function offers_seller_ContactPoint( $contactPoint ) {
         $contactPoint['telephone']          = "";
         $contactPoint['url']                = "";
 
@@ -551,7 +550,7 @@ class Product
      *
      * @return array
      */
-    protected function offers_category(): array {
+    protected function offers_category() {
 
         $categoryObj = wp_get_post_terms($this->product->get_id(), 'product_cat');
 
@@ -578,23 +577,23 @@ class Product
      *
      * @return string
      */
-    protected function offers_mpn(): string { // TODO Operation not implemented
+    protected function offers_mpn() { // TODO Operation not implemented
         return '';
     }
 
-    protected function offers_gtin8(): string { // TODO Operation not implemented
+    protected function offers_gtin8() { // TODO Operation not implemented
         return '';
     }
 
-    protected function offers_gtin13(): string { // TODO Operation not implemented
+    protected function offers_gtin13() { // TODO Operation not implemented
         return '';
     }
 
-    protected function offers_gtin14(): string { // TODO Operation not implemented
+    protected function offers_gtin14() { // TODO Operation not implemented
         return '';
     }
 
-    protected function offers_weight(): array {
+    protected function offers_weight() {
 
         $weight = [
             "@type"         => "QuantitativeValue",
@@ -640,7 +639,7 @@ class Product
         return apply_filters("schemax_{$this->schema_type}_offers_width", $width, $this->product);
     }
 
-    protected function offers_height(): array {
+    protected function offers_height() {
         $height = [
             "@type"         => "QuantitativeValue",
             "value"         => $this->product->get_height(),
@@ -654,11 +653,7 @@ class Product
         return apply_filters("schemax_{$this->schema_type}_offers_width", $height, $this->product);
     }
 
-    protected function offers_shippingDetails(): array { // TODO this method is incomplete for lacking of necessary information
-
-        return [];
-
-        $shippingDetails    = array();
+    protected function offers_shippingDetails( $shippingDetails ) { // TODO this method is incomplete for lacking of necessary information
 
         $shipping_class_id  = $this->product->get_shipping_class_id();
 
@@ -667,16 +662,18 @@ class Product
         foreach ($shipping_zones as $zone_id => $zone_data) {
 
             $zone               = new \WC_Shipping_Zone($zone_id);
-            $shipping_methods   = $zone->get_shipping_methods(true);
+            $shipping_methods   = $zone->get_shipping_methods(true );
 
-            $data = [
-                "@type"                 => "OfferShippingDetails",
-                "shippingRate"          => '',//$this->shippingDetails_shippingRate(),
-                "shippingDestination"   => $this->shippingDetails_shippingDestination($zone_data['zone_name']),
-                "deliveryTime"          => '',//$this->shippingDetails_deliveryTime(),
-                "taxShippingDetails"    => '', //$this->shippingDetails_taxShippingDetails()
-            ];
-            $shippingDetails[]  = $data;
+           
+
+//            $data = [
+//                "@type"                 => "OfferShippingDetails",
+//                "shippingRate"          => '',//$this->shippingDetails_shippingRate(),
+//                "shippingDestination"   => $this->shippingDetails_shippingDestination($zone_data['zone_name']),
+//                "deliveryTime"          => '',//$this->shippingDetails_deliveryTime(),
+//                "taxShippingDetails"    => '', //$this->shippingDetails_taxShippingDetails()
+//            ];
+//            $shippingDetails[]  = $data;
         }
 
         return $shippingDetails;
@@ -758,8 +755,12 @@ class Product
         return $transitTime;
     }
 
-    public function attach_schema()
-    {
+    /**
+     * Show the Schema in meta tag
+     *
+     * @return void
+     */
+    public function attach_schema(): void {
         $updated_data = $this->update_schema();
         echo "<script src='schemax-$this->schema_type' type='application/ld+json'>$updated_data</script>";
     }
