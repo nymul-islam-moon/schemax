@@ -3,6 +3,7 @@
 namespace Schema\Engine;
 
 use Schema\Inc\Service;
+use tad\WPBrowser\Generators\Date;
 
 
 class Product
@@ -29,6 +30,8 @@ class Product
         $this->schema_service   = new Service();
         $this->schema_name      = 'product.json';
         $this->schema_type      = 'product';
+
+//        error_log( print_r( $this->product->get_date_on_sale_to(), true ) );
     }
 
     /**
@@ -467,22 +470,20 @@ class Product
     }
 
     /**
-     * Get priceValidUntil for Offers method
+     * Get the PriceValidUntil Date
      *
-     * @return string
+     * @return String
      */
-    protected function offers_priceValidUntil()
-    {
-        return $this->product->date_on_sale_to();
+    protected function offers_priceValidUntil(): string {
+        return $this->product->get_date_on_sale_to();
     }
 
     /**
-     * Get priceValidFrom informatin for Offers method
+     * Get priceValidFrom information for Offers method
      *
      * @return string
      */
-    protected function offers_priceValidFrom()
-    {
+    protected function offers_priceValidFrom(): string {
         return $this->product->get_date_on_sale_from();
     }
 
