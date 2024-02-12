@@ -506,8 +506,8 @@ class Product
             unset( $seller['url'] );
         }
 
-        if ( isset( $seller['contactPoint'] ) && !empty( $this->offers_seller_ContactPoint() ) ) {
-            $seller['contactPoint']  = $this->offers_seller_ContactPoint();
+        if ( isset( $seller['contactPoint'] ) && !empty( $this->offers_seller_ContactPoint( $seller['contactPoint'] ) ) ) {
+            $seller['contactPoint']  = $this->offers_seller_ContactPoint( $seller['contactPoint'] );
         } else {
             unset( $seller['contactPoint'] );
         }
@@ -530,24 +530,18 @@ class Product
     }
 
     /**
-     * Saller ContactPoint information
+     * Get the information of Seller Contact Point
      *
-     * @return string[]
+     * @param array $contactPoint
+     * @return array
      */
-    protected function offers_seller_ContactPoint()
-    {
-        $contactPoint = [
-            "@type"                 => "ContactPoint",
-            "contactType"           => "",
-            "telephone"             => "",
-            "availableLanguage"     => "",
-            "url"                   => ""
-        ];
+    protected function offers_seller_ContactPoint( array $contactPoint ): array {
+        $contactPoint['telephone']          = "";
+        $contactPoint['url']                = "";
 
         if ( empty( $contactPoint['telephone'] ) ) {
             return [];
         }
-
         return $contactPoint;
     }
 
