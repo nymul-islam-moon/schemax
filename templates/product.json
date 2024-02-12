@@ -1,122 +1,122 @@
 {
   "@context": "https://schema.org/",
   "@type": "Product",
-  "name": "Executive Anvil",
-  "description": "Sleeker than ACME's Classic Anvil, the Executive Anvil is perfect for the business traveler looking for something to drop from a height.",
+  "name": "",
+  "description": "",
   "review": [
     {
       "@type": "Review",
       "reviewRating": {
         "@type": "Rating",
-        "ratingValue": 4,
+        "ratingValue": 0,
         "bestRating": 5
       },
       "author": {
         "@type": "Person",
-        "name": "Fred Benson"
+        "name": ""
       },
-      "comment": "Great product, really enjoyed it!"
+      "comment": ""
     }
   ],
   "aggregateRating": {
     "@type": "AggregateRating",
-    "ratingValue": 4.4,
-    "reviewCount": 89
+    "ratingValue": 0,
+    "reviewCount": 0
   },
   "image": [
-    "https://example.com/photos/1x1/photo.jpg",
-    "https://example.com/photos/4x3/photo.jpg",
-    "https://example.com/photos/16x9/photo.jpg"
+    "",
+    "",
+    ""
   ],
   "brand": {
     "@type": "Brand",
-    "name": "Brand Name"
+    "name": ""
   },
   "offers": {
     "@type": "Offer",
-    "price": 39.99,
-    "priceCurrency": "CHF",
+    "price": 0,
+    "priceCurrency": "",
     "priceSpecification": {
       "@type": "PriceSpecification",
-      "price": 29.99,
-      "valueAddedTaxIncluded": "true",
-      "taxPercentage": 7.5,
-      "taxFixedAmount": 2.5
+      "price": 0,
+      "valueAddedTaxIncluded": "",
+      "taxPercentage": 0,
+      "taxFixedAmount": 0
     },
     "hasMerchantReturnPolicy": {
       "@type": "MerchantReturnPolicy",
-      "applicableCountry": "CH",
-      "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-      "merchantReturnDays": 60,
-      "returnMethod": "https://schema.org/ReturnByMail",
-      "returnFees": "https://schema.org/FreeReturn"
+      "applicableCountry": "",
+      "returnPolicyCategory": "",
+      "merchantReturnDays": 0,
+      "returnMethod": "",
+      "returnFees": ""
     },
-    "priceValidUntil": "2024-12-31T23:59:59",
-    "availability": "https://schema.org/InStock",
-    "quantity": 9999,
-    "url": "https://example.com/product-url",
+    "priceValidUntil": "",
+    "availability": "",
+    "quantity": 0,
+    "url": "",
     "seller": {
       "@type": "Organization",
-      "name": "Seller Name",
-      "url": "https://example.com/seller-url",
+      "name": "",
+      "url": "",
       "contactPoint": {
         "@type": "ContactPoint",
-        "contactType": "customer service",
-        "telephone": "+1-877-746-9757",
-        "availableLanguage": "en",
-        "url": "https://example.com/contact-url"
+        "contactType": "",
+        "telephone": "",
+        "availableLanguage": "",
+        "url": ""
       }
     },
-    "itemCondition": "https://schema.org/NewCondition",
-    "category": "Electronics > Gadgets",
-    "mpn": "MPN123456",
-    "gtin8": "12345678",
-    "gtin13": "1234567890123",
-    "gtin14": "12345678901234",
+    "itemCondition": "",
+    "category": "",
+    "mpn": "",
+    "gtin8": "",
+    "gtin13": "",
+    "gtin14": "",
     "weight": {
       "@type": "QuantitativeValue",
-      "value": 1.5,
-      "unitCode": "KG"
+      "value": 0,
+      "unitCode": ""
     },
     "depth": {
       "@type": "QuantitativeValue",
-      "value": 10,
-      "unitCode": "CM"
+      "value": 0,
+      "unitCode": ""
     },
     "width": {
       "@type": "QuantitativeValue",
-      "value": 15,
-      "unitCode": "CM"
+      "value": 0,
+      "unitCode": ""
     },
     "height": {
       "@type": "QuantitativeValue",
-      "value": 5,
-      "unitCode": "CM"
+      "value": 0,
+      "unitCode": ""
     },
     "shippingDetails": [
       {
         "@type": "OfferShippingDetails",
         "shippingRate": {
           "@type": "MonetaryAmount",
-          "currency": "USD",
-          "value": 5.99
+          "currency": "",
+          "value": 0
         },
         "shippingDestination": {
           "@type": "DefinedRegion",
-          "addressCountry": "US"
+          "addressCountry": ""
         },
         "deliveryTime": {
           "@type": "ShippingDeliveryTime",
           "handlingTime": {
             "@type": "QuantitativeValue",
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 0,
             "unitCode": "DAY"
           },
           "transitTime": {
             "@type": "QuantitativeValue",
-            "minValue": 1,
-            "maxValue": 5,
+            "minValue": 0,
+            "maxValue": 0,
             "unitCode": "DAY"
           }
         },
@@ -124,8 +124,8 @@
           "@type": "OfferShippingDetails",
           "shippingRate": {
             "@type": "MonetaryAmount",
-            "currency": "USD",
-            "value": 2.50
+            "currency": "",
+            "value": 0
           }
         }
       }

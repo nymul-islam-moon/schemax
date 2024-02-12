@@ -30,7 +30,6 @@ class Product
         $this->schema_name      = 'product.json';
         $this->schema_type      = 'product';
 
-//        error_log( print_r( $this->product->needs_shipping(), true ) );
     }
 
     /**
@@ -43,7 +42,9 @@ class Product
 
         if ($this->product_type == 'simple') {
             $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
-        } else if ($this->product_type == 'variable') {
+        }
+
+        if ($this->product_type == 'variable') {
             $children                       = $this->product->get_children();
             $variable_product_arr           = [];
             foreach ($children as $variation_id) {
@@ -51,7 +52,9 @@ class Product
                 $variable_product_arr[]     = $this->single_product( $this->schema_structure );
             }
             $updated_schema_data            = json_encode( $variable_product_arr );
-        } else if ( $this->product_type = 'grouped' ) {
+        }
+
+        if ( $this->product_type = 'grouped' ) {
             $children                       = $this->product->get_children();
             $grouped_product_arr            = [];
             foreach ($children as $grouped_id) {
@@ -59,13 +62,21 @@ class Product
                 $grouped_product_arr[]      = $this->single_product( $this->schema_structure );
             }
             $updated_schema_data            = json_encode( $grouped_product_arr );
-        } else if ( $this->product->is_virtual() ) {
-            $updated_schema_data            = json_encode( $this->schema_structure );
-        } else if ( $this->product->is_downloadable() ) {
-            $updated_schema_data            = json_encode( $this->schema_structure );
-        } else {
-            $updated_schema_data            = json_encode( $this->schema_structure );
         }
+
+        if ( $this->product->is_virtual() ) {
+            $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
+        }
+
+        if ( $this->product->is_downloadable() ) {
+            $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
+        }
+
+        if ( $this->product->get_type() === 'external' ) {
+            $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
+        }
+
+//        error_log( print_r( 'here', true ) );
 
         return apply_filters("schemax_{$this->schema_type}_update_schema", $updated_schema_data, $this->product);
     }
@@ -245,8 +256,12 @@ class Product
 
         $gallery_image_ids = $this->product->get_gallery_image_ids();
 
+        $images[] = wp_get_attachment_url($this->product->get_image_id());
+
         foreach ($gallery_image_ids as $image_id) {
-            $images[] = wp_get_attachment_url($image_id);
+            if ( !empty( wp_get_attachment_url( $image_id ) && wp_get_attachment_url( $image_id ) != '') ) {
+                $images[] = wp_get_attachment_url( $image_id );
+            }
         }
 
         if ( ! empty( $images ) ) {
@@ -551,7 +566,6 @@ class Product
      * @return array
      */
     protected function offers_category() {
-
         $categoryObj = wp_get_post_terms($this->product->get_id(), 'product_cat');
 
         $category = [
