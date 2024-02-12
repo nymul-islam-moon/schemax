@@ -488,8 +488,9 @@ class Product
     }
 
     /**
-     * Get the offer seller information
+     * Get the information of Offers Seller
      *
+     * @param array $seller
      * @return array
      */
     protected function offers_seller( array $seller ): array {
