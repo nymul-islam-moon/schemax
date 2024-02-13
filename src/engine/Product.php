@@ -7,7 +7,6 @@ use Schema\Inc\Service;
 
 class Product
 {
-
     public $product;
     private $schema_type, $schema_name, $schema_service, $product_type, $schema_structure;
 
@@ -30,6 +29,8 @@ class Product
         $this->schema_name      = 'product.json';
         $this->schema_type      = 'product';
 
+//        error_log( print_r( $this->product->get_type(), true ) );
+
     }
 
     /**
@@ -40,43 +41,44 @@ class Product
     protected function update_schema() {
         $this->schema_structure             = $this->schema_service->read_schema( $this->schema_name );
 
-        if ($this->product_type == 'simple') {
+        if ( $this->product->get_type() == 'simple') {
             $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
-        }
-
-        if ($this->product_type == 'variable') {
+            error_log( print_r( 'simple', true ) );
+        } else if ( $this->product->get_type() == 'variable') {
             $children                       = $this->product->get_children();
             $variable_product_arr           = [];
             foreach ($children as $variation_id) {
                 $this->product              = wc_get_product( $variation_id );
                 $variable_product_arr[]     = $this->single_product( $this->schema_structure );
             }
-            $updated_schema_data            = json_encode( $variable_product_arr );
-        }
+            error_log( print_r( 'variable', true ) );
 
-        if ( $this->product_type = 'grouped' ) {
+            $updated_schema_data            = json_encode( $variable_product_arr );
+        } else if ( $this->product->get_type() == 'grouped' ) {
             $children                       = $this->product->get_children();
             $grouped_product_arr            = [];
             foreach ($children as $grouped_id) {
                 $this->product              = wc_get_product( $grouped_id );
                 $grouped_product_arr[]      = $this->single_product( $this->schema_structure );
             }
+            error_log( print_r( 'grouped', true ) );
+
             $updated_schema_data            = json_encode( $grouped_product_arr );
-        }
+        } else if ( $this->product->is_virtual() ) {
+            error_log( print_r( 'variable', true ) );
 
-        if ( $this->product->is_virtual() ) {
+            $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
+        } else if ( $this->product->is_downloadable() ) {
+            error_log( print_r( 'is downloadable', true ) );
+
+            $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
+        } else if ( $this->product->get_type() === 'external' ) {
+            error_log( print_r( 'external', true ) );
+
             $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
         }
 
-        if ( $this->product->is_downloadable() ) {
-            $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
-        }
-
-        if ( $this->product->get_type() === 'external' ) {
-            $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
-        }
-
-//        error_log( print_r( 'here', true ) );
+//        error_log( print_r( $updated_schema_data, true ) );
 
         return apply_filters("schemax_{$this->schema_type}_update_schema", $updated_schema_data, $this->product);
     }
