@@ -90,21 +90,23 @@ class Product
     protected function single_product( $product_arr ) {
 
         if ( isset( $product_arr['name'] ) ) {
-            $product_arr['name']                = !empty($this->name()) ? $this->name() : '';
+            $product_arr['name']                = !empty( $this->name() ) ? $this->name() : '';
         }
 
         if ( isset( $product_arr['description'] ) ) {
-            $product_arr['description']         = !empty($this->description()) ? $this->description() : '';
+            $product_arr['description']         = !empty( $this->description() ) ? $this->description() : '';
         }
 
-        if ( isset( $product_arr['review'] ) && ! empty ( $this->review( $product_arr['review'] ) ) ) {
-            $product_arr['review']              = $this->review( $product_arr['review'] );
+        $review = $this->review( $product_arr['review'] );
+        if ( isset( $product_arr['review'] ) && ! empty ( $review ) ) {
+            $product_arr['review']              = $review;
         } else {
             unset( $product_arr['review'] );
         }
 
-        if ( isset( $product_arr['aggregateRating'] ) && isset( $product_arr['review'] ) && !empty( $this->review( $product_arr['review'] ) ) && !empty( $product_arr['aggregateRating'] ) ) {
-            $product_arr['aggregateRating']     = $this->aggregateRating( $product_arr['aggregateRating'] );
+        $aggregateRating = $this->aggregateRating( $product_arr['aggregateRating'] );
+        if ( isset( $product_arr['aggregateRating'] ) && isset( $review ) && !empty( $review ) && !empty( $aggregateRating ) ) {
+            $product_arr['aggregateRating']     = $aggregateRating;
         } else {
             unset( $product_arr['aggregateRating'] );
         }
@@ -116,8 +118,9 @@ class Product
             unset( $product_arr['image'] );
         }
 
-        if ( isset( $product_arr['brand'] ) && !empty( $this->brand( $product_arr['brand'] ) ) ) {
-            $product_arr['brand']               = $this->brand( $product_arr['brand'] );
+        $brand = $this->brand( $product_arr['brand'] );
+        if ( isset( $product_arr['brand'] ) && !empty( $brand ) ) {
+            $product_arr['brand']               = $brand;
         } else {
             unset( $product_arr['brand'] );
         }
@@ -170,20 +173,24 @@ class Product
 
             foreach ( $review_arr as $key => $item ) {
                 $review_structure   = $review[0];
-                if ( isset( $review_structure['reviewRating'] ) && !empty( $this->review_reviewRating( $review_structure['reviewRating'], $item->comment_ID ) ) ) {
-                    $review_structure['reviewRating']       = $this->review_reviewRating( $review_structure['reviewRating'], $item->comment_ID );
+
+                $review_reviewRating = $this->review_reviewRating( $review_structure['reviewRating'], $item->comment_ID );
+                if ( isset( $review_structure['reviewRating'] ) && !empty( $review_reviewRating ) ) {
+                    $review_structure['reviewRating']       = $review_reviewRating;
                 } else {
                     continue;
                 }
 
-                if ( isset( $review_structure['author'] ) && !empty( $item->comment_author ) ) {
-                    $review_structure['author']['name']     = $item->comment_author;
+                $author_name = $item->comment_author;
+                if ( isset( $review_structure['author'] ) && !empty( $author_name ) ) {
+                    $review_structure['author']['name']     = $author_name;
                 } else {
                     unset( $review_structure['author'] );
                 }
 
-                if ( isset( $review_structure['comment'] ) && !empty( $item->comment_content ) ) {
-                    $review_structure['comment']            = $item->comment_content;
+                $comment = $item->comment_content;
+                if ( isset( $review_structure['comment'] ) && !empty( $comment ) ) {
+                    $review_structure['comment']            = $comment;
                 } else {
                     unset( $review_structure['comment'] );
                 }
@@ -214,11 +221,10 @@ class Product
             $reviewRating['ratingValue'] = (int) get_comment_meta( $commentId, 'rating', true );
         }
 
-        if ( empty( $reviewRating['ratingValue'] ) ) {
-            return [];
+        if ( ! empty( $reviewRating['ratingValue'] ) ) {
+            return apply_filters("schemax_{$this->schema_type}_review_reviewRating", $reviewRating, $this->product);
         }
-
-        return apply_filters("schemax_{$this->schema_type}_review_reviewRating", $reviewRating, $this->product);
+        return [];
     }
 
     /**
@@ -235,14 +241,16 @@ class Product
         );
         $review_count = get_comments($args);
 
-        if ( isset( $aggregateRating['ratingValue'] ) && !empty( $this->product->get_average_rating() ) ) {
-            $aggregateRating["ratingValue"]         = (float) $this->product->get_average_rating();
+        $average_rating = (float) $this->product->get_average_rating();
+        if ( isset( $aggregateRating['ratingValue'] ) && !empty( $average_rating ) ) {
+            $aggregateRating["ratingValue"]         = $average_rating;
         }
 
         if ( isset( $aggregateRating['reviewCount'] ) && !empty( $review_count ) ) {
             $aggregateRating['reviewCount']         =  (int) $review_count;
         }
 
+        
         if ( !empty( $aggregateRating['ratingValue'] ) && !empty( $aggregateRating['reviewCount'] ) ) {
             return apply_filters("schemax_{$this->schema_type}_aggregateRating", $aggregateRating, $this->product);
         }
