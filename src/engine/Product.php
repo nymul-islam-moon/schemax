@@ -531,7 +531,7 @@ class Product
      * @param array $seller
      * @return array
      */
-    protected function offers_seller(  $seller ) {
+    protected function offers_seller( $seller ) {
 
         if ( isset( $seller['name'] ) && !empty( get_bloginfo('name') ) ) {
             $seller['name'] = get_bloginfo('name');
@@ -655,11 +655,11 @@ class Product
             "unitCode"      => get_option('woocommerce_dimension_unit')
         ];
 
-        if ( empty( $depth['value'] ) ) {
-            return [];
+        if ( ! empty( $depth['value'] ) ) {
+            return apply_filters( "schemax_{$this->schema_type}_offers_depth", $depth, $this->product );
         }
 
-        return apply_filters("schemax_{$this->schema_type}_offers_depth", $depth, $this->product);
+        return [];
     }
 
     protected function offers_width()
@@ -670,11 +670,11 @@ class Product
             "unitCode"      => get_option('woocommerce_dimension_unit')
         ];
 
-        if ( empty( $width['value'] ) ) {
-            return [];
+        if ( ! empty( $width['value'] ) ) {
+            return apply_filters( "schemax_{$this->schema_type}_offers_width", $width, $this->product );
         }
 
-        return apply_filters("schemax_{$this->schema_type}_offers_width", $width, $this->product);
+        return [];
     }
 
     protected function offers_height() {
@@ -684,11 +684,11 @@ class Product
             "unitCode"      => get_option('woocommerce_dimension_unit')
         ];
 
-        if ( empty( $height['value'] ) ) {
-            return [];
+        if ( ! empty( $height['value'] ) ) {
+            return apply_filters( "schemax_{$this->schema_type}_offers_width", $height, $this->product );
         }
 
-        return apply_filters("schemax_{$this->schema_type}_offers_width", $height, $this->product);
+        return [];
     }
 
     protected function offers_shippingDetails( $shippingDetails ) { // TODO this method is incomplete for lacking of necessary information
