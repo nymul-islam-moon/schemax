@@ -23,11 +23,7 @@
     "ratingValue": 0,
     "reviewCount": 0
   },
-  "image": [
-    "",
-    "",
-    ""
-  ],
+  "image": [],
   "brand": {
     "@type": "Brand",
     "name": ""

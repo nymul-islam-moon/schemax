@@ -109,8 +109,9 @@ class Product
             unset( $product_arr['aggregateRating'] );
         }
 
-        if ( isset( $product_arr['image'] )  && !empty( $this->image( $product_arr['image'] ) ) ) {
-            $product_arr['image']               = $this->image( $product_arr['image'] );
+        $images = $this->image();
+        if ( isset( $product_arr['image'] )  && !empty( $images ) ) {
+            $product_arr['image']               = $images;
         } else {
             unset( $product_arr['image'] );
         }
@@ -252,23 +253,23 @@ class Product
     /**
      * @return array
      */
-    protected function image( $images ) {
+    protected function image( $images = [] ) {
 
         $gallery_image_ids = $this->product->get_gallery_image_ids();
 
-        $images[] = wp_get_attachment_url($this->product->get_image_id());
+        $feature_image = wp_get_attachment_url($this->product->get_image_id());
+        if( ! empty( $feature_image ) ) {
+            $images[] = $feature_image;
+        }
 
         foreach ($gallery_image_ids as $image_id) {
-            if ( !empty( wp_get_attachment_url( $image_id ) && wp_get_attachment_url( $image_id ) != '') ) {
-                $images[] = wp_get_attachment_url( $image_id );
+            $gallery_image = wp_get_attachment_url( $image_id );
+            if ( ! empty( $gallery_image ) ) {
+                $images[] = $gallery_image;
             }
         }
 
-        if ( ! empty( $images ) ) {
-            return apply_filters("schemax_{$this->schema_type}_image", $images, $this->product);
-        }
-
-        return [];
+        return apply_filters("schemax_{$this->schema_type}_image", $images, $this->product);
     }
 
     /**
