@@ -250,7 +250,7 @@ class Product
             $aggregateRating['reviewCount']         =  (int) $review_count;
         }
 
-        
+
         if ( !empty( $aggregateRating['ratingValue'] ) && !empty( $aggregateRating['reviewCount'] ) ) {
             return apply_filters("schemax_{$this->schema_type}_aggregateRating", $aggregateRating, $this->product);
         }
@@ -289,10 +289,10 @@ class Product
 
         $brand['name']  = get_bloginfo('name');
 
-        if ( empty ( $brand['name'] ) ) {
-            return [];
+        if ( ! empty ( $brand['name'] ) ) {
+            return apply_filters("schemax_{$this->schema_type}_brand", $brand, $this->product);
         }
-        return apply_filters("schemax_{$this->schema_type}_brand", $brand, $this->product);
+        return [];
     }
 
     /**
@@ -312,112 +312,127 @@ class Product
         }
 
         if ( isset( $offers_arr['priceSpecification'] ) ) {
-            if ( !empty( $this->offers_priceSpecification( $offers_arr['priceSpecification'] ) ) ) {
-                $offers_arr['priceSpecification']       = $this->offers_priceSpecification( $offers_arr['priceSpecification'] );
+
+            $offers_priceSpecification = $this->offers_priceSpecification( $offers_arr['priceSpecification'] );
+            if ( !empty( $offers_priceSpecification ) ) {
+                $offers_arr['priceSpecification']       = $offers_priceSpecification;
             } else {
                 unset( $offers_arr['priceSpecification'] );
             }
+
         } else {
             unset( $offers_arr['priceSpecification'] );
         }
 
-        if ( isset( $offers_arr['hasMerchantReturnPolicy'] ) && !empty( $this->offers_hasMerchantReturnPolicy( $offers_arr['hasMerchantReturnPolicy'] ) ) ) {
-            $offers_arr['hasMerchantReturnPolicy']      = $this->offers_hasMerchantReturnPolicy( $offers_arr['hasMerchantReturnPolicy'] );
+        $hasMerchantReturnPolicy = $this->offers_hasMerchantReturnPolicy( $offers_arr['hasMerchantReturnPolicy'] );
+        if ( isset( $offers_arr['hasMerchantReturnPolicy'] ) && !empty( $hasMerchantReturnPolicy ) ) {
+            $offers_arr['hasMerchantReturnPolicy']      = $hasMerchantReturnPolicy;
         } else {
             unset( $offers_arr['hasMerchantReturnPolicy'] );
         }
 
-        if ( isset( $offers_arr['priceValidUntil'] ) && !empty( $this->offers_priceValidUntil() ) ) {
-            $offers_arr['priceValidUntil']              = $this->offers_priceValidUntil();
+        $offers_priceValidUntil = $this->offers_priceValidUntil();
+        if ( isset( $offers_arr['priceValidUntil'] ) && !empty( $offers_priceValidUntil ) ) {
+            $offers_arr['priceValidUntil']              = $offers_priceValidUntil;
         } else {
             unset( $offers_arr['priceValidUntil'] );
         }
 
-        if ( isset( $offers_arr['availability'] ) && $this->product->get_stock_status() ) {
-            $offers_arr['availability']                 = $this->product->get_stock_status();
+        $product_stock_status = $this->product->get_stock_status();
+        if ( isset( $offers_arr['availability'] ) && $product_stock_status ) {
+            $offers_arr['availability']                 = $product_stock_status;
         } else {
             unset( $offers_arr['availability'] );
         }
 
-        if ( isset( $offers_arr['quantity'] ) && !empty( $this->product->get_stock_quantity() ) ) {
-            $offers_arr['quantity']                     = $this->product->get_stock_quantity();
+        $product_stock_quantity = $this->product->get_stock_quantity();
+        if ( isset( $offers_arr['quantity'] ) && !empty( $product_stock_quantity ) ) {
+            $offers_arr['quantity']                     = $product_stock_quantity;
         } else {
             unset( $offers_arr['quantity'] );
         }
 
-        if ( isset( $offers_arr['url'] ) && !empty( $this->product->get_permalink() ) ){
-            $offers_arr['url']                          = $this->product->get_permalink();
+        $product_permalink = $this->product->get_permalink();
+        if ( isset( $offers_arr['url'] ) && !empty( $product_permalink ) ){
+            $offers_arr['url']                          = $product_permalink;
         } else {
             unset( $offers_arr['url'] );
         }
 
-        if ( isset( $offers_arr['seller'] ) && !empty( $this->offers_seller( $offers_arr['seller'] ) ) ) {
-            $offers_arr['seller']                       = $this->offers_seller( $offers_arr['seller'] );
+        $offers_seller = $this->offers_seller( $offers_arr['seller'] );
+        if ( isset( $offers_arr['seller'] ) && !empty( $offers_seller ) ) {
+            $offers_arr['seller']                       = $offers_seller;
         } else {
             unset( $offers_arr['seller'] );
         }
 
-        if ( isset( $offers_arr['itemCondition'] ) && !empty( $this->offers_itemCondition() ) ) {
-            $offers_arr['itemCondition']                = $this->offers_itemCondition();
+        $offers_itemCondition = $this->offers_itemCondition();
+        if ( isset( $offers_arr['itemCondition'] ) && !empty( $offers_itemCondition ) ) {
+            $offers_arr['itemCondition']                = $offers_itemCondition;
         } else {
             unset( $offers_arr['itemCondition'] );
         }
 
-        if ( isset( $offers_arr['category'] ) && !empty( $this->offers_category() ) ) {
-            $offers_arr['category']                     = $this->offers_category()['name'];
+        $offers_category = $this->offers_category()['name'];
+        if ( isset( $offers_arr['category'] ) && !empty( $offers_category ) ) {
+            $offers_arr['category']                     = $offers_category;
         } else {
             unset( $offers_arr['category'] );
         }
 
-        if ( isset( $offers_arr['mpn'] ) && !empty( $this->offers_mpn() ) ) {
+        if ( isset( $offers_arr['mpn'] ) && !empty( $this->offers_mpn() ) ) { // TODO fix later
             $offers_arr['mpn']                          = '';
         } else {
             unset( $offers_arr['mpn'] );
         }
 
-        if ( isset( $offers_arr['gtin8'] ) && !empty( $this->offers_gtin8() ) ) {
+        if ( isset( $offers_arr['gtin8'] ) && !empty( $this->offers_gtin8() ) ) { // TODO fix later
             $offers_arr['gtin8']                        = '';
         } else {
             unset( $offers_arr['gtin8'] );
         }
 
-        if ( isset( $offers_arr['gtin13'] ) && !empty( $this->offers_gtin13() ) ) {
+        if ( isset( $offers_arr['gtin13'] ) && !empty( $this->offers_gtin13() ) ) { // TODO fix later
             $offers_arr['gtin13']                       = '';
         } else {
             unset( $offers_arr['gtin13'] );
         }
 
-        if ( isset( $offers_arr['gtin14'] ) && !empty( $this->offers_gtin14() ) ) {
+        if ( isset( $offers_arr['gtin14'] ) && !empty( $this->offers_gtin14() ) ) { // TODO fix later
             $offers_arr['gtin14']                       = '';
         } else {
             unset( $offers_arr['gtin14'] );
         }
 
-        if ( isset( $offers_arr['weight'] ) && ! empty( $this->offers_weight() ) ) {
-            $offers_arr['weight']                       = $this->offers_weight();
+        $offers_weight = $this->offers_weight();
+        if ( isset( $offers_arr['weight'] ) && ! empty( $offers_weight ) ) {
+            $offers_arr['weight']                       = $offers_weight;
         } else {
             unset( $offers_arr['weight'] );
         }
 
-        if ( isset( $offers_arr['depth'] ) && !empty( $this->offers_depth() ) ) {
-            $offers_arr['depth']                        = $this->offers_depth();
+        $offers_depth = $this->offers_depth();
+        if ( isset( $offers_arr['depth'] ) && !empty( $offers_depth ) ) {
+            $offers_arr['depth']                        = $offers_depth;
         } else {
             unset( $offers_arr['depth'] );
         }
 
-        if ( isset( $offers_arr['width'] ) && !empty( $this->offers_width() ) ) {
-            $offers_arr['width']                        = $this->offers_width();
+        $offers_width = $this->offers_width();
+        if ( isset( $offers_arr['width'] ) && !empty( $offers_width ) ) {
+            $offers_arr['width']                        = $offers_width;
         } else {
             unset( $offers_arr['width'] );
         }
 
-        if ( isset( $offers_arr['height'] ) && !empty( $this->offers_height() ) ) {
-            $offers_arr['height']                       = $this->offers_height();
+        $offers_height = $this->offers_height();
+        if ( isset( $offers_arr['height'] ) && !empty( $offers_height ) ) {
+            $offers_arr['height']                       = $offers_height;
         } else {
             unset( $offers_arr['height'] );
         }
 
-        if ( isset( $offers_arr['shippingDetails'] ) && !empty( $this->product->needs_shipping() ) && !empty( $this->offers_shippingDetails( $offers_arr['shippingDetails'] ) ) ) {
+        if ( isset( $offers_arr['shippingDetails'] ) && !empty( $this->product->needs_shipping() ) && !empty( $this->offers_shippingDetails( $offers_arr['shippingDetails'] ) ) ) { // TODO fix later
             $offers_arr['shippingDetails'] = $this->offers_shippingDetails( $offers_arr['shippingDetails'] );
         } else {
             unset( $offers_arr['shippingDetails'] );
