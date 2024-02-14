@@ -43,7 +43,7 @@ class Product
 
         if ( $this->product->get_type() == 'simple') {
             $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
-            error_log( print_r( 'simple', true ) );
+
         } else if ( $this->product->get_type() == 'variable') {
             $children                       = $this->product->get_children();
             $variable_product_arr           = [];
@@ -51,7 +51,6 @@ class Product
                 $this->product              = wc_get_product( $variation_id );
                 $variable_product_arr[]     = $this->single_product( $this->schema_structure );
             }
-            error_log( print_r( 'variable', true ) );
 
             $updated_schema_data            = json_encode( $variable_product_arr );
         } else if ( $this->product->get_type() == 'grouped' ) {
@@ -61,19 +60,15 @@ class Product
                 $this->product              = wc_get_product( $grouped_id );
                 $grouped_product_arr[]      = $this->single_product( $this->schema_structure );
             }
-            error_log( print_r( 'grouped', true ) );
 
             $updated_schema_data            = json_encode( $grouped_product_arr );
         } else if ( $this->product->is_virtual() ) {
-            error_log( print_r( 'variable', true ) );
 
             $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
         } else if ( $this->product->is_downloadable() ) {
-            error_log( print_r( 'is downloadable', true ) );
 
             $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
-        } else if ( $this->product->get_type() === 'external' ) {
-            error_log( print_r( 'external', true ) );
+        } else if ( $this->product->get_type() == 'external' ) {
 
             $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
         }
@@ -434,8 +429,9 @@ class Product
             unset( $offers_arr['height'] );
         }
 
-        if ( isset( $offers_arr['shippingDetails'] ) && !empty( $this->product->needs_shipping() ) && !empty( $this->offers_shippingDetails( $offers_arr['shippingDetails'] ) ) ) { // TODO fix later
-            $offers_arr['shippingDetails'] = $this->offers_shippingDetails( $offers_arr['shippingDetails'] );
+        $offers_shippingDetails = $this->offers_shippingDetails( $offers_arr['shippingDetails'] );
+        if ( isset( $offers_arr['shippingDetails'] ) && !empty( $this->product->needs_shipping() ) && !empty( $offers_shippingDetails ) ) {
+            $offers_arr['shippingDetails'] = $offers_shippingDetails;
         } else {
             unset( $offers_arr['shippingDetails'] );
         }
@@ -694,27 +690,39 @@ class Product
     }
 
     protected function offers_shippingDetails( $shippingDetails ) { // TODO this method is incomplete for lacking of necessary information
-        return [];
-        $shipping_class_id  = $this->product->get_shipping_class_id();
 
-        $shipping_zones     = \WC_Shipping_Zones::get_zones();
+//        error_log( print_r( $shippingDetails, true ) );
+//        error_log( print_r( $shipping_class, true ) );
 
-        foreach ($shipping_zones as $zone_id => $zone_data) {
+        $shipping_destination = $this->shippingDetails_shippingDestination( $shippingDetails[0]['shippingDestination'] );
 
-            $zone               = new \WC_Shipping_Zone($zone_id);
-            $shipping_methods   = $zone->get_shipping_methods(true );
+        if ( isset( $shippingDetails[0]['shippingDestination'] ) && !empty( $shipping_destination ) ) {
+            $shippingDetails[0]['shippingDestination'] = $shipping_destination;
+        } else {
+            unset( $shippingDetails[0]['shippingDestination'] );
+        }
 
-           
+        if ( empty( $shippingDetails[0]['shippingDestination'] ) ) {
+            return [];
+        }
+        unset( $shippingDetails[0]['shippingRate'] );
+        unset( $shippingDetails[0]['deliveryTime'] );
+        unset( $shippingDetails[0]['taxShippingDetails'] );
 
+//        $shipping_zones     = \WC_Shipping_Zones::get_zones();
+
+//        foreach ($shipping_zones as $zone_id => $zone_data) {
+//            $zone               = new \WC_Shipping_Zone( $zone_id );
+////            error_log( print_r( $zone, true ) );
+//
 //            $data = [
-//                "@type"                 => "OfferShippingDetails",
 //                "shippingRate"          => '',//$this->shippingDetails_shippingRate(),
 //                "shippingDestination"   => $this->shippingDetails_shippingDestination($zone_data['zone_name']),
 //                "deliveryTime"          => '',//$this->shippingDetails_deliveryTime(),
 //                "taxShippingDetails"    => '', //$this->shippingDetails_taxShippingDetails()
 //            ];
 //            $shippingDetails[]  = $data;
-        }
+//        }
 
         return $shippingDetails;
     }
@@ -730,13 +738,20 @@ class Product
         return $shippingRate;
     }
 
-    protected function shippingDetails_shippingDestination( $zone_location )
+    protected function shippingDetails_shippingDestination( $shippingDestination )
     {
 
-        $shippingDestination = [
-            "@type"             => "DefinedRegion",
-            "addressCountry"    => $zone_location
-        ];
+        $shipping_class_id  = $this->product->get_shipping_class_id();
+        $shipping_class = get_term( $shipping_class_id, 'product_shipping_class' );
+
+        if ( isset( $shippingDestination['addressCountry'] ) && !empty( $shipping_class->name ) ) {
+            $shippingDestination['addressCountry'] = $shipping_class->name;
+        }
+
+        if ( empty( $shippingDestination['addressCountry'] ) ) {
+            return [];
+        }
+
         return $shippingDestination;
     }
 
