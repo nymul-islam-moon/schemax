@@ -135,7 +135,7 @@ class Website {
 
     public function attach_schema() {
         $updated_data = $this->update_schema();
-//        echo "<script src='schemax' type='application/ld+json' schema_type='website'>$updated_data</script>";
+        echo "<script src='schemax-website' type='application/ld+json'>$updated_data</script>";
     }
 
 }
