@@ -2,15 +2,13 @@
 
 namespace Schema;
 
-include_once(ABSPATH . 'wp-admin/includes/plugin.php');
-
 use Schema\Engine\Product;
 use Schema\Engine\Website;
-
 
 class Init {
 
 	public function __construct() {
+        include_once( ABSPATH . 'wp-admin/includes/plugin.php');
 		add_action('wp_head', [ $this, 'run' ] );
 	}
 
