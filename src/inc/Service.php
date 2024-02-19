@@ -11,6 +11,12 @@ class Service {
     }
 
 
+    /**
+     * Read the schema data
+     *
+     * @param $schema_name
+     * @return mixed
+     */
     public function read_schema( $schema_name ) {
         $schema_data = file_get_contents( $this->schema_root_path . $schema_name );
 
@@ -19,5 +25,3 @@ class Service {
         return $schema_data_decoded;
     }
 }
-
-//public function schema_service = new
