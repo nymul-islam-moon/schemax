@@ -76,6 +76,8 @@ class Article {
         $description = get_the_excerpt( $this->post_id );
         if( isset( $article_arr['description'] ) && ! empty( $description ) ) {
             $article_arr['description']         = $description;
+        } else {
+            unset( $article_arr['description'] );
         }
 
         /**
@@ -164,6 +166,8 @@ class Article {
         $commentCount = null;
         if (isset( $article_arr['commentCount'] ) && ! empty( $commentCount ) ) {
             $article_arr['commentCount']        = $commentCount;
+        } else {
+            unset( $article_arr['commentCount'] );
         }
 
         /**
@@ -172,6 +176,8 @@ class Article {
         $wordCount = null;
         if ( isset( $article_arr['wordCount'] ) && ! empty( $wordCount ) ) {
             $article_arr['wordCount']           = $wordCount;
+        } else {
+            unset( $article_arr['wordCount'] );
         }
 
         /**
@@ -180,6 +186,8 @@ class Article {
         $thumbnailUrl = null;
         if ( isset( $article_arr['thumbnailUrl'] ) && ! empty( $thumbnailUrl ) ) {
             $article_arr['thumbnailUrl']        = $thumbnailUrl;
+        } else {
+            unset( $article_arr['thumbnailUrl'] );
         }
 
 
@@ -189,6 +197,8 @@ class Article {
         $isAccessibleForFree = null;
         if (isset($article_arr['isAccessibleForFree']) && !empty($isAccessibleForFree)) {
             $article_arr['isAccessibleForFree'] = $isAccessibleForFree;
+        } else {
+            unset( $article_arr['isAccessibleForFree'] );
         }
 
         /**
@@ -197,6 +207,8 @@ class Article {
         $copyrightHolder = null;
         if (isset($article_arr['copyrightHolder']) && !empty($copyrightHolder)) {
             $article_arr['copyrightHolder'] = $copyrightHolder;
+        } else {
+            unset( $article_arr['copyrightHolder'] );
         }
 
         /**
@@ -205,6 +217,8 @@ class Article {
         $potentialAction = null;
         if (isset($article_arr['potentialAction']) && !empty($potentialAction)) {
             $article_arr['potentialAction'] = $potentialAction;
+        } else {
+            unset( $article_arr['potentialAction'] );
         }
 
         /**
@@ -213,6 +227,8 @@ class Article {
         $isPartOf = null;
         if (isset($article_arr['isPartOf']) && !empty($isPartOf)) {
             $article_arr['isPartOf'] = $isPartOf;
+        } else {
+            unset( $article_arr['isPartOf'] );
         }
 
         /**
@@ -221,6 +237,8 @@ class Article {
         $mentions = null;
         if (isset($article_arr['mentions']) && !empty($mentions)) {
             $article_arr['mentions'] = $mentions;
+        } else {
+            unset( $article_arr['mentions'] );
         }
 
         /**
@@ -229,6 +247,8 @@ class Article {
         $publisherImprint = null;
         if (isset($article_arr['publisherImprint']) && !empty($publisherImprint)) {
             $article_arr['publisherImprint'] = $publisherImprint;
+        } else {
+            unset( $article_arr['publisherImprint'] );
         }
 
         /**
@@ -237,14 +257,18 @@ class Article {
         $alternateName = null;
         if (isset($article_arr['alternateName']) && !empty($alternateName)) {
             $article_arr['alternateName'] = $alternateName;
+        } else {
+            unset( $article_arr['alternateName'] );
         }
 
         /**
          * article schema dateCreated key
          */
         $dateCreated = null;
-        if (isset($article_arr['dateCreated']) && !empty($dateCreated)) {
+        if ( isset( $article_arr['dateCreated'] ) && !empty( $dateCreated ) ) {
             $article_arr['dateCreated'] = $dateCreated;
+        } else {
+            unset( $article_arr['dateCreated'] );
         }
 
         /**
@@ -253,6 +277,8 @@ class Article {
         $comment = null;
         if (isset($article_arr['comment']) && !empty($comment)) {
             $article_arr['comment'] = $comment;
+        } else {
+            unset( $article_arr['comment'] );
         }
 
         /**
@@ -261,6 +287,8 @@ class Article {
         $interactionStatistic = null;
         if (isset($article_arr['interactionStatistic']) && !empty($interactionStatistic)) {
             $article_arr['interactionStatistic'] = $interactionStatistic;
+        } else {
+            unset( $article_arr['interactionStatistic'] );
         }
 
         /**
@@ -269,6 +297,8 @@ class Article {
         $blogPost = null;
         if (isset($article_arr['blogPost']) && !empty($blogPost)) {
             $article_arr['blogPost'] = $blogPost;
+        } else {
+            unset( $article_arr['blogPost'] );
         }
 
         /**
@@ -277,6 +307,8 @@ class Article {
         $isBasedOn = null;
         if (isset($article_arr['isBasedOn']) && !empty($isBasedOn)) {
             $article_arr['isBasedOn'] = $isBasedOn;
+        } else {
+            unset( $article_arr['isBasedOn'] );
         }
 
         /**
@@ -285,6 +317,8 @@ class Article {
         $genre = null;
         if (isset($article_arr['genre']) && !empty($genre)) {
             $article_arr['genre'] = $genre;
+        } else {
+            unset( $article_arr['genre'] );
         }
 
         /**
@@ -293,6 +327,8 @@ class Article {
         $educationalUse = null;
         if (isset($article_arr['educationalUse']) && !empty($educationalUse)) {
             $article_arr['educationalUse'] = $educationalUse;
+        } else {
+            unset( $article_arr['educationalUse'] );
         }
 
         /**
@@ -301,6 +337,8 @@ class Article {
         $about = null;
         if (isset($article_arr['about']) && !empty($about)) {
             $article_arr['about'] = $about;
+        } else {
+            unset( $article_arr['about'] );
         }
 
         return apply_filters("schemax_{$this->schema_type}_single_article", $article_arr );
@@ -460,6 +498,12 @@ class Article {
      * @return string | null
      */
     protected function articleSection() {
+
+        return null;
+    }
+
+
+    protected function commentCount() {
 
         return null;
     }
