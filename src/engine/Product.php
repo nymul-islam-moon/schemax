@@ -73,8 +73,6 @@ class Product
             $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
         }
 
-//        error_log( print_r( $updated_schema_data, true ) );
-
         return apply_filters("schemax_{$this->schema_type}_update_schema", $updated_schema_data, $this->product);
     }
 

@@ -15,6 +15,9 @@ class Service {
         $schema_data = file_get_contents( $this->schema_root_path . $schema_name );
 
         $schema_data_decoded = json_decode( $schema_data, true );
+
         return $schema_data_decoded;
     }
 }
+
+//public function schema_service = new

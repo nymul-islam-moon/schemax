@@ -1,7 +1,6 @@
-<script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "NewsArticle",
+    "@type": "NewsArticle",
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "https://example.com/article"
@@ -116,4 +115,3 @@
     "name": "Main Topic"
   }
 }
-</script>
