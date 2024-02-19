@@ -55,7 +55,7 @@ class Article {
          */
         $mainEntityOfPage = $this->mainEntityOfPage( $article_arr['mainEntityOfPage'] );
         if ( isset( $article_arr['mainEntityOfPage'] ) && ! empty( $mainEntityOfPage ) ) {
-            $article_arr['mainEntityOfPage'] = $mainEntityOfPage;
+            $article_arr['mainEntityOfPage']    = $mainEntityOfPage;
         } else {
             unset( $article_arr['mainEntityOfPage'] );
         }
@@ -65,7 +65,7 @@ class Article {
          */
         $headline = get_the_title( $this->post_id );
         if ( isset( $article_arr['headline'] ) && ! empty( $headline ) ) {
-            $article_arr['headline']        = $headline;
+            $article_arr['headline']            = $headline;
         }else {
             unset( $article_arr['headline'] );
         }
@@ -75,7 +75,7 @@ class Article {
          */
         $description = get_the_excerpt( $this->post_id );
         if( isset( $article_arr['description'] ) && ! empty( $description ) ) {
-            $article_arr['description']     = $description;
+            $article_arr['description']         = $description;
         }
 
         /**
@@ -83,7 +83,7 @@ class Article {
          */
         $images = $this->image();
         if ( isset( $article_arr['image'] ) && ! empty( $images ) ) {
-            $article_arr['image']          = $images;
+            $article_arr['image']               = $images;
         }else {
             unset( $article_arr['image'] );
         }
@@ -93,7 +93,7 @@ class Article {
          */
         $datePublished = $this->datePublished();
         if ( isset( $article_arr['datePublished'] ) && ! empty( $datePublished ) ) {
-            $article_arr['datePublished']   = $datePublished;
+            $article_arr['datePublished']       = $datePublished;
         } else {
             unset( $datePublished );
         }
@@ -103,7 +103,7 @@ class Article {
          */
         $dateModified = $this->dateModified();
         if ( isset(  $article_arr['dateModified'] ) && !empty( $dateModified ) ) {
-            $article_arr['dateModified']    = $dateModified;
+            $article_arr['dateModified']        = $dateModified;
         } else {
             unset( $article_arr['dateModified'] );
         }
@@ -113,7 +113,7 @@ class Article {
          */
         $author = $this->author( $article_arr['author'] );
         if( isset( $article_arr['author'] ) && ! empty( $author ) ) {
-            $article_arr['author']      = $author;
+            $article_arr['author']              = $author;
         } else {
             unset( $article_arr['author'] );
         }
@@ -123,7 +123,7 @@ class Article {
          */
         $publisher = $this->publisher( $article_arr['publisher'] );
         if ( isset( $article_arr['publisher'] )  && ! empty( $publisher ) ) {
-            $article_arr['publisher']   = $publisher;
+            $article_arr['publisher']           = $publisher;
         } else {
             unset( $article_arr['publisher'] );
         }
@@ -138,6 +138,9 @@ class Article {
             unset( $article_arr['articleBody'] );
         }
 
+        /**
+         * article schema keywords key
+         */
         $keywords = $this->keywords();
         if ( isset( $article_arr['keywords'] ) && ! empty( $keywords ) ) {
             $article_arr['keywords']            = $keywords;
@@ -145,11 +148,159 @@ class Article {
             unset( $article_arr['keywords'] );
         }
 
+        /**
+         * article schema articleSection key
+         */
         $articleSection = $this->articleSection();
         if ( isset( $article_arr['articleSection'] ) && ! empty( $articleSection ) ) {
             $article_arr['articleSection']      = $articleSection;
         } else {
             unset( $article_arr['articleSection'] );
+        }
+
+        /**
+         * article schema commentCount key
+         */
+        $commentCount = null;
+        if (isset( $article_arr['commentCount'] ) && ! empty( $commentCount ) ) {
+            $article_arr['commentCount']        = $commentCount;
+        }
+
+        /**
+         * article schema wordCount key
+         */
+        $wordCount = null;
+        if ( isset( $article_arr['wordCount'] ) && ! empty( $wordCount ) ) {
+            $article_arr['wordCount']           = $wordCount;
+        }
+
+        /**
+         * article schema thumbnailUrl key
+         */
+        $thumbnailUrl = null;
+        if ( isset( $article_arr['thumbnailUrl'] ) && ! empty( $thumbnailUrl ) ) {
+            $article_arr['thumbnailUrl']        = $thumbnailUrl;
+        }
+
+
+        /**
+         * article schema isAccessibleForFree key
+         */
+        $isAccessibleForFree = null;
+        if (isset($article_arr['isAccessibleForFree']) && !empty($isAccessibleForFree)) {
+            $article_arr['isAccessibleForFree'] = $isAccessibleForFree;
+        }
+
+        /**
+         * article schema copyrightHolder key
+         */
+        $copyrightHolder = null;
+        if (isset($article_arr['copyrightHolder']) && !empty($copyrightHolder)) {
+            $article_arr['copyrightHolder'] = $copyrightHolder;
+        }
+
+        /**
+         * article schema potentialAction key
+         */
+        $potentialAction = null;
+        if (isset($article_arr['potentialAction']) && !empty($potentialAction)) {
+            $article_arr['potentialAction'] = $potentialAction;
+        }
+
+        /**
+         * article schema isPartOf key
+         */
+        $isPartOf = null;
+        if (isset($article_arr['isPartOf']) && !empty($isPartOf)) {
+            $article_arr['isPartOf'] = $isPartOf;
+        }
+
+        /**
+         * article schema mentions key
+         */
+        $mentions = null;
+        if (isset($article_arr['mentions']) && !empty($mentions)) {
+            $article_arr['mentions'] = $mentions;
+        }
+
+        /**
+         * article schema publisherImprint key
+         */
+        $publisherImprint = null;
+        if (isset($article_arr['publisherImprint']) && !empty($publisherImprint)) {
+            $article_arr['publisherImprint'] = $publisherImprint;
+        }
+
+        /**
+         * article schema alternateName key
+         */
+        $alternateName = null;
+        if (isset($article_arr['alternateName']) && !empty($alternateName)) {
+            $article_arr['alternateName'] = $alternateName;
+        }
+
+        /**
+         * article schema dateCreated key
+         */
+        $dateCreated = null;
+        if (isset($article_arr['dateCreated']) && !empty($dateCreated)) {
+            $article_arr['dateCreated'] = $dateCreated;
+        }
+
+        /**
+         * article schema comment key
+         */
+        $comment = null;
+        if (isset($article_arr['comment']) && !empty($comment)) {
+            $article_arr['comment'] = $comment;
+        }
+
+        /**
+         * article schema interactionStatistic key
+         */
+        $interactionStatistic = null;
+        if (isset($article_arr['interactionStatistic']) && !empty($interactionStatistic)) {
+            $article_arr['interactionStatistic'] = $interactionStatistic;
+        }
+
+        /**
+         * article schema blogPost key
+         */
+        $blogPost = null;
+        if (isset($article_arr['blogPost']) && !empty($blogPost)) {
+            $article_arr['blogPost'] = $blogPost;
+        }
+
+        /**
+         * article schema isBasedOn key
+         */
+        $isBasedOn = null;
+        if (isset($article_arr['isBasedOn']) && !empty($isBasedOn)) {
+            $article_arr['isBasedOn'] = $isBasedOn;
+        }
+
+        /**
+         * article schema genre key
+         */
+        $genre = null;
+        if (isset($article_arr['genre']) && !empty($genre)) {
+            $article_arr['genre'] = $genre;
+        }
+
+        /**
+         * article schema educationalUse key
+         */
+        $educationalUse = null;
+        if (isset($article_arr['educationalUse']) && !empty($educationalUse)) {
+            $article_arr['educationalUse'] = $educationalUse;
+        }
+
+        /**
+         * article schema about key
+         */
+        $about = null;
+        if (isset($article_arr['about']) && !empty($about)) {
+            $article_arr['about'] = $about;
         }
 
         return apply_filters("schemax_{$this->schema_type}_single_article", $article_arr );
@@ -215,7 +366,7 @@ class Article {
     }
 
     /**
-     * Get $dateModified
+     * Get dateModified
      *
      * @return mixed|null
      */
