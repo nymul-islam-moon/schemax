@@ -195,7 +195,7 @@ class Article {
          * article schema isAccessibleForFree key
          */
         $isAccessibleForFree = null;
-        if (isset($article_arr['isAccessibleForFree']) && !empty($isAccessibleForFree)) {
+        if ( isset( $article_arr['isAccessibleForFree'] ) && !empty( $isAccessibleForFree ) ) {
             $article_arr['isAccessibleForFree'] = $isAccessibleForFree;
         } else {
             unset( $article_arr['isAccessibleForFree'] );
@@ -205,7 +205,7 @@ class Article {
          * article schema copyrightHolder key
          */
         $copyrightHolder = null;
-        if (isset($article_arr['copyrightHolder']) && !empty($copyrightHolder)) {
+        if ( isset( $article_arr['copyrightHolder'] ) && !empty( $copyrightHolder ) ) {
             $article_arr['copyrightHolder'] = $copyrightHolder;
         } else {
             unset( $article_arr['copyrightHolder'] );
@@ -215,7 +215,7 @@ class Article {
          * article schema potentialAction key
          */
         $potentialAction = null;
-        if (isset($article_arr['potentialAction']) && !empty($potentialAction)) {
+        if ( isset($article_arr['potentialAction'] ) && !empty( $potentialAction ) ) {
             $article_arr['potentialAction'] = $potentialAction;
         } else {
             unset( $article_arr['potentialAction'] );
@@ -225,7 +225,7 @@ class Article {
          * article schema isPartOf key
          */
         $isPartOf = null;
-        if (isset($article_arr['isPartOf']) && !empty($isPartOf)) {
+        if ( isset( $article_arr['isPartOf'] ) && !empty( $isPartOf ) ) {
             $article_arr['isPartOf'] = $isPartOf;
         } else {
             unset( $article_arr['isPartOf'] );
@@ -235,7 +235,7 @@ class Article {
          * article schema mentions key
          */
         $mentions = null;
-        if (isset($article_arr['mentions']) && !empty($mentions)) {
+        if ( isset( $article_arr['mentions'] ) && !empty( $mentions ) ) {
             $article_arr['mentions'] = $mentions;
         } else {
             unset( $article_arr['mentions'] );
@@ -245,7 +245,7 @@ class Article {
          * article schema publisherImprint key
          */
         $publisherImprint = null;
-        if (isset($article_arr['publisherImprint']) && !empty($publisherImprint)) {
+        if ( isset( $article_arr['publisherImprint'] ) && !empty( $publisherImprint ) ) {
             $article_arr['publisherImprint'] = $publisherImprint;
         } else {
             unset( $article_arr['publisherImprint'] );
@@ -255,7 +255,7 @@ class Article {
          * article schema alternateName key
          */
         $alternateName = null;
-        if (isset($article_arr['alternateName']) && !empty($alternateName)) {
+        if ( isset( $article_arr['alternateName'] ) && !empty( $alternateName ) ) {
             $article_arr['alternateName'] = $alternateName;
         } else {
             unset( $article_arr['alternateName'] );
@@ -275,7 +275,7 @@ class Article {
          * article schema comment key
          */
         $comment = null;
-        if (isset($article_arr['comment']) && !empty($comment)) {
+        if ( isset( $article_arr['comment'] ) && !empty( $comment ) ) {
             $article_arr['comment'] = $comment;
         } else {
             unset( $article_arr['comment'] );
@@ -285,7 +285,7 @@ class Article {
          * article schema interactionStatistic key
          */
         $interactionStatistic = null;
-        if (isset($article_arr['interactionStatistic']) && !empty($interactionStatistic)) {
+        if ( isset( $article_arr['interactionStatistic'] ) && !empty( $interactionStatistic ) ) {
             $article_arr['interactionStatistic'] = $interactionStatistic;
         } else {
             unset( $article_arr['interactionStatistic'] );
@@ -295,7 +295,7 @@ class Article {
          * article schema blogPost key
          */
         $blogPost = null;
-        if (isset($article_arr['blogPost']) && !empty($blogPost)) {
+        if ( isset( $article_arr['blogPost'] ) && !empty( $blogPost ) ) {
             $article_arr['blogPost'] = $blogPost;
         } else {
             unset( $article_arr['blogPost'] );
@@ -305,7 +305,7 @@ class Article {
          * article schema isBasedOn key
          */
         $isBasedOn = null;
-        if (isset($article_arr['isBasedOn']) && !empty($isBasedOn)) {
+        if ( isset( $article_arr['isBasedOn'] ) && !empty( $isBasedOn ) ) {
             $article_arr['isBasedOn'] = $isBasedOn;
         } else {
             unset( $article_arr['isBasedOn'] );
@@ -315,7 +315,7 @@ class Article {
          * article schema genre key
          */
         $genre = null;
-        if (isset($article_arr['genre']) && !empty($genre)) {
+        if ( isset( $article_arr['genre'] ) && !empty( $genre ) ) {
             $article_arr['genre'] = $genre;
         } else {
             unset( $article_arr['genre'] );
@@ -325,7 +325,7 @@ class Article {
          * article schema educationalUse key
          */
         $educationalUse = null;
-        if (isset($article_arr['educationalUse']) && !empty($educationalUse)) {
+        if ( isset( $article_arr['educationalUse'] ) && !empty( $educationalUse ) ) {
             $article_arr['educationalUse'] = $educationalUse;
         } else {
             unset( $article_arr['educationalUse'] );
@@ -335,7 +335,7 @@ class Article {
          * article schema about key
          */
         $about = null;
-        if (isset($article_arr['about']) && !empty($about)) {
+        if ( isset( $article_arr['about'] ) && !empty( $about ) ) {
             $article_arr['about'] = $about;
         } else {
             unset( $article_arr['about'] );
