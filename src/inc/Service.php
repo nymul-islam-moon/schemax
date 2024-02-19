@@ -24,4 +24,13 @@ class Service {
 
         return $schema_data_decoded;
     }
+
+    /**
+     * Show the Schema in meta tag
+     *
+     * @return void
+     */
+    public function attach_schema( $schema, $type ) {
+        echo "<script src='schemax-$type' type='application/ld+json'>$schema</script>";
+    }
 }

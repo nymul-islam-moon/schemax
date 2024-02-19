@@ -16,12 +16,6 @@
       "name": "Jane Doe",
       "url": "https://example.com/profile/janedoe123",
       "sameAs": "https://www.linkedin.com/in/janedoe"
-    },
-    {
-      "@type": "Person",
-      "name": "John Doe",
-      "url": "https://example.com/profile/johndoe123",
-      "sameAs": "https://www.linkedin.com/in/johndoe"
     }
   ],
   "publisher": {
@@ -38,7 +32,7 @@
     ]
   },
   "articleBody": "The main content of the news article goes here.",
-  "keywords": "news, important events, updates, current affairs, breaking news, global events, political developments",
+  "keywords": "",
   "articleSection": "Politics",
   "commentCount": 10,
   "wordCount": 800,

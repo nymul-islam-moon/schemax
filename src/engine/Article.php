@@ -41,6 +41,9 @@ class Article {
      */
     protected function single_article( $article_arr, $type ) {
 
+        /**
+         * article schema type key
+         */
         if ( isset( $article_arr['@type'] ) ) {
             $article_arr['@type'] = $type;
         }else {
@@ -95,11 +98,58 @@ class Article {
             unset( $datePublished );
         }
 
+        /**
+         * article schema dateModified key
+         */
         $dateModified = $this->dateModified();
         if ( isset(  $article_arr['dateModified'] ) && !empty( $dateModified ) ) {
             $article_arr['dateModified']    = $dateModified;
         } else {
             unset( $article_arr['dateModified'] );
+        }
+
+        /**
+         * article schema author key
+         */
+        $author = $this->author( $article_arr['author'] );
+        if( isset( $article_arr['author'] ) && ! empty( $author ) ) {
+            $article_arr['author']      = $author;
+        } else {
+            unset( $article_arr['author'] );
+        }
+
+        /**
+         * article schema publisher key
+         */
+        $publisher = $this->publisher( $article_arr['publisher'] );
+        if ( isset( $article_arr['publisher'] )  && ! empty( $publisher ) ) {
+            $article_arr['publisher']   = $publisher;
+        } else {
+            unset( $article_arr['publisher'] );
+        }
+
+        /**
+         * article schema articleBody key
+         */
+        $articleBody = $this->articleBody();
+        if ( isset( $article_arr['articleBody'] ) && !empty( $articleBody ) ) {
+            $article_arr['articleBody']         = $articleBody;
+        } else {
+            unset( $article_arr['articleBody'] );
+        }
+
+        $keywords = $this->keywords();
+        if ( isset( $article_arr['keywords'] ) && ! empty( $keywords ) ) {
+            $article_arr['keywords']            = $keywords;
+        } else {
+            unset( $article_arr['keywords'] );
+        }
+
+        $articleSection = $this->articleSection();
+        if ( isset( $article_arr['articleSection'] ) && ! empty( $articleSection ) ) {
+            $article_arr['articleSection']      = $articleSection;
+        } else {
+            unset( $article_arr['articleSection'] );
         }
 
         return apply_filters("schemax_{$this->schema_type}_single_article", $article_arr );
@@ -180,14 +230,97 @@ class Article {
         return null;
     }
 
+    protected function author( $author ) {  // TODO this author part is incomplete for some problem
+
+        $author_ids = get_post_field( 'post_author', $this->post_id );
+
+//        error_log( print_r( var_dump( $author_ids ), true ) );
+
+//        $author_data = $author[0];
+//
+//        if ( is_array( $author_ids ) ) {
+//
+//        } else {
+//            $author_name = get_the_author_meta( 'display_name', $author_ids );
+//            if ( isset( $author_data['name'] ) && ! empty( $author_name ) ) {
+//                $author_data['name'] = $author_name;
+//            }
+//        }
+//
+//        if (  ) {
+//
+//        }
+
+
+        return [];
+    }
+
+    public function publisher( $publisher ) {
+
+        return [];
+    }
 
     /**
-     * Show the Schema in meta tag
+     * Get articleBody
+     *
+     * @return mixed|null
+     */
+    protected function articleBody() {
+
+        $post = get_post( $this->post_id );
+        $articleBody = strip_tags($post->post_content);
+
+        if ( ! empty( $articleBody ) ) {
+            return apply_filters("schemax_{$this->schema_type}_articleBody", $articleBody );
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the keywords
+     *
+     * @return mixed|null
+     */
+    protected function keywords() {
+
+        $post_tags = get_the_tags( $this->post_id );
+
+        $keywords = null;
+
+        if ( $post_tags ) {
+            foreach($post_tags as $tag) {
+                $keywords =  $tag->name . ' '; // Display the tag name
+            }
+        } else {
+            $keywords = the_tags();
+        }
+
+        if ( ! empty( $keywords ) ) {
+            return apply_filters("schemax_{$this->schema_type}_keywords", $keywords );
+        }
+
+        return null;
+    }
+
+    /**
+     * Get articleSection
+     *
+     * @return string | null
+     */
+    protected function articleSection() {
+
+        return null;
+    }
+
+
+    /**
+     * Article Schema
      *
      * @return void
      */
-    public function attach_schema() {
+    public function article() {
         $updated_data = $this->update_schema();
-        echo "<script src='schemax-$this->schema_type' type='application/ld+json'>$updated_data</script>";
+        $this->schema_service->attach_schema( $updated_data, $this->schema_type );
     }
 }

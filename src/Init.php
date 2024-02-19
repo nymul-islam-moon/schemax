@@ -32,7 +32,7 @@ class Init {
         if ( is_single() && 'post' == get_post_type() ) {
             global $post;
             $article_object = new Article( $post->ID );
-            $article_object->attach_schema();
+            $article_object->article();
         }
 
 	}
