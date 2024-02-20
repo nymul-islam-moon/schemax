@@ -53,31 +53,37 @@ class Article {
         /**
          * article schema mainEntityOfPage key
          */
-        $mainEntityOfPage = $this->mainEntityOfPage( $article_arr['mainEntityOfPage'] );
-        if ( isset( $article_arr['mainEntityOfPage'] ) && ! empty( $mainEntityOfPage ) ) {
-            $article_arr['mainEntityOfPage']    = $mainEntityOfPage;
-        } else {
-            unset( $article_arr['mainEntityOfPage'] );
+        if ( isset( $article_arr['mainEntityOfPage'] ) ) {
+            $mainEntityOfPage                       = $this->mainEntityOfPage( $article_arr['mainEntityOfPage'] );
+            if ( ! empty( $mainEntityOfPage ) ) {
+                $article_arr['mainEntityOfPage']    = $mainEntityOfPage;
+            } else {
+                unset( $article_arr['mainEntityOfPage'] );
+            }
         }
 
         /**
          * article schema headline key
          */
-        $headline = get_the_title( $this->post_id );
-        if ( isset( $article_arr['headline'] ) && ! empty( $headline ) ) {
-            $article_arr['headline']            = $headline;
-        }else {
-            unset( $article_arr['headline'] );
+        if( isset( $article_arr['headline'] ) ) {
+            $headline                               = get_the_title($this->post_id);
+            if (!empty($headline)) {
+                $article_arr['headline']            = $headline;
+            } else {
+                unset($article_arr['headline']);
+            }
         }
 
         /**
          * article schema description key
          */
-        $description = get_the_excerpt( $this->post_id );
-        if( isset( $article_arr['description'] ) && ! empty( $description ) ) {
-            $article_arr['description']         = $description;
-        } else {
-            unset( $article_arr['description'] );
+        if ( isset($article_arr['description']) ) {
+            $description                            = get_the_excerpt($this->post_id);
+            if ( !empty($description)) {
+                $article_arr['description']         = $description;
+            } else {
+                unset($article_arr['description']);
+            }
         }
 
         /**
@@ -194,17 +200,14 @@ class Article {
         /**
          * article schema isAccessibleForFree key
          */
-        $isAccessibleForFree = $this->isAccessibleForFree();
-        if ( isset( $article_arr['isAccessibleForFree'] ) && !empty( $isAccessibleForFree ) ) {
-            $article_arr['isAccessibleForFree'] = $isAccessibleForFree;
-        } else {
-            unset( $article_arr['isAccessibleForFree'] );
+        if ( isset( $article_arr['isAccessibleForFree'] ) ) {
+            $article_arr['isAccessibleForFree'] = $this->isAccessibleForFree();
         }
 
         /**
          * article schema copyrightHolder key
          */
-        $copyrightHolder = null;
+        $copyrightHolder = $this->copyrightHolder( $article_arr['copyrightHolder'] );
         if ( isset( $article_arr['copyrightHolder'] ) && !empty( $copyrightHolder ) ) {
             $article_arr['copyrightHolder'] = $copyrightHolder;
         } else {
@@ -214,7 +217,7 @@ class Article {
         /**
          * article schema potentialAction key
          */
-        $potentialAction = null;
+        $potentialAction = $this->potentialAction( $article_arr['potentialAction'] );
         if ( isset($article_arr['potentialAction'] ) && !empty( $potentialAction ) ) {
             $article_arr['potentialAction'] = $potentialAction;
         } else {
@@ -224,7 +227,7 @@ class Article {
         /**
          * article schema isPartOf key
          */
-        $isPartOf = null;
+        $isPartOf = $this->isPartOf( $article_arr['isPartOf'] );
         if ( isset( $article_arr['isPartOf'] ) && !empty( $isPartOf ) ) {
             $article_arr['isPartOf'] = $isPartOf;
         } else {
@@ -234,7 +237,7 @@ class Article {
         /**
          * article schema mentions key
          */
-        $mentions = null;
+        $mentions = $this->mentions( $article_arr['mentions'] );
         if ( isset( $article_arr['mentions'] ) && !empty( $mentions ) ) {
             $article_arr['mentions'] = $mentions;
         } else {
@@ -554,7 +557,7 @@ class Article {
      */
     protected function thumbnailUrl() {
         $thumbnailUrl = get_the_post_thumbnail_url( $this->post_id );
-        error_log( print_r( $thumbnailUrl, true ) );
+
         if ( ! empty( $thumbnailUrl ) ) {
             return apply_filters( "schemax_{ $this->schema_type }_thumbnailUrl", $thumbnailUrl );
         }
@@ -570,6 +573,81 @@ class Article {
     protected function isAccessibleForFree() {
 
         return false;
+    }
+
+    /**
+     * Get copyrightHolder
+     *
+     * @return mixed|null
+     */
+    protected function copyrightHolder( $copyrightHolder ) {
+
+        $name = null;
+        if ( isset( $copyrightHolder['name'] ) && ! empty( $name ) ) {
+            $copyrightHolder['name'] = $name;
+        } else {
+            return null;
+        }
+
+        $url = null;
+        if ( isset( $copyrightHolder['logo']['url'] ) && ! empty( $url ) ) {
+            $copyrightHolder['logo']['url'] = $url;
+
+        } else {
+            unset( $copyrightHolder['logo'] );
+        }
+
+        return apply_filters( "schemax_{ $this->schema_type }_copyrightHolder", $copyrightHolder );
+    }
+
+    /**
+     * Get potentialAction
+     *
+     * @param $potentialAction
+     * @return mixed|null
+     */
+    protected function potentialAction( $potentialAction ) {
+
+        if ( isset($potentialAction['target'] ) ) {
+            $potentialAction['target']      = [];
+        }
+
+        if ( ! empty( $potentialAction['target'] ) ) {
+            return apply_filters( "schemax_{ $this->schema_type }_potentialAction", $potentialAction );
+        }
+
+        return null;
+    }
+
+    /**
+     * Get isPartOf
+     *
+     * @param $isPartOf
+     * @return mixed|null
+     */
+    protected function isPartOf( $isPartOf ) {
+
+        if ( isset( $isPartOf['name'] ) ) {
+            $isPartOf['name']       = null;
+        }
+
+        $url = null;
+        if( isset( $isPartOf['url'] ) && ! empty( $url ) ) {
+            $isPartOf['url']        = $url;
+        } else {
+            unset( $isPartOf['url'] );
+        }
+
+        if ( ! empty( $isPartOf['name'] ) ) {
+            return apply_filters( "schemax_{ $this->schema_type }_isPartOf", $isPartOf );
+        }
+
+        return null;
+    }
+
+    protected function mentions() {
+
+        return [];
     }
 
 
