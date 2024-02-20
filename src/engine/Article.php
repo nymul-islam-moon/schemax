@@ -163,7 +163,7 @@ class Article {
         /**
          * article schema commentCount key
          */
-        $commentCount = null;
+        $commentCount = $this->commentCount();
         if (isset( $article_arr['commentCount'] ) && ! empty( $commentCount ) ) {
             $article_arr['commentCount']        = $commentCount;
         } else {
@@ -173,7 +173,7 @@ class Article {
         /**
          * article schema wordCount key
          */
-        $wordCount = null;
+        $wordCount = $this->wordCount();
         if ( isset( $article_arr['wordCount'] ) && ! empty( $wordCount ) ) {
             $article_arr['wordCount']           = $wordCount;
         } else {
@@ -183,7 +183,7 @@ class Article {
         /**
          * article schema thumbnailUrl key
          */
-        $thumbnailUrl = null;
+        $thumbnailUrl = $this->thumbnailUrl();
         if ( isset( $article_arr['thumbnailUrl'] ) && ! empty( $thumbnailUrl ) ) {
             $article_arr['thumbnailUrl']        = $thumbnailUrl;
         } else {
@@ -194,7 +194,7 @@ class Article {
         /**
          * article schema isAccessibleForFree key
          */
-        $isAccessibleForFree = null;
+        $isAccessibleForFree = $this->isAccessibleForFree();
         if ( isset( $article_arr['isAccessibleForFree'] ) && !empty( $isAccessibleForFree ) ) {
             $article_arr['isAccessibleForFree'] = $isAccessibleForFree;
         } else {
@@ -419,6 +419,12 @@ class Article {
         return null;
     }
 
+    /**
+     * Get author
+     *
+     * @param $author
+     * @return array
+     */
     protected function author( $author ) {  // TODO this author part is incomplete for some problem
 
         $author_ids = get_post_field( 'post_author', $this->post_id );
@@ -444,6 +450,12 @@ class Article {
         return [];
     }
 
+    /**
+     * Get publisher
+     *
+     * @param $publisher
+     * @return array
+     */
     public function publisher( $publisher ) {
 
         return [];
@@ -457,7 +469,7 @@ class Article {
     protected function articleBody() {
 
         $post = get_post( $this->post_id );
-        $articleBody = strip_tags($post->post_content);
+        $articleBody = strip_tags( $post->post_content );
 
         if ( ! empty( $articleBody ) ) {
             return apply_filters("schemax_{$this->schema_type}_articleBody", $articleBody );
@@ -502,10 +514,62 @@ class Article {
         return null;
     }
 
-
+    /**
+     * Get commentCount
+     *
+     * @return mixed|null
+     */
     protected function commentCount() {
 
+        $commentCount = get_comments_number( $this->post_id );
+
+        if ( ! empty( $commentCount ) ) {
+            return apply_filters( "schemax_{ $this->schema_type }_commentCount", $commentCount );
+        }
+
         return null;
+    }
+
+    /**
+     * Get wordCount
+     *
+     * @return mixed|null
+     */
+    protected function wordCount() {
+
+        $content = get_post_field('post_content', $this->post_id);
+        $wordCount = str_word_count(strip_tags( $content ) );
+
+        if ( ! empty( $wordCount ) ) {
+            return apply_filters( "schemax_{ $this->schema_type }_wordCount", $wordCount );
+        }
+
+        return null;
+    }
+
+    /**
+     * Get thumbnailUrl
+     *
+     * @return mixed|null
+     */
+    protected function thumbnailUrl() {
+        $thumbnailUrl = get_the_post_thumbnail_url( $this->post_id );
+        error_log( print_r( $thumbnailUrl, true ) );
+        if ( ! empty( $thumbnailUrl ) ) {
+            return apply_filters( "schemax_{ $this->schema_type }_thumbnailUrl", $thumbnailUrl );
+        }
+
+        return null;
+    }
+
+    /**
+     * Get isAccessibleForFree
+     *
+     * @return boolean
+     */
+    protected function isAccessibleForFree() {
+
+        return false;
     }
 
 
