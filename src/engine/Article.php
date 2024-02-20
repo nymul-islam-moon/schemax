@@ -223,147 +223,175 @@ class Article {
          * article schema isAccessibleForFree key
          */
         if ( isset( $article_arr['isAccessibleForFree'] ) ) {
-            $article_arr['isAccessibleForFree'] = $this->isAccessibleForFree();
+            $article_arr['isAccessibleForFree']     = $this->isAccessibleForFree();
         }
 
         /**
          * article schema copyrightHolder key
          */
-        $copyrightHolder = $this->copyrightHolder( $article_arr['copyrightHolder'] );
-        if ( isset( $article_arr['copyrightHolder'] ) && !empty( $copyrightHolder ) ) {
-            $article_arr['copyrightHolder'] = $copyrightHolder;
-        } else {
-            unset( $article_arr['copyrightHolder'] );
+        if ( isset( $article_arr['copyrightHolder'] ) ) {
+            $copyrightHolder                        = $this->copyrightHolder( $article_arr['copyrightHolder'] );
+            if ( ! empty( $copyrightHolder ) ) {
+                $article_arr['copyrightHolder']     = $copyrightHolder;
+            } else {
+                unset( $article_arr['copyrightHolder'] );
+            }
         }
 
         /**
          * article schema potentialAction key
          */
-        $potentialAction = $this->potentialAction( $article_arr['potentialAction'] );
-        if ( isset($article_arr['potentialAction'] ) && !empty( $potentialAction ) ) {
-            $article_arr['potentialAction'] = $potentialAction;
-        } else {
-            unset( $article_arr['potentialAction'] );
+        if ( isset( $article_arr['potentialAction'] ) ) {
+            $potentialAction                        = $this->potentialAction( $article_arr['potentialAction'] );
+            if ( ! empty( $potentialAction ) ) {
+                $article_arr['potentialAction']     = $potentialAction;
+            } else {
+                unset( $article_arr['potentialAction'] );
+            }
         }
 
         /**
          * article schema isPartOf key
          */
-        $isPartOf = $this->isPartOf( $article_arr['isPartOf'] );
-        if ( isset( $article_arr['isPartOf'] ) && !empty( $isPartOf ) ) {
-            $article_arr['isPartOf'] = $isPartOf;
-        } else {
-            unset( $article_arr['isPartOf'] );
+        if ( isset( $article_arr['isPartOf'] ) ) {
+            $isPartOf                               = $this->isPartOf( $article_arr['isPartOf'] );
+            if ( !empty( $isPartOf ) ) {
+                $article_arr['isPartOf']            = $isPartOf;
+            } else {
+                unset( $article_arr['isPartOf'] );
+            }
         }
 
         /**
          * article schema mentions key
          */
-        $mentions = $this->mentions( $article_arr['mentions'] );
-        if ( isset( $article_arr['mentions'] ) && !empty( $mentions ) ) {
-            $article_arr['mentions'] = $mentions;
-        } else {
-            unset( $article_arr['mentions'] );
+        if ( isset( $article_arr['mentions'] ) ) {
+            $mentions                               = $this->mentions( $article_arr['mentions'] );
+            if ( ! empty( $mentions ) ) {
+                $article_arr['mentions']            = $mentions;
+            } else {
+                unset( $article_arr['mentions'] );
+            }
         }
 
         /**
          * article schema publisherImprint key
          */
-        $publisherImprint = null;
-        if ( isset( $article_arr['publisherImprint'] ) && !empty( $publisherImprint ) ) {
-            $article_arr['publisherImprint'] = $publisherImprint;
-        } else {
-            unset( $article_arr['publisherImprint'] );
+        if ( isset( $article_arr['publisherImprint'] ) ) {
+            $publisherImprint                       = null;
+            if ( ! empty( $publisherImprint ) ) {
+                $article_arr['publisherImprint']    = $publisherImprint;
+            } else {
+                unset( $article_arr['publisherImprint'] );
+            }
         }
 
         /**
          * article schema alternateName key
          */
-        $alternateName = null;
-        if ( isset( $article_arr['alternateName'] ) && !empty( $alternateName ) ) {
-            $article_arr['alternateName'] = $alternateName;
-        } else {
-            unset( $article_arr['alternateName'] );
+        if ( isset( $article_arr['alternateName'] ) ) {
+            $alternateName                          = null;
+            if ( ! empty( $alternateName ) ) {
+                $article_arr['alternateName']       = $alternateName;
+            } else {
+                unset( $article_arr['alternateName'] );
+            }
         }
 
         /**
          * article schema dateCreated key
          */
-        $dateCreated = null;
-        if ( isset( $article_arr['dateCreated'] ) && !empty( $dateCreated ) ) {
-            $article_arr['dateCreated'] = $dateCreated;
-        } else {
-            unset( $article_arr['dateCreated'] );
+        if ( isset( $article_arr['dateCreated'] ) ) {
+            $dateCreated                            = null;
+            if ( ! empty( $dateCreated ) ) {
+                $article_arr['dateCreated']         = $dateCreated;
+            } else {
+                unset( $article_arr['dateCreated'] );
+            }
         }
 
         /**
          * article schema comment key
          */
-        $comment = null;
-        if ( isset( $article_arr['comment'] ) && !empty( $comment ) ) {
-            $article_arr['comment'] = $comment;
-        } else {
-            unset( $article_arr['comment'] );
+        if ( isset( $article_arr['comment'] ) ) {
+            $comment                                = null;
+            if ( !empty( $comment ) ) {
+                $article_arr['comment']             = $comment;
+            } else {
+                unset( $article_arr['comment'] );
+            }
         }
 
         /**
          * article schema interactionStatistic key
          */
-        $interactionStatistic = null;
-        if ( isset( $article_arr['interactionStatistic'] ) && !empty( $interactionStatistic ) ) {
-            $article_arr['interactionStatistic'] = $interactionStatistic;
-        } else {
-            unset( $article_arr['interactionStatistic'] );
+        if ( isset( $article_arr['interactionStatistic'] ) ) {
+            $interactionStatistic = null;
+            if ( !empty( $interactionStatistic ) ) {
+                $article_arr['interactionStatistic'] = $interactionStatistic;
+            } else {
+                unset( $article_arr['interactionStatistic'] );
+            }
         }
 
         /**
          * article schema blogPost key
          */
-        $blogPost = null;
-        if ( isset( $article_arr['blogPost'] ) && !empty( $blogPost ) ) {
-            $article_arr['blogPost'] = $blogPost;
-        } else {
-            unset( $article_arr['blogPost'] );
+        if ( isset( $article_arr['blogPost'] ) ) {
+            $blogPost = null;
+            if ( ! empty( $blogPost ) ) {
+                $article_arr['blogPost'] = $blogPost;
+            } else {
+                unset( $article_arr['blogPost'] );
+            }
         }
 
         /**
          * article schema isBasedOn key
          */
-        $isBasedOn = null;
-        if ( isset( $article_arr['isBasedOn'] ) && !empty( $isBasedOn ) ) {
-            $article_arr['isBasedOn'] = $isBasedOn;
-        } else {
-            unset( $article_arr['isBasedOn'] );
+        if ( isset( $article_arr['isBasedOn'] ) ) {
+            $isBasedOn = null;
+            if ( ! empty( $isBasedOn ) ) {
+                $article_arr['isBasedOn'] = $isBasedOn;
+            } else {
+                unset( $article_arr['isBasedOn'] );
+            }
         }
 
         /**
          * article schema genre key
          */
-        $genre = null;
-        if ( isset( $article_arr['genre'] ) && !empty( $genre ) ) {
-            $article_arr['genre'] = $genre;
-        } else {
-            unset( $article_arr['genre'] );
+        if ( isset( $article_arr['genre'] ) ) {
+            $genre = null;
+            if ( !empty( $genre ) ) {
+                $article_arr['genre'] = $genre;
+            } else {
+                unset( $article_arr['genre'] );
+            }
         }
 
         /**
          * article schema educationalUse key
          */
-        $educationalUse = null;
-        if ( isset( $article_arr['educationalUse'] ) && !empty( $educationalUse ) ) {
-            $article_arr['educationalUse'] = $educationalUse;
-        } else {
-            unset( $article_arr['educationalUse'] );
+        if ( isset( $article_arr['educationalUse'] ) ) {
+            $educationalUse = null;
+            if ( ! empty( $educationalUse ) ) {
+                $article_arr['educationalUse'] = $educationalUse;
+            } else {
+                unset( $article_arr['educationalUse'] );
+            }
         }
 
         /**
          * article schema about key
          */
-        $about = null;
-        if ( isset( $article_arr['about'] ) && !empty( $about ) ) {
-            $article_arr['about'] = $about;
-        } else {
-            unset( $article_arr['about'] );
+        if ( isset( $article_arr['about'] ) ) {
+            $about = null;
+            if ( ! empty( $about ) ) {
+                $article_arr['about'] = $about;
+            } else {
+                unset( $article_arr['about'] );
+            }
         }
 
         return apply_filters("schemax_{$this->schema_type}_single_article", $article_arr );
@@ -667,7 +695,7 @@ class Article {
         return null;
     }
 
-    protected function mentions() {
+    protected function mentions( $mentions ) {
 
         return [];
     }
