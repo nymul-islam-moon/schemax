@@ -45,7 +45,7 @@ class Article {
          * article schema type key
          */
         if ( isset( $article_arr['@type'] ) ) {
-            $article_arr['@type'] = $type;
+            $article_arr['@type']                   = $type;
         }else {
             unset( $article_arr['@type'] );
         }
@@ -89,21 +89,25 @@ class Article {
         /**
          * article schema image key
          */
-        $images = $this->image();
-        if ( isset( $article_arr['image'] ) && ! empty( $images ) ) {
-            $article_arr['image']               = $images;
-        }else {
-            unset( $article_arr['image'] );
+        if ( isset( $article_arr['image'] ) ) {
+            $images                                 = $this->image();
+            if ( ! empty( $images ) ) {
+                $article_arr['image']               = $images;
+            }else {
+                unset( $article_arr['image'] );
+            }
         }
 
         /**
          * article schema datePublished key
          */
-        $datePublished = $this->datePublished();
-        if ( isset( $article_arr['datePublished'] ) && ! empty( $datePublished ) ) {
-            $article_arr['datePublished']       = $datePublished;
-        } else {
-            unset( $datePublished );
+        if ( isset($article_arr['datePublished']) ) {
+            $datePublished                          = $this->datePublished();
+            if ( !empty($datePublished)) {
+                $article_arr['datePublished']       = $datePublished;
+            } else {
+                unset($datePublished);
+            }
         }
 
         /**
