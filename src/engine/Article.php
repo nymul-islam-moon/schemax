@@ -126,9 +126,9 @@ class Article {
          * article schema author key
          */
         if ( isset( $article_arr['author'] ) ) {
-            $author = $this->author( $article_arr['author'] );
+            $author                                 = $this->author( $article_arr['author'] );
             if ( !empty( $author ) ) {
-                $article_arr['author'] = $author;
+                $article_arr['author']              = $author;
             } else {
                 unset( $article_arr['author'] );
             }
@@ -138,9 +138,9 @@ class Article {
          * article schema publisher key
          */
         if ( isset( $article_arr['publisher'] ) ) {
-            $publisher = $this->publisher( $article_arr['publisher'] );
+            $publisher                              = $this->publisher( $article_arr['publisher'] );
             if ( ! empty( $publisher ) ) {
-                $article_arr['publisher'] = $publisher;
+                $article_arr['publisher']           = $publisher;
             } else {
                 unset( $article_arr['publisher'] );
             }
@@ -150,9 +150,9 @@ class Article {
          * article schema articleBody key
          */
         if ( isset($article_arr['articleBody']) ) {
-            $articleBody = $this->articleBody();
+            $articleBody                            = $this->articleBody();
             if ( !empty($articleBody)) {
-                $article_arr['articleBody'] = $articleBody;
+                $article_arr['articleBody']         = $articleBody;
             } else {
                 unset( $article_arr['articleBody'] );
             }
@@ -162,9 +162,9 @@ class Article {
          * article schema keywords key
          */
         if ( isset( $article_arr['keywords'] ) ) {
-            $keywords = $this->keywords();
+            $keywords                               = $this->keywords();
             if ( ! empty( $keywords ) ) {
-                $article_arr['keywords'] = $keywords;
+                $article_arr['keywords']            = $keywords;
             } else {
                 unset( $article_arr['keywords'] );
             }
@@ -174,9 +174,9 @@ class Article {
          * article schema articleSection key
          */
         if ( isset( $article_arr['articleSection'] ) ) {
-            $articleSection = $this->articleSection();
+            $articleSection                         = $this->articleSection();
             if ( !empty( $articleSection ) ) {
-                $article_arr['articleSection'] = $articleSection;
+                $article_arr['articleSection']      = $articleSection;
             } else {
                 unset( $article_arr['articleSection'] );
             }
@@ -186,9 +186,9 @@ class Article {
          * article schema commentCount key
          */
         if ( isset( $article_arr['commentCount'] ) ) {
-            $commentCount = $this->commentCount();
+            $commentCount                           = $this->commentCount();
             if ( !empty( $commentCount ) ) {
-                $article_arr['commentCount'] = $commentCount;
+                $article_arr['commentCount']        = $commentCount;
             } else {
                 unset( $article_arr['commentCount'] );
             }
@@ -198,9 +198,9 @@ class Article {
          * article schema wordCount key
          */
         if ( isset( $article_arr['wordCount'] ) ) {
-            $wordCount = $this->wordCount();
+            $wordCount                              = $this->wordCount();
             if ( ! empty( $wordCount ) ) {
-                $article_arr['wordCount'] = $wordCount;
+                $article_arr['wordCount']           = $wordCount;
             } else {
                 unset( $article_arr['wordCount'] );
             }
@@ -209,11 +209,13 @@ class Article {
         /**
          * article schema thumbnailUrl key
          */
-        $thumbnailUrl = $this->thumbnailUrl();
-        if ( isset( $article_arr['thumbnailUrl'] ) && ! empty( $thumbnailUrl ) ) {
-            $article_arr['thumbnailUrl']        = $thumbnailUrl;
-        } else {
-            unset( $article_arr['thumbnailUrl'] );
+        if ( isset( $article_arr['thumbnailUrl'] ) ) {
+            $thumbnailUrl                           = $this->thumbnailUrl();
+            if ( ! empty( $thumbnailUrl ) ) {
+                $article_arr['thumbnailUrl']        = $thumbnailUrl;
+            } else {
+                unset( $article_arr['thumbnailUrl'] );
+            }
         }
 
 
