@@ -84,46 +84,73 @@ class Product
      */
     protected function single_product( $product_arr ) {
 
+        /**
+         * product schema name key
+         */
         if ( isset( $product_arr['name'] ) ) {
-            $product_arr['name']                = !empty( $this->name() ) ? $this->name() : '';
+            $product_arr['name']                        = !empty( $this->name() ) ? $this->name() : '';
         }
 
+        /**
+         * product schema description key
+         */
         if ( isset( $product_arr['description'] ) ) {
-            $product_arr['description']         = !empty( $this->description() ) ? $this->description() : '';
+            $product_arr['description']                 = !empty( $this->description() ) ? $this->description() : '';
         }
 
-        $review = $this->review( $product_arr['review'] );
-        if ( isset( $product_arr['review'] ) && ! empty ( $review ) ) {
-            $product_arr['review']              = $review;
-        } else {
-            unset( $product_arr['review'] );
+        /**
+         * product schema review key
+         */
+        if ( isset($product_arr['review']) ) {
+            $review                                     = $this->review( $product_arr['review'] );
+            if ( !empty ($review)) {
+                $product_arr['review']                  = $review;
+            } else {
+                unset($product_arr['review']);
+            }
+
+            /**
+             * product schema aggregateRating key
+             */
+            if ( isset($product_arr['aggregateRating']) ) {
+                $aggregateRating                        = $this->aggregateRating($product_arr['aggregateRating']);
+                if ( !empty($aggregateRating)) {
+                    $product_arr['aggregateRating']     = $aggregateRating;
+                } else {
+                    unset($product_arr['aggregateRating']);
+                }
+            }
         }
 
-        $aggregateRating = $this->aggregateRating( $product_arr['aggregateRating'] );
-        if ( isset( $product_arr['aggregateRating'] ) && isset( $review ) && !empty( $review ) && !empty( $aggregateRating ) ) {
-            $product_arr['aggregateRating']     = $aggregateRating;
-        } else {
-            unset( $product_arr['aggregateRating'] );
+        /**
+         * product schema image key
+         */
+        if ( isset($product_arr['image']) ) {
+            $images                                     = $this->image();
+            if ( !empty($images)) {
+                $product_arr['image']                   = $images;
+            } else {
+                unset($product_arr['image']);
+            }
         }
 
-        $images = $this->image();
-        if ( isset( $product_arr['image'] )  && !empty( $images ) ) {
-            $product_arr['image']               = $images;
-        } else {
-            unset( $product_arr['image'] );
+        /**
+         * product schema brand key
+         */
+        if ( isset($product_arr['brand']) ) {
+            $brand                                      = $this->brand($product_arr['brand']);
+            if ( !empty($brand)) {
+                $product_arr['brand']                   = $brand;
+            } else {
+                unset($product_arr['brand']);
+            }
         }
 
-        $brand = $this->brand( $product_arr['brand'] );
-        if ( isset( $product_arr['brand'] ) && !empty( $brand ) ) {
-            $product_arr['brand']               = $brand;
-        } else {
-            unset( $product_arr['brand'] );
-        }
-
+        /**
+         * product schema offers key
+         */
         if ( isset( $product_arr['offers'] ) ) {
             $product_arr['offers']              = $this->offers( $product_arr['offers'] );
-        } else {
-            unset( $product_arr['offers'] );
         }
 
         return apply_filters("schemax_{$this->schema_type}_single_product", $product_arr, $this->product);
@@ -135,7 +162,7 @@ class Product
      * @return string
      */
     protected function name() {
-        return apply_filters("schemax_{$this->schema_type}", $this->product->get_name(), $this->product);
+        return apply_filters( "schemax_{$this->schema_type}", $this->product->get_name(), $this->product );
     }
 
     /**
@@ -144,7 +171,7 @@ class Product
      * @return string
      */
     protected function description() {
-        return apply_filters("schemax_{$this->schema_type}", $this->product->get_description(), $this->product);
+        return apply_filters( "schemax_{$this->schema_type}", $this->product->get_description(), $this->product );
     }
 
     /**
@@ -197,7 +224,7 @@ class Product
                 return [];
             }
 
-            return apply_filters("schemax_{$this->schema_type}_review", $review_data, $this->product);
+            return apply_filters( "schemax_{$this->schema_type}_review", $review_data, $this->product );
         }
 
         return [];
@@ -217,7 +244,7 @@ class Product
         }
 
         if ( ! empty( $reviewRating['ratingValue'] ) ) {
-            return apply_filters("schemax_{$this->schema_type}_review_reviewRating", $reviewRating, $this->product);
+            return apply_filters( "schemax_{$this->schema_type}_review_reviewRating", $reviewRating, $this->product );
         }
         return [];
     }
@@ -247,7 +274,7 @@ class Product
 
 
         if ( !empty( $aggregateRating['ratingValue'] ) && !empty( $aggregateRating['reviewCount'] ) ) {
-            return apply_filters("schemax_{$this->schema_type}_aggregateRating", $aggregateRating, $this->product);
+            return apply_filters( "schemax_{$this->schema_type}_aggregateRating", $aggregateRating, $this->product );
         }
 
         return [];
@@ -319,46 +346,61 @@ class Product
             unset( $offers_arr['priceSpecification'] );
         }
 
-        $hasMerchantReturnPolicy = $this->offers_hasMerchantReturnPolicy( $offers_arr['hasMerchantReturnPolicy'] );
-        if ( isset( $offers_arr['hasMerchantReturnPolicy'] ) && !empty( $hasMerchantReturnPolicy ) ) {
-            $offers_arr['hasMerchantReturnPolicy']      = $hasMerchantReturnPolicy;
-        } else {
-            unset( $offers_arr['hasMerchantReturnPolicy'] );
+        if ( isset( $offers_arr['hasMerchantReturnPolicy'] ) ) {
+            $hasMerchantReturnPolicy = $this->offers_hasMerchantReturnPolicy($offers_arr['hasMerchantReturnPolicy']);
+            if ( !empty( $hasMerchantReturnPolicy ) ) {
+                $offers_arr['hasMerchantReturnPolicy'] = $hasMerchantReturnPolicy;
+            } else {
+                unset($offers_arr['hasMerchantReturnPolicy']);
+            }
         }
 
-        $offers_priceValidUntil = $this->offers_priceValidUntil();
-        if ( isset( $offers_arr['priceValidUntil'] ) && !empty( $offers_priceValidUntil ) ) {
-            $offers_arr['priceValidUntil']              = $offers_priceValidUntil;
-        } else {
-            unset( $offers_arr['priceValidUntil'] );
+        if ( isset( $offers_arr['priceValidUntil'] ) ) {
+            $offers_priceValidUntil = $this->offers_priceValidUntil();
+            if ( !empty( $offers_priceValidUntil ) ) {
+                $offers_arr['priceValidUntil'] = $offers_priceValidUntil;
+            } else {
+                unset($offers_arr['priceValidUntil']);
+            }
         }
 
-        $product_stock_status = $this->product->get_stock_status();
-        if ( isset( $offers_arr['availability'] ) && $product_stock_status ) {
-            $offers_arr['availability']                 = $product_stock_status;
-        } else {
-            unset( $offers_arr['availability'] );
+        if ( isset( $offers_arr['availability'] ) ) {
+            $product_stock_status = $this->product->get_stock_status();
+            if ( $product_stock_status) {
+                $offers_arr['availability'] = $product_stock_status;
+            } else {
+                unset($offers_arr['availability']);
+            }
         }
 
-        $product_stock_quantity = $this->product->get_stock_quantity();
-        if ( isset( $offers_arr['quantity'] ) && !empty( $product_stock_quantity ) ) {
-            $offers_arr['quantity']                     = $product_stock_quantity;
-        } else {
-            unset( $offers_arr['quantity'] );
+        if ( isset($offers_arr['quantity']) ) {
+            $product_stock_quantity = $this->product->get_stock_quantity();
+            if ( !empty( $product_stock_quantity ) ) {
+                $offers_arr['quantity'] = $product_stock_quantity;
+            } else {
+                unset($offers_arr['quantity']);
+            }
         }
 
-        $product_permalink = $this->product->get_permalink();
-        if ( isset( $offers_arr['url'] ) && !empty( $product_permalink ) ){
-            $offers_arr['url']                          = $product_permalink;
-        } else {
-            unset( $offers_arr['url'] );
+        if ( isset( $offers_arr['url'] ) ) {
+            $product_permalink = $this->product->get_permalink();
+            if ( !empty( $product_permalink ) ) {
+                $offers_arr['url'] = $product_permalink;
+            } else {
+                unset($offers_arr['url']);
+            }
         }
 
-        $offers_seller = $this->offers_seller( $offers_arr['seller'] );
-        if ( isset( $offers_arr['seller'] ) && !empty( $offers_seller ) ) {
-            $offers_arr['seller']                       = $offers_seller;
-        } else {
-            unset( $offers_arr['seller'] );
+        /**
+         * product schema offer_seller key
+         */
+        if ( isset($offers_arr['seller']) ) {
+            $offers_seller = $this->offers_seller( $offers_arr['seller'] );
+            if ( !empty( $offers_seller ) ) {
+                $offers_arr['seller'] = $offers_seller;
+            } else {
+                unset($offers_arr['seller']);
+            }
         }
 
         $offers_itemCondition = $this->offers_itemCondition();

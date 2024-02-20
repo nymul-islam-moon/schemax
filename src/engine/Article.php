@@ -66,23 +66,23 @@ class Article {
          * article schema headline key
          */
         if( isset( $article_arr['headline'] ) ) {
-            $headline                               = get_the_title($this->post_id);
-            if (!empty($headline)) {
+            $headline                               = get_the_title( $this->post_id );
+            if ( ! empty( $headline ) ) {
                 $article_arr['headline']            = $headline;
             } else {
-                unset($article_arr['headline']);
+                unset( $article_arr['headline'] );
             }
         }
 
         /**
          * article schema description key
          */
-        if ( isset($article_arr['description']) ) {
+        if ( isset( $article_arr['description'] ) ) {
             $description                            = get_the_excerpt($this->post_id);
-            if ( !empty($description)) {
+            if ( !empty( $description ) ) {
                 $article_arr['description']         = $description;
             } else {
-                unset($article_arr['description']);
+                unset( $article_arr['description'] );
             }
         }
 
@@ -101,93 +101,109 @@ class Article {
         /**
          * article schema datePublished key
          */
-        if ( isset($article_arr['datePublished']) ) {
+        if ( isset( $article_arr['datePublished'] ) ) {
             $datePublished                          = $this->datePublished();
-            if ( !empty($datePublished)) {
+            if ( !empty( $datePublished ) ) {
                 $article_arr['datePublished']       = $datePublished;
             } else {
-                unset($datePublished);
+                unset( $datePublished );
             }
         }
 
         /**
          * article schema dateModified key
          */
-        $dateModified = $this->dateModified();
-        if ( isset(  $article_arr['dateModified'] ) && !empty( $dateModified ) ) {
-            $article_arr['dateModified']        = $dateModified;
-        } else {
-            unset( $article_arr['dateModified'] );
+        if ( isset( $article_arr['dateModified'] ) ) {
+            $dateModified                           = $this->dateModified();
+            if ( !empty( $dateModified ) ) {
+                $article_arr['dateModified']        = $dateModified;
+            } else {
+                unset( $article_arr['dateModified'] );
+            }
         }
 
         /**
          * article schema author key
          */
-        $author = $this->author( $article_arr['author'] );
-        if( isset( $article_arr['author'] ) && ! empty( $author ) ) {
-            $article_arr['author']              = $author;
-        } else {
-            unset( $article_arr['author'] );
+        if ( isset( $article_arr['author'] ) ) {
+            $author = $this->author( $article_arr['author'] );
+            if ( !empty( $author ) ) {
+                $article_arr['author'] = $author;
+            } else {
+                unset( $article_arr['author'] );
+            }
         }
 
         /**
          * article schema publisher key
          */
-        $publisher = $this->publisher( $article_arr['publisher'] );
-        if ( isset( $article_arr['publisher'] )  && ! empty( $publisher ) ) {
-            $article_arr['publisher']           = $publisher;
-        } else {
-            unset( $article_arr['publisher'] );
+        if ( isset( $article_arr['publisher'] ) ) {
+            $publisher = $this->publisher( $article_arr['publisher'] );
+            if ( ! empty( $publisher ) ) {
+                $article_arr['publisher'] = $publisher;
+            } else {
+                unset( $article_arr['publisher'] );
+            }
         }
 
         /**
          * article schema articleBody key
          */
-        $articleBody = $this->articleBody();
-        if ( isset( $article_arr['articleBody'] ) && !empty( $articleBody ) ) {
-            $article_arr['articleBody']         = $articleBody;
-        } else {
-            unset( $article_arr['articleBody'] );
+        if ( isset($article_arr['articleBody']) ) {
+            $articleBody = $this->articleBody();
+            if ( !empty($articleBody)) {
+                $article_arr['articleBody'] = $articleBody;
+            } else {
+                unset( $article_arr['articleBody'] );
+            }
         }
 
         /**
          * article schema keywords key
          */
-        $keywords = $this->keywords();
-        if ( isset( $article_arr['keywords'] ) && ! empty( $keywords ) ) {
-            $article_arr['keywords']            = $keywords;
-        } else {
-            unset( $article_arr['keywords'] );
+        if ( isset( $article_arr['keywords'] ) ) {
+            $keywords = $this->keywords();
+            if ( ! empty( $keywords ) ) {
+                $article_arr['keywords'] = $keywords;
+            } else {
+                unset( $article_arr['keywords'] );
+            }
         }
 
         /**
          * article schema articleSection key
          */
-        $articleSection = $this->articleSection();
-        if ( isset( $article_arr['articleSection'] ) && ! empty( $articleSection ) ) {
-            $article_arr['articleSection']      = $articleSection;
-        } else {
-            unset( $article_arr['articleSection'] );
+        if ( isset( $article_arr['articleSection'] ) ) {
+            $articleSection = $this->articleSection();
+            if ( !empty( $articleSection ) ) {
+                $article_arr['articleSection'] = $articleSection;
+            } else {
+                unset( $article_arr['articleSection'] );
+            }
         }
 
         /**
          * article schema commentCount key
          */
-        $commentCount = $this->commentCount();
-        if (isset( $article_arr['commentCount'] ) && ! empty( $commentCount ) ) {
-            $article_arr['commentCount']        = $commentCount;
-        } else {
-            unset( $article_arr['commentCount'] );
+        if ( isset( $article_arr['commentCount'] ) ) {
+            $commentCount = $this->commentCount();
+            if ( !empty( $commentCount ) ) {
+                $article_arr['commentCount'] = $commentCount;
+            } else {
+                unset( $article_arr['commentCount'] );
+            }
         }
 
         /**
          * article schema wordCount key
          */
-        $wordCount = $this->wordCount();
-        if ( isset( $article_arr['wordCount'] ) && ! empty( $wordCount ) ) {
-            $article_arr['wordCount']           = $wordCount;
-        } else {
-            unset( $article_arr['wordCount'] );
+        if ( isset( $article_arr['wordCount'] ) ) {
+            $wordCount = $this->wordCount();
+            if ( ! empty( $wordCount ) ) {
+                $article_arr['wordCount'] = $wordCount;
+            } else {
+                unset( $article_arr['wordCount'] );
+            }
         }
 
         /**
