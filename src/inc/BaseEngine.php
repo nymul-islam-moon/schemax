@@ -2,7 +2,7 @@
 
 namespace Schema\Inc;
 
-class BaseEngine {
+abstract class BaseEngine {
 
     /**
      * Global variables
@@ -38,6 +38,11 @@ class BaseEngine {
      */
     abstract protected function update_schema();
 
+    /**
+     * Attach schema data in the script tag with schema type
+     *
+     * @return void
+     */
     public function __destruct() {
         $this->update_schema();
         echo "<script src='schemax-$this->schema_type' type='application/ld+json'>$this->schema</script>";

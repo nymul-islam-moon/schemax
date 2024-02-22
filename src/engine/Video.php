@@ -10,4 +10,8 @@ class Video extends BaseEngine {
 
         parent::__construct();
     }
+
+    protected function update_schema() {
+
+    }
 }

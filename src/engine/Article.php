@@ -25,7 +25,6 @@ class Article extends BaseEngine {
         $this->post_id          = $post_id;
 
         error_log( print_r( get_post( $this->post_id ), true ) );
-
     }
 
     /**
