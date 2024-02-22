@@ -8,10 +8,18 @@ use Schema\Engine\Website;
 
 class Init {
 
+    /**
+     * Init class constructor for attach the schema in wp_head tag
+     */
 	public function __construct() {
 		add_action('wp_head', [ $this, 'run' ] );
 	}
 
+    /**
+     * Init Class run method for run the program
+     *
+     * @return void
+     */
 	public function run() {
         if( ! function_exists('is_plugin_active') ) {
             include_once( ABSPATH . 'wp-admin/includes/plugin.php');
@@ -31,8 +39,7 @@ class Init {
 
         if ( is_single() && 'post' == get_post_type() ) {
             global $post;
-            $article_object = new Article( $post->ID );
-            $article_object->article();
+            new Article( $post->ID );
         }
 
 	}

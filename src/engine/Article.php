@@ -26,10 +26,10 @@ class Article extends BaseEngine {
     protected function update_schema() {
 
         if ( is_single() ) {
-            $updated_schema_data            = json_encode( $this->single_article( $this->schema_structure, 'NewsArticle' ) );
+            $this->schema            = json_encode( $this->single_article( $this->schema_structure, 'NewsArticle' ) );
         }
 
-        return apply_filters( "schemax_{$this->schema_type}_update_schema", $updated_schema_data );
+        return apply_filters( "schemax_{$this->schema_type}_update_schema", $this->schema );
     }
 
     /**
@@ -350,7 +350,7 @@ class Article extends BaseEngine {
          * article schema isBasedOn key
          */
         if ( isset( $article_arr['isBasedOn'] ) ) {
-            $isBasedOn                                  = null;
+            $isBasedOn                                  = $this->isBasedOn( $article_arr['isBasedOn'] );
             if ( ! empty( $isBasedOn ) ) {
                 $article_arr['isBasedOn']               = $isBasedOn;
             } else {
@@ -767,13 +767,8 @@ class Article extends BaseEngine {
         return null;
     }
 
-    /**
-     * Show the Schema in meta tag
-     *
-     * @return void
-     */
-    public function article() {
-        $this->schema = $this->update_schema();
-        echo "<script src='schemax-$this->schema_type' type='application/ld+json'>$this->schema</script>";
+    protected function isBasedOn( $isBasedOn ) {
+
+        return null;
     }
 }
