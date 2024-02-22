@@ -832,7 +832,6 @@ class Article extends BaseEngine {
         if ( ! empty( $about['name'] ) ) {
             return $about;
         }
-
         return null;
     }
 }
