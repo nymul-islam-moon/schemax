@@ -24,11 +24,10 @@ class Init {
         if( ! function_exists('is_plugin_active') ) {
             include_once( ABSPATH . 'wp-admin/includes/plugin.php');
         }
-        if (is_plugin_active('woocommerce/woocommerce.php')) {
+        if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
             if ( is_product() ) {
                 global $post;
-                $product_object = new Product( $post->ID );
-                $product_object->attach_schema();
+                new Product( $post->ID );
             }
         }
 
@@ -41,6 +40,5 @@ class Init {
             global $post;
             new Article( $post->ID );
         }
-
 	}
 }

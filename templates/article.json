@@ -99,9 +99,9 @@
     }
   ],
   "genre": ["News", "Opinion", "Analysis"],
-  "educationalUse": "Informative",
+  "educationalUse": "",
   "about": {
     "@type": "Thing",
-    "name": "Main Topic"
+    "name": ""
   }
 }

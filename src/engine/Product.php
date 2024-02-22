@@ -2,13 +2,14 @@
 
 namespace Schema\Engine;
 
-use Schema\Inc\Service;
+use Schema\Inc\BaseEngine;
 
+class Product extends BaseEngine {
 
-class Product
-{
-    public $product;
-    private $schema_type, $schema_name, $schema_service, $product_type, $schema_structure;
+    /**
+     * @var false|\WC_Product|null
+     */
+    protected $product, $product_type;
 
     /**
      * Construct for the Product Class
@@ -17,7 +18,11 @@ class Product
      */
     public function __construct( $product_id = null )
     {
+        $this->schema_file      = 'product.json';
+        parent::__construct();
+
         global $product;
+
         if ( $product instanceof \WC_Product ) {
             $this->product      = $product;
         } else {
@@ -25,11 +30,7 @@ class Product
         }
         $this->product_type     = $this->product->get_type();
 
-        $this->schema_service   = new Service();
-        $this->schema_name      = 'product.json';
         $this->schema_type      = 'product';
-
-//        error_log( print_r( $this->product->get_type(), true ) );
 
     }
 
@@ -39,10 +40,9 @@ class Product
      * @return string
      */
     protected function update_schema() {
-        $this->schema_structure             = $this->schema_service->read_schema( $this->schema_name );
 
         if ( $this->product->get_type() == 'simple') {
-            $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
+            $this->schema                   = json_encode( $this->single_product( $this->schema_structure ) );
 
         } else if ( $this->product->get_type() == 'variable') {
             $children                       = $this->product->get_children();
@@ -52,7 +52,7 @@ class Product
                 $variable_product_arr[]     = $this->single_product( $this->schema_structure );
             }
 
-            $updated_schema_data            = json_encode( $variable_product_arr );
+            $this->schema                   = json_encode( $variable_product_arr );
         } else if ( $this->product->get_type() == 'grouped' ) {
             $children                       = $this->product->get_children();
             $grouped_product_arr            = [];
@@ -61,19 +61,19 @@ class Product
                 $grouped_product_arr[]      = $this->single_product( $this->schema_structure );
             }
 
-            $updated_schema_data            = json_encode( $grouped_product_arr );
+            $this->schema                   = json_encode( $grouped_product_arr );
         } else if ( $this->product->is_virtual() ) {
 
-            $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
+            $this->schema                   = json_encode( $this->single_product( $this->schema_structure ) );
         } else if ( $this->product->is_downloadable() ) {
 
-            $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
+            $this->schema                   = json_encode( $this->single_product( $this->schema_structure ) );
         } else if ( $this->product->get_type() == 'external' ) {
 
-            $updated_schema_data            = json_encode( $this->single_product( $this->schema_structure ) );
+            $this->schema                   = json_encode( $this->single_product( $this->schema_structure ) );
         }
 
-        return apply_filters("schemax_{$this->schema_type}_update_schema", $updated_schema_data, $this->product);
+        return apply_filters("schemax_{$this->schema_type}_update_schema", $this->schema, $this->product);
     }
 
     /**
@@ -767,8 +767,7 @@ class Product
         return $shippingDetails;
     }
 
-    protected function shippingDetails_shippingRate()
-    {
+    protected function shippingDetails_shippingRate() { // TODO incomplete for proper information
         $shippingRate = [
             "@type"         => "MonetaryAmount",
             "currency"      => "",
@@ -795,8 +794,7 @@ class Product
         return $shippingDestination;
     }
 
-    protected function shippingDetails_deliveryTime()
-    {
+    protected function shippingDetails_deliveryTime() { // TODO incomplete for proper information
 
         $deliveryTime = [
             "@type"             => "ShippingDeliveryTime",
@@ -807,8 +805,7 @@ class Product
         return $deliveryTime;
     }
 
-    protected function shippingDetails_taxShippingDetails()
-    {
+    protected function shippingDetails_taxShippingDetails() { // TODO incomplete for proper information
         $taxShippingDetails = [
             "@type"             => "OfferShippingDetails",
             "shippingRate"      => $this->shippingDetails_taxShippingDetails_shippingRate(),
@@ -817,8 +814,7 @@ class Product
         return $taxShippingDetails;
     }
 
-    protected function shippingDetails_taxShippingDetails_shippingRate()
-    {
+    protected function shippingDetails_taxShippingDetails_shippingRate() { // TODO incomplete for proper information
         $shippingRate = [
             "@type"         => "MonetaryAmount",
             "currency"      => "",
@@ -827,8 +823,7 @@ class Product
         return $shippingRate;
     }
 
-    protected function shippingDetails_deliveryTime_handlingTime()
-    {
+    protected function shippingDetails_deliveryTime_handlingTime() { // TODO incomplete for proper information
         $handlingTime = [
             "@type"         => "QuantitativeValue",
             "minValue"      => "",
@@ -838,8 +833,7 @@ class Product
         return $handlingTime;
     }
 
-    protected function shippingDetails_deliveryTime_transitTime()
-    {
+    protected function shippingDetails_deliveryTime_transitTime() { // TODO incomplete for proper information
         $transitTime = [
             "@type"             => "QuantitativeValue",
             "minValue"          => "",
@@ -848,15 +842,5 @@ class Product
         ];
 
         return $transitTime;
-    }
-
-    /**
-     * Show the Schema in meta tag
-     *
-     * @return void
-     */
-    public function attach_schema(): void {
-        $updated_data = $this->update_schema();
-        echo "<script src='schemax-$this->schema_type' type='application/ld+json'>$updated_data</script>";
     }
 }

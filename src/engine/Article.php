@@ -3,12 +3,19 @@
 namespace Schema\Engine;
 
 use Schema\Inc\BaseEngine;
-use Schema\Inc\Service;
 
 class Article extends BaseEngine {
 
+    /**
+     * @var mixed|null
+     */
     private $post_id;
 
+    /**
+     * Article schema constructor
+     *
+     * @param $post_id
+     */
     public function __construct( $post_id = null ) {
 
         $this->schema_file      = 'article.json';
@@ -217,7 +224,6 @@ class Article extends BaseEngine {
                 unset( $article_arr['thumbnailUrl'] );
             }
         }
-
 
         /**
          * article schema isAccessibleForFree key
@@ -478,7 +484,7 @@ class Article extends BaseEngine {
      * @param $author
      * @return array
      */
-    protected function author( $author ) {  // TODO this author part is incomplete for some problem
+    protected function author( $author ) {  // TODO this author part is incomplete for some problems
 
         $author_ids = get_post_field( 'post_author', $this->post_id );
 
@@ -564,6 +570,12 @@ class Article extends BaseEngine {
      */
     protected function articleSection() {
 
+        $articleSection = get_the_category( $this->post_id )[0]->name;
+
+        if ( ! empty( $articleSection ) ) {
+            return $articleSection;
+        }
+
         return null;
     }
 
@@ -620,7 +632,7 @@ class Article extends BaseEngine {
      *
      * @return boolean
      */
-    protected function isAccessibleForFree() {
+    protected function isAccessibleForFree() { // TODO incomplete for proper information
 
         return false;
     }
@@ -695,17 +707,28 @@ class Article extends BaseEngine {
         return null;
     }
 
-    protected function mentions( $mentions ) {
+    /**
+     * @param $mentions
+     * @return array
+     */
+    protected function mentions( $mentions ) { // TODO incomplete for proper information
 
         return [];
     }
 
-    protected function publisherImprint( $publisherImprint ) {
+    /**
+     * @param $publisherImprint
+     * @return null
+     */
+    protected function publisherImprint( $publisherImprint ) {// TODO incomplete for proper information
 
         return null;
     }
 
-    protected function alternateName() {
+    /**
+     * @return null
+     */
+    protected function alternateName() { // TODO incomplete for proper information
 
         return null;
     }
@@ -748,7 +771,7 @@ class Article extends BaseEngine {
      * @param $interactionStatistic
      * @return mixed|null
      */
-    protected function interactionStatistic( $interactionStatistic ) {
+    protected function interactionStatistic( $interactionStatistic ) { // TODO incomplete for proper information
 
 //        $userInteractionCount = (int) 0;
 //
@@ -763,26 +786,46 @@ class Article extends BaseEngine {
         return null;
     }
 
-    protected function blogPost( $blogPost ) {
+    /**
+     * @param $blogPost
+     * @return null
+     */
+    protected function blogPost( $blogPost ) { // TODO incomplete for proper information
         return null;
     }
 
-    protected function isBasedOn( $isBasedOn ) {
+    /**
+     * @param $isBasedOn
+     * @return null
+     */
+    protected function isBasedOn( $isBasedOn ) { // TODO incomplete for proper information
 
         return null;
     }
 
-    protected function genre() {
+    /**
+     * @return array
+     */
+    protected function genre() { // TODO incomplete for proper information
         return [];
     }
 
-    protected function educationalUse() {
+    /**
+     * @return null
+     */
+    protected function educationalUse() { // TODO incomplete for proper information
         return null;
     }
 
+    /**
+     * Get about
+     *
+     * @param $about
+     * @return null
+     */
     protected function about( $about ) {
 
-        $about['name'] = null;
+        $about['name'] = get_the_category($this->post_id)[0]->name;
 
         if ( ! empty( $about['name'] ) ) {
             return $about;

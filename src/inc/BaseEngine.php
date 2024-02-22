@@ -15,6 +15,7 @@ class BaseEngine {
      * BaseEngine __construct method
      */
     protected function __construct() {
+
         $this->schema_structure = $this->read_schema( $this->schema_file );
     }
 
@@ -30,7 +31,7 @@ class BaseEngine {
         return json_decode( $schema_data, true );
     }
 
-    protected function updated_schema() {
+    protected function update_schema() {
 
     }
 
