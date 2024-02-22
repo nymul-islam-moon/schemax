@@ -2,19 +2,20 @@
 
 namespace Schema\Engine;
 
+use Schema\Inc\BaseEngine;
 use Schema\Inc\Service;
 
-class Article {
+class Article extends BaseEngine {
 
-    private $schema_name, $schema_type, $schema_service, $post_id;
+    private $post_id;
 
     public function __construct( $post_id = null ) {
-        $this->schema_name      = 'article.json';
+
+        $this->schema_file      = 'article.json';
+        parent::__construct();
+
         $this->schema_type      = 'article';
         $this->post_id          = $post_id;
-
-        // creating new object of the service schema
-        $this->schema_service   = new Service();
     }
 
     /**
@@ -23,7 +24,6 @@ class Article {
      * @return mixed|null
      */
     protected function update_schema() {
-        $this->schema_structure             = $this->schema_service->read_schema( $this->schema_name );
 
         if ( is_single() ) {
             $updated_schema_data            = json_encode( $this->single_article( $this->schema_structure, 'NewsArticle' ) );
@@ -278,7 +278,7 @@ class Article {
          * article schema publisherImprint key
          */
         if ( isset( $article_arr['publisherImprint'] ) ) {
-            $publisherImprint                           = null;
+            $publisherImprint                           = $this->publisherImprint( $article_arr['publisherImprint'] );
             if ( ! empty( $publisherImprint ) ) {
                 $article_arr['publisherImprint']        = $publisherImprint;
             } else {
@@ -290,7 +290,7 @@ class Article {
          * article schema alternateName key
          */
         if ( isset( $article_arr['alternateName'] ) ) {
-            $alternateName                              = null;
+            $alternateName                              = $this->alternateName();
             if ( ! empty( $alternateName ) ) {
                 $article_arr['alternateName']           = $alternateName;
             } else {
@@ -302,7 +302,7 @@ class Article {
          * article schema dateCreated key
          */
         if ( isset( $article_arr['dateCreated'] ) ) {
-            $dateCreated                                = null;
+            $dateCreated                                = $this->dateCreated();
             if ( ! empty( $dateCreated ) ) {
                 $article_arr['dateCreated']             = $dateCreated;
             } else {
@@ -314,7 +314,7 @@ class Article {
          * article schema comment key
          */
         if ( isset( $article_arr['comment'] ) ) {
-            $comment                                    = null;
+            $comment                                    = $this->comment();
             if ( !empty( $comment ) ) {
                 $article_arr['comment']                 = $comment;
             } else {
@@ -326,7 +326,7 @@ class Article {
          * article schema interactionStatistic key
          */
         if ( isset( $article_arr['interactionStatistic'] ) ) {
-            $interactionStatistic                       = null;
+            $interactionStatistic                       = $this->interactionStatistic( $article_arr['interactionStatistic'] );
             if ( !empty( $interactionStatistic ) ) {
                 $article_arr['interactionStatistic']    = $interactionStatistic;
             } else {
@@ -338,7 +338,7 @@ class Article {
          * article schema blogPost key
          */
         if ( isset( $article_arr['blogPost'] ) ) {
-            $blogPost                                   = null;
+            $blogPost                                   = $this->blogPost( $article_arr['blogPost'] );
             if ( ! empty( $blogPost ) ) {
                 $article_arr['blogPost']                = $blogPost;
             } else {
@@ -700,14 +700,80 @@ class Article {
         return [];
     }
 
+    protected function publisherImprint( $publisherImprint ) {
+
+        return null;
+    }
+
+    protected function alternateName() {
+
+        return null;
+    }
 
     /**
-     * Article Schema
+     * Get dateCreated
+     *
+     * @return mixed|null
+     */
+    protected function dateCreated() {
+
+        $datePublished = get_the_date('F j, Y', $this->post_id);
+
+        if ( ! empty( $datePublished ) ) {
+            return apply_filters("schemax_{$this->schema_type}_datePublished", $datePublished );
+        }
+
+        return null;
+    }
+
+    /**
+     * Get comment
+     *
+     * @return mixed|null
+     */
+    protected function comment() {
+
+        $comment = get_comments_link( $this->post_id );
+
+        if ( ! empty( $comment ) ) {
+            return apply_filters("schemax_{$this->schema_type}_comment", $comment );
+        }
+
+        return null;
+    }
+
+    /**
+     * Get interactionStatistic
+     *
+     * @param $interactionStatistic
+     * @return mixed|null
+     */
+    protected function interactionStatistic( $interactionStatistic ) {
+
+//        $userInteractionCount = (int) 0;
+//
+//        if ( isset( $interactionStatistic['interactionType']['userInteractionCount'] ) && $userInteractionCount > 0 ) {
+//            $interactionStatistic['interactionType']['userInteractionCount'] = $userInteractionCount;
+//        }
+//
+//        if ( $interactionStatistic['interactionType']['userInteractionCount'] > 0 ) {
+//            return apply_filters("schemax_{$this->schema_type}_interactionStatistic", $interactionStatistic );
+//        }
+
+        return null;
+    }
+
+    protected function blogPost( $blogPost ) {
+        return null;
+    }
+
+    /**
+     * Show the Schema in meta tag
      *
      * @return void
      */
     public function article() {
-        $updated_data = $this->update_schema();
-        $this->schema_service->attach_schema( $updated_data, $this->schema_type );
+        $this->schema = $this->update_schema();
+        echo "<script src='schemax-$this->schema_type' type='application/ld+json'>$this->schema</script>";
     }
 }
