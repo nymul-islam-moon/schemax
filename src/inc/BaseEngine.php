@@ -15,7 +15,6 @@ class BaseEngine {
      * BaseEngine __construct method
      */
     protected function __construct() {
-
         $this->schema_structure = $this->read_schema( $this->schema_file );
     }
 
@@ -31,9 +30,13 @@ class BaseEngine {
         return json_decode( $schema_data, true );
     }
 
-    protected function update_schema() {
-
-    }
+    /**
+     * Update the schema with new data.
+     * Child classes should implement this method to modify $this->schema.
+     *
+     * @return mixed
+     */
+    abstract protected function update_schema();
 
     public function __destruct() {
         $this->update_schema();
