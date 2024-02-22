@@ -24,7 +24,7 @@ class Article extends BaseEngine {
         $this->schema_type      = 'article';
         $this->post_id          = $post_id;
 
-        error_log( print_r( get_post( $this->post_id ), true ) );
+//        error_log( print_r( get_post( $this->post_id ), true ) );
     }
 
     /**
@@ -568,7 +568,7 @@ class Article extends BaseEngine {
     /**
      * Get articleSection
      *
-     * @return string | null
+     * @return string|null
      */
     protected function articleSection() {
 
