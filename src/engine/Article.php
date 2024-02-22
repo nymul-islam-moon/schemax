@@ -362,7 +362,7 @@ class Article extends BaseEngine {
          * article schema genre key
          */
         if ( isset( $article_arr['genre'] ) ) {
-            $genre                                      = null;
+            $genre                                      = $this->genre();
             if ( !empty( $genre ) ) {
                 $article_arr['genre']                   = $genre;
             } else {
@@ -374,7 +374,7 @@ class Article extends BaseEngine {
          * article schema educationalUse key
          */
         if ( isset( $article_arr['educationalUse'] ) ) {
-            $educationalUse                             = null;
+            $educationalUse                             = $this->educationalUse();
             if ( ! empty( $educationalUse ) ) {
                 $article_arr['educationalUse']          = $educationalUse;
             } else {
@@ -386,7 +386,7 @@ class Article extends BaseEngine {
          * article schema about key
          */
         if ( isset( $article_arr['about'] ) ) {
-            $about                                      = null;
+            $about                                      = $this->about( $article_arr['about'] );
             if ( ! empty( $about ) ) {
                 $article_arr['about']                   = $about;
             } else {
@@ -768,6 +768,25 @@ class Article extends BaseEngine {
     }
 
     protected function isBasedOn( $isBasedOn ) {
+
+        return null;
+    }
+
+    protected function genre() {
+        return [];
+    }
+
+    protected function educationalUse() {
+        return null;
+    }
+
+    protected function about( $about ) {
+
+        $about['name'] = null;
+
+        if ( ! empty( $about['name'] ) ) {
+            return $about;
+        }
 
         return null;
     }
