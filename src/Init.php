@@ -6,6 +6,7 @@ use Schema\Engine\Product;
 use Schema\Engine\Article;
 use Schema\Engine\Video;
 use Schema\Engine\Website;
+use Schema\Inc\Support;
 
 class Init {
 
@@ -14,7 +15,6 @@ class Init {
      */
 	public function __construct() {
         add_action('wp_head', [ $this, 'run' ] );
-        error_log( print_r( 'this is a test message', true ) );
     }
 
     /**
@@ -23,44 +23,46 @@ class Init {
      * @return void
      */
 	public function run() {
+        global $post;
 
+        /**
+         * Product Schema
+         */
         if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
             if ( is_product() ) {
-                global $post;
                 new Product( $post->ID );
             }
         }
 
+        /**
+         * Website Schema
+         */
         if ( ! is_admin() && ! defined( 'DOING_AJAX' ) ) {
             $website_object = new Website();
             $website_object->attach_schema();
         }
 
+        /**
+         * Article Schema
+         */
         if ( 'post' == get_post_type() && is_single() || is_singular() ) {
-            global $post;
             new Article( $post->ID );
         }
+
+        /**
+         * Support Schemas
+         */
+        $support_schema = null;
+        if ( ! empty( $post ) ) {
+            $support_schema = new Support( $post->post_content );
+
+            $support_schema_arr = $support_schema->get_support_schema();
+
+            if ( is_array( $support_schema_arr ) && isset( $support_schema_arr['video'] ) ) {
+                new Video( $post->ID, $support_schema_arr['video'] );
+            }
+
+        }
+
 	}
 }
-
-//protected function video( $content ) {
-//
-//    $patterns = [
-//        '/https?:\/\/(?:www\.)?youtube\.com\/watch\?v=[^&\s]+/',
-//        '/https?:\/\/youtu\.be\/[^&\s]+/',
-//        '/https?:\/\/(?:www\.)?vimeo\.com\/\d+/',
-//        '/https?:\/\/(?:www\.)?instagram\.com\/p\/[^&\s]+/',
-//        '/https?:\/\/(?:www\.)?twitter\.com\/[^&\s]+\/status\/\d+/',
-//        '/https?:\/\/(?:www\.)?facebook\.com\/[^&\s]+\/videos\/\d+/'
-//    ];
-//
-//    $videoLinks = [];
-//
-//    foreach ($patterns as $pattern) {
-//        if (preg_match_all($pattern, $content, $matches)) {
-//            $videoLinks = array_merge($videoLinks, $matches[0]);
-//        }
-//    }
-//
-//    return !empty($videoLinks) ? $videoLinks : false;
-//}
