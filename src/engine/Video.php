@@ -19,7 +19,7 @@ class Video extends BaseEngine {
     }
 
     protected function update_schema() {
-        $this->schema           = $this->single_video( $this->schema_structure );
+        $this->schema           = json_encode( $this->single_video( $this->schema_structure ) );
 
         return apply_filters( "schemax_{$this->schema_type}_update_schema", $this->schema );
     }
@@ -341,6 +341,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function description() {
+        return null;
         $description = get_the_title($this->post_id);
 
         if (!empty($description)) {
@@ -354,6 +355,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function thumbnailUrl() {
+        return null;
         $thumbnailUrl = get_the_title($this->post_id);
 
         if (!empty($thumbnailUrl)) {
@@ -367,6 +369,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function uploadDate() {
+        return null;
         $uploadDate = get_the_title($this->post_id);
 
         if (!empty($uploadDate)) {
@@ -380,6 +383,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function duration() {
+        return null;
         $duration = get_the_title($this->post_id);
 
         if (!empty($duration)) {
@@ -393,6 +397,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function contentUrl() {
+        return null;
         $contentUrl = get_the_title($this->post_id);
 
         if (!empty($contentUrl)) {
@@ -406,6 +411,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function embedUrl() {
+        return null;
         $embedUrl = get_the_title($this->post_id);
 
         if (!empty($embedUrl)) {
@@ -419,6 +425,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function interactionStatistic() {
+        return null;
         $interactionStatistic = get_the_title($this->post_id);
 
         if (!empty($interactionStatistic)) {
@@ -432,6 +439,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function regionsAllowed() {
+        return null;
         $regionsAllowed = get_the_title($this->post_id);
 
         if (!empty($regionsAllowed)) {
@@ -445,6 +453,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function author() {
+        return null;
         $author = get_the_title($this->post_id);
 
         if (!empty($author)) {
@@ -458,6 +467,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function commentCount() {
+        return null;
         $commentCount = get_the_title($this->post_id);
 
         if (!empty($commentCount)) {
@@ -471,6 +481,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function interactionCount() {
+        return null;
         $interactionCount = get_the_title($this->post_id);
 
         if (!empty($interactionCount)) {
@@ -484,6 +495,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function dateModified() {
+        return null;
         $dateModified = get_the_title($this->post_id);
 
         if (!empty($dateModified)) {
@@ -497,6 +509,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function datePublished() {
+        return null;
         $datePublished = get_the_title($this->post_id);
 
         if (!empty($datePublished)) {
@@ -510,6 +523,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function mainEntityOfPage() {
+        return null;
         $mainEntityOfPage = get_the_title($this->post_id);
 
         if (!empty($mainEntityOfPage)) {
@@ -523,6 +537,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function videoQuality() {
+        return null;
         $videoQuality = get_the_title($this->post_id);
 
         if (!empty($videoQuality)) {
@@ -536,6 +551,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function transcript() {
+        return null;
         $transcript = get_the_title($this->post_id);
 
         if (!empty($transcript)) {
@@ -549,6 +565,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function genre() {
+        return null;
         $genre = get_the_title($this->post_id);
 
         if (!empty($genre)) {
@@ -562,6 +579,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function keywords() {
+        return null;
         $keywords = get_the_title($this->post_id);
 
         if (!empty($keywords)) {
@@ -575,6 +593,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function isFamilyFriendly() {
+        return null;
         $isFamilyFriendly = get_the_title($this->post_id);
 
         if (!empty($isFamilyFriendly)) {
@@ -588,6 +607,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function requiresSubscription() {
+        return null;
         $requiresSubscription = get_the_title($this->post_id);
 
         if (!empty($requiresSubscription)) {
@@ -601,6 +621,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function publisher() {
+        return null;
         $publisher = get_the_title($this->post_id);
 
         if (!empty($publisher)) {
@@ -614,6 +635,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function license() {
+        return null;
         $license = get_the_title($this->post_id);
 
         if (!empty($license)) {
@@ -627,6 +649,7 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function comment() {
+        return null;
         $comment = get_the_title($this->post_id);
 
         if (!empty($comment)) {

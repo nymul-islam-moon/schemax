@@ -2,6 +2,7 @@
 
 namespace Schema\Engine;
 
+use PHPUnit\Exception;
 use Schema\Inc\BaseEngine;
 
 class Article extends BaseEngine {
@@ -33,10 +34,8 @@ class Article extends BaseEngine {
      * @return mixed|null
      */
     protected function update_schema() {
-
-        if ( is_single() ) {
-            $this->schema            = json_encode( $this->single_article( $this->schema_structure, 'NewsArticle' ) );
-        }
+//        error_log( print_r( json_encode( $this->single_article( $this->schema_structure, 'NewsArticle' ) ), true ) );
+        $this->schema            = json_encode( $this->single_article( $this->schema_structure, 'NewsArticle' ) );
 
         return apply_filters( "schemax_{$this->schema_type}_update_schema", $this->schema );
     }
@@ -49,6 +48,8 @@ class Article extends BaseEngine {
      * @return mixed
      */
     protected function single_article( $article_arr, $type ) {
+
+//        error_log( print_r( 'here', true ) );
 
         /**
          * article schema type key
@@ -572,6 +573,8 @@ class Article extends BaseEngine {
      */
     protected function articleSection() {
 
+        return null;
+
         $articleSection = get_the_category( $this->post_id )[0]->name;
 
         if ( ! empty( $articleSection ) ) {
@@ -826,7 +829,7 @@ class Article extends BaseEngine {
      * @return null
      */
     protected function about( $about ) {
-
+        return null;
         $about['name'] = get_the_category($this->post_id)[0]->name;
 
         if ( ! empty( $about['name'] ) ) {
