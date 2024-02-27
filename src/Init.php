@@ -37,10 +37,10 @@ class Init {
         /**
          * Website Schema
          */
-        if ( ! is_admin() && ! defined( 'DOING_AJAX' ) ) {
-            $website_object = new Website();
-            $website_object->attach_schema();
-        }
+//        if ( ! is_admin() && ! defined( 'DOING_AJAX' ) ) {
+//            $website_object = new Website();
+//            $website_object->attach_schema();
+//        }
 
         /**
          * Article Schema
@@ -58,9 +58,13 @@ class Init {
 
             $support_schema_arr = $support_schema->get_support_schema();
 
+            /**
+             * Video Schema
+             */
             if ( is_array( $support_schema_arr ) && isset( $support_schema_arr['video'] ) ) {
                 new Video( $post->ID, $support_schema_arr['video'] );
             }
+
 
         }
 

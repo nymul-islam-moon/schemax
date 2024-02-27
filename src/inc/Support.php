@@ -38,12 +38,35 @@ class Support {
 
         $videoLinks = [];
 
-        foreach ($patterns as $pattern) {
-            if (preg_match_all($pattern, $content, $matches)) {
-                $videoLinks = array_merge($videoLinks, $matches[0]);
+        foreach ( $patterns as $pattern ) {
+            if ( preg_match_all( $pattern, $content, $matches ) ) {
+                $videoLinks = array_merge( $videoLinks, $matches[0] );
             }
         }
 
-        return !empty($videoLinks) ? $videoLinks : [];
+        return !empty( $videoLinks ) ? $videoLinks : [];
     }
+
+
+    protected function audio( $content ) {
+        // Patterns for common audio file URLs
+        $patterns = [
+            '/https?:\/\/(?:www\.)?[\w\-\.]+\/[\w\-\.]+\/[\w\-\.]+\/[\w\-\.]+\.mp3/',
+            '/https?:\/\/(?:www\.)?[\w\-\.]+\/[\w\-\.]+\/[\w\-\.]+\/[\w\-\.]+\.wav/',
+            '/https?:\/\/(?:www\.)?[\w\-\.]+\/[\w\-\.]+\/[\w\-\.]+\/[\w\-\.]+\.ogg/',
+            '/\.(mp3|wav|ogg)/i'
+        ];
+
+        $audioLinks = [];
+
+        foreach ( $patterns as $pattern ) {
+            if ( preg_match_all( $pattern, $content, $matches ) ) {
+                $audioLinks = array_merge( $audioLinks, $matches[0] );
+            }
+        }
+
+        return !empty( $audioLinks ) ? $audioLinks : [];
+    }
+
+
 }
