@@ -402,12 +402,14 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function contentUrl() {
-        return null;
-        $contentUrl = get_the_title($this->post_id);
 
-        if (!empty($contentUrl)) {
+        $contentUrl = null;
+
+        if ( ! empty( $contentUrl ) ) {
             return apply_filters("schemax_{$this->schema_type}_contentUrl", $contentUrl);
         }
+
+        return null;
     }
 
     /**
