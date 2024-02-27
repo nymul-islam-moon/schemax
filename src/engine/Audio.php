@@ -26,194 +26,193 @@ class Audio extends BaseEngine {
         /**
          * Audio schema name key
          */
-        if ( isset( $article_arr['name'] ) ) {
+        if ( isset( $audio_arr['name'] ) ) {
             $name = $this->name();
             if (!empty($name)) {
-                $article_arr['name'] = $name;
+                $audio_arr['name'] = $name;
             } else {
-                unset($article_arr['name']);
+                unset($audio_arr['name']);
             }
         }
 
         /**
          * Audio schema description key
          */
-        if ( isset( $article_arr['description'] ) ) {
-            $description = null;
-//            $description = $this->description();
-            if (!empty($description)) {
-                $article_arr['description'] = $description;
+        if ( isset( $audio_arr['description'] ) ) {
+            $description = $this->description();
+            if ( ! empty( $description ) ) {
+                $audio_arr['description'] = $description;
             } else {
-                unset($article_arr['description']);
+                unset( $audio_arr['description'] );
             }
         }
 
         /**
          * Audio schema contentUrl key
          */
-        if ( isset( $article_arr['contentUrl'] ) ) {
+        if ( isset( $audio_arr['contentUrl'] ) ) {
             $contentUrl = null;
 //            $contentUrl = $this->contentUrl();
             if (!empty($contentUrl)) {
-                $article_arr['contentUrl'] = $contentUrl;
+                $audio_arr['contentUrl'] = $contentUrl;
             } else {
-                unset($article_arr['contentUrl']);
+                unset($audio_arr['contentUrl']);
             }
         }
 
         /**
          * Audio schema encodingFormat key
          */
-        if ( isset( $article_arr['encodingFormat'] ) ) {
+        if ( isset( $audio_arr['encodingFormat'] ) ) {
             $encodingFormat = null;
 //            $encodingFormat = $this->encodingFormat();
             if (!empty($encodingFormat)) {
-                $article_arr['encodingFormat'] = $encodingFormat;
+                $audio_arr['encodingFormat'] = $encodingFormat;
             } else {
-                unset($article_arr['encodingFormat']);
+                unset($audio_arr['encodingFormat']);
             }
         }
 
         /**
          * Audio schema duration key
          */
-        if ( isset( $article_arr['duration'] ) ) {
+        if ( isset( $audio_arr['duration'] ) ) {
             $duration = null;
 //            $duration = $this->duration();
             if (!empty($duration)) {
-                $article_arr['duration'] = $duration;
+                $audio_arr['duration'] = $duration;
             } else {
-                unset($article_arr['duration']);
+                unset($audio_arr['duration']);
             }
         }
 
         /**
          * Audio schema datePublished key
          */
-        if ( isset( $article_arr['datePublished'] ) ) {
+        if ( isset( $audio_arr['datePublished'] ) ) {
             $datePublished = null;
 //            $datePublished = $this->datePublished();
             if (!empty($datePublished)) {
-                $article_arr['datePublished'] = $datePublished;
+                $audio_arr['datePublished'] = $datePublished;
             } else {
-                unset( $article_arr['datePublished'] );
+                unset( $audio_arr['datePublished'] );
             }
         }
 
         /**
          * Audio schema interactionStatistic key
          */
-        if ( isset( $article_arr['interactionStatistic'] ) ) {
+        if ( isset( $audio_arr['interactionStatistic'] ) ) {
             $interactionStatistic = null;
 //            $interactionStatistic = $this->interactionStatistic();
             if (!empty($interactionStatistic)) {
-                $article_arr['interactionStatistic'] = $interactionStatistic;
+                $audio_arr['interactionStatistic'] = $interactionStatistic;
             } else {
-                unset($article_arr['interactionStatistic']);
+                unset($audio_arr['interactionStatistic']);
             }
         }
 
         /**
          * Audio schema author key
          */
-        if ( isset( $article_arr['author'] ) ) {
+        if ( isset( $audio_arr['author'] ) ) {
             $author = null;
 //            $author = $this->author();
             if ( !empty( $author ) ) {
-                $article_arr['author'] = $author;
+                $audio_arr['author'] = $author;
             } else {
-                unset( $article_arr['author'] );
+                unset( $audio_arr['author'] );
             }
         }
 
         /**
          * Audio schema publisher key
          */
-        if ( isset( $article_arr['publisher'] ) ) {
+        if ( isset( $audio_arr['publisher'] ) ) {
             $publisher = null;
 //            $publisher = $this->publisher();
             if (!empty($publisher)) {
-                $article_arr['publisher'] = $publisher;
+                $audio_arr['publisher'] = $publisher;
             } else {
-                unset($article_arr['publisher']);
+                unset($audio_arr['publisher']);
             }
         }
 
         /**
          * Audio schema inLanguage key
          */
-        if ( isset( $article_arr['inLanguage'] ) ) {
+        if ( isset( $audio_arr['inLanguage'] ) ) {
             $inLanguage = null;
 //            $inLanguage = $this->inLanguage();
             if ( !empty( $inLanguage ) ) {
-                $article_arr['inLanguage'] = $inLanguage;
+                $audio_arr['inLanguage'] = $inLanguage;
             } else {
-                unset( $article_arr['inLanguage'] );
+                unset( $audio_arr['inLanguage'] );
             }
         }
 
         /**
          * Audio schema keywords key
          */
-        if ( isset( $article_arr['keywords'] ) ) {
+        if ( isset( $audio_arr['keywords'] ) ) {
             $keywords = null;
 //            $keywords = $this->keywords();
             if (!empty($keywords)) {
-                $article_arr['keywords'] = $keywords;
+                $audio_arr['keywords'] = $keywords;
             } else {
-                unset($article_arr['keywords']);
+                unset($audio_arr['keywords']);
             }
         }
 
         /**
          * Audio schema license key
          */
-        if (isset($article_arr['license'])) {
+        if (isset($audio_arr['license'])) {
             $license = null;
 //            $license = $this->license();
             if (!empty($license)) {
-                $article_arr['license'] = $license;
+                $audio_arr['license'] = $license;
             } else {
-                unset($article_arr['license']);
+                unset($audio_arr['license']);
             }
         }
 
         /**
          * Audio schema isAccessibleForFree key
          */
-        if (isset($article_arr['isAccessibleForFree'])) {
+        if (isset($audio_arr['isAccessibleForFree'])) {
             $isAccessibleForFree = null;
 //            $isAccessibleForFree = $this->isAccessibleForFree();
             if (!empty($isAccessibleForFree)) {
-                $article_arr['isAccessibleForFree'] = $isAccessibleForFree;
+                $audio_arr['isAccessibleForFree'] = $isAccessibleForFree;
             } else {
-                unset($article_arr['isAccessibleForFree']);
+                unset($audio_arr['isAccessibleForFree']);
             }
         }
 
         /**
          * Audio schema transcript key
          */
-        if (isset($article_arr['transcript'])) {
+        if (isset($audio_arr['transcript'])) {
             $transcript = null;
 //            $transcript = $this->transcript();
             if (!empty($transcript)) {
-                $article_arr['transcript'] = $transcript;
+                $audio_arr['transcript'] = $transcript;
             } else {
-                unset($article_arr['transcript']);
+                unset($audio_arr['transcript']);
             }
         }
 
         /**
          * Audio schema mainEntityOfPage key
          */
-        if (isset($article_arr['mainEntityOfPage'])) {
+        if (isset($audio_arr['mainEntityOfPage'])) {
             $mainEntityOfPage = null;
 //            $mainEntityOfPage = $this->mainEntityOfPage();
             if (!empty($mainEntityOfPage)) {
-                $article_arr['mainEntityOfPage'] = $mainEntityOfPage;
+                $audio_arr['mainEntityOfPage'] = $mainEntityOfPage;
             } else {
-                unset($article_arr['mainEntityOfPage']);
+                unset($audio_arr['mainEntityOfPage']);
             }
         }
 
@@ -232,6 +231,20 @@ class Audio extends BaseEngine {
             return apply_filters("schemax_{$this->schema_type}_name", $name );
         }
         return null;
+    }
+
+    /**
+     * Get Description
+     *
+     * @return mixed|void|null
+     */
+    protected function description() {
+        return null;
+        $description = get_the_title( $this->post_id );
+
+        if (! empty( $description ) ) {
+            return apply_filters("schemax_{$this->schema_type}_description", $description);
+        }
     }
 
 }

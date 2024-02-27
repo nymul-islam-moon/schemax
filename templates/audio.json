@@ -4,6 +4,10 @@
   "name": "Example Audio",
   "description": "This is an example audio file showcasing additional information.",
   "contentUrl": "https://example.com/audio.mp3",
+  "additionalContentUrls": [
+    "https://www.example.com/video/124/file.mp3",
+    "https://www.example.com/video/125/file.mp3"
+  ],
   "encodingFormat": "audio/mpeg",
   "duration": "PT3M30S",
   "datePublished": "2024-01-16",

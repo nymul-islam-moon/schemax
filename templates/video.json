@@ -11,6 +11,10 @@
   "uploadDate": "2016-03-31T08:00:00+08:00",
   "duration": "PT1M54S",
   "contentUrl": "https://www.example.com/video/123/file.mp4",
+  "additionalContentUrls": [
+    "https://www.example.com/video/124/file.mp4",
+    "https://www.example.com/video/125/file.mp4"
+  ],
   "embedUrl": "https://www.example.com/embed/123",
   "interactionStatistic": {
     "@type": "InteractionCounter",
