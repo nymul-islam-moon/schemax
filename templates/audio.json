@@ -1,4 +1,3 @@
-<script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "AudioObject",
@@ -34,9 +33,5 @@
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "https://example.com/audio-detail-page"
-  },
-  "sche_max": [
-    "comment": "this full schema accepts by the schema.org"
-  ]
+  }
 }
-</script>

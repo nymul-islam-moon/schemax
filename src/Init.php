@@ -5,7 +5,7 @@ namespace Schema;
 use Schema\Engine\Product;
 use Schema\Engine\Article;
 use Schema\Engine\Video;
-use Schema\Engine\Website;
+use Schema\Engine\Audio;
 use Schema\Inc\Support;
 
 class Init {
@@ -58,11 +58,22 @@ class Init {
 
             $support_schema_arr = $support_schema->get_support_schema();
 
-            /**
-             * Video Schema
-             */
-            if ( is_array( $support_schema_arr ) && isset( $support_schema_arr['video'] ) ) {
-                new Video( $post->ID, $support_schema_arr['video'] );
+            if ( is_array( $support_schema_arr ) ) {
+
+                /**
+                 * Video Schema
+                 */
+                if ( isset( $support_schema_arr['video'] ) ) {
+                    new Video( $post->ID, $support_schema_arr['video'] );
+                }
+
+                /**
+                 * Audio Schema
+                 */
+                if ( isset( $support_schema_arr['audio'] ) ) {
+                    new Audio( $post->ID, $support_schema_arr['audio'] );
+                }
+
             }
 
 

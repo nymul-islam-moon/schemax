@@ -67,6 +67,4 @@ class Support {
 
         return !empty( $audioLinks ) ? $audioLinks : [];
     }
-
-
 }

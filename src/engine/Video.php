@@ -8,7 +8,7 @@ class Video extends BaseEngine {
 
     private $post_id, $video_links;
 
-    public function __construct( $post_id = null, $video_links ) {
+    public function __construct( $video_links, $post_id = null ) {
 
         $this->schema_file      = 'video.json';
         parent::__construct();
@@ -18,6 +18,11 @@ class Video extends BaseEngine {
         $this->video_links      = $video_links;
     }
 
+    /**
+     * Update the schema data
+     *
+     * @return mixed|null
+     */
     protected function update_schema() {
         $this->schema           = json_encode( $this->single_video( $this->schema_structure ) );
 

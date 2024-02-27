@@ -2,7 +2,6 @@
 
 namespace Schema\Engine;
 
-use PHPUnit\Exception;
 use Schema\Inc\BaseEngine;
 
 class Article extends BaseEngine {
