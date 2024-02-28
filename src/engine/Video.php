@@ -100,7 +100,7 @@ class Video extends BaseEngine {
          * Video schema contentUrl key
          */
         if (isset($video_arr['contentUrl'])) {
-            $contentUrl                                     = $this->contentUrl();
+            $contentUrl                                   = $this->contentUrl();
             if (!empty($contentUrl)) {
                 $video_arr['contentUrl']                  = $contentUrl;
             } else {
@@ -200,88 +200,88 @@ class Video extends BaseEngine {
             if (!empty($datePublished)) {
                 $video_arr['datePublished']                 = $datePublished;
             } else {
-                unset($video_arr['datePublished']);
+                unset( $video_arr['datePublished'] );
             }
         }
 
         /**
          * Video schema mainEntityOfPage key
          */
-        if (isset($video_arr['mainEntityOfPage'])) {
+        if ( isset( $video_arr['mainEntityOfPage'] ) ) {
             $mainEntityOfPage                               = $this->mainEntityOfPage();
-            if (!empty($mainEntityOfPage)) {
+            if ( ! empty( $mainEntityOfPage ) ) {
                 $video_arr['mainEntityOfPage']              = $mainEntityOfPage;
             } else {
-                unset($video_arr['mainEntityOfPage']);
+                unset( $video_arr['mainEntityOfPage'] );
             }
         }
 
         /**
          * Video schema videoQuality key
          */
-        if (isset($video_arr['videoQuality'])) {
+        if ( isset( $video_arr['videoQuality'] ) ) {
             $videoQuality                                   = $this->videoQuality();
-            if (!empty($videoQuality)) {
+            if ( ! empty( $videoQuality ) ) {
                 $video_arr['videoQuality']                  = $videoQuality;
             } else {
-                unset($video_arr['videoQuality']);
+                unset( $video_arr['videoQuality'] );
             }
         }
 
         /**
          * Video schema transcript key
          */
-        if (isset($video_arr['transcript'])) {
+        if ( isset( $video_arr['transcript'] ) ) {
             $transcript                                     = $this->transcript();
-            if (!empty($transcript)) {
+            if ( ! empty( $transcript ) ) {
                 $video_arr['transcript']                    = $transcript;
             } else {
-                unset($video_arr['transcript']);
+                unset( $video_arr['transcript'] );
             }
         }
 
         /**
          * Video schema genre key
          */
-        if (isset($video_arr['genre'])) {
+        if ( isset( $video_arr['genre'] ) ) {
             $genre                                          = $this->genre();
-            if (!empty($genre)) {
+            if ( ! empty( $genre ) ) {
                 $video_arr['genre']                         = $genre;
             } else {
-                unset($video_arr['genre']);
+                unset( $video_arr['genre'] );
             }
         }
 
         /**
          * Video schema keywords key
          */
-        if (isset($video_arr['keywords'])) {
+        if ( isset( $video_arr['keywords'] ) ) {
             $keywords                                       = $this->keywords();
-            if (!empty($keywords)) {
+            if ( ! empty( $keywords) ) {
                 $video_arr['keywords']                      = $keywords;
             } else {
-                unset($video_arr['keywords']);
+                unset( $video_arr['keywords'] );
             }
         }
 
         /**
          * Video schema isFamilyFriendly key
          */
-        if (isset($video_arr['isFamilyFriendly'])) {
+        if ( isset( $video_arr['isFamilyFriendly'] ) ) {
             $isFamilyFriendly                               = $this->isFamilyFriendly();
-            if (!empty($isFamilyFriendly)) {
+            if ( ! empty( $isFamilyFriendly ) ) {
                 $video_arr['isFamilyFriendly']              = $isFamilyFriendly;
             } else {
-                unset($video_arr['isFamilyFriendly']);
+                unset( $video_arr['isFamilyFriendly'] );
             }
         }
 
         /**
          * Video schema requiresSubscription key
          */
-        if (isset($video_arr['requiresSubscription'])) {
+        if ( isset( $video_arr['requiresSubscription'] ) ) {
             $requiresSubscription                           = $this->requiresSubscription();
-            if (!empty($requiresSubscription)) {
+            if ( ! empty( $requiresSubscription ) ) {
                 $video_arr['requiresSubscription']          = $requiresSubscription;
             } else {
                 unset($video_arr['requiresSubscription']);
@@ -291,19 +291,19 @@ class Video extends BaseEngine {
         /**
          * Video schema publisher key
          */
-        if (isset($video_arr['publisher'])) {
+        if ( isset( $video_arr['publisher'] ) ) {
             $publisher                                      = $this->publisher();
             if (!empty($publisher)) {
                 $video_arr['publisher']                     = $publisher;
             } else {
-                unset($video_arr['publisher']);
+                unset( $video_arr['publisher'] );
             }
         }
 
         /**
          * Video schema license key
          */
-        if (isset($video_arr['license'])) {
+        if ( isset( $video_arr['license'] ) ) {
             $license                                        = $this->license();
             if (!empty( $license ) ) {
                 $video_arr['license']                     = $license;
@@ -346,8 +346,8 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function description() {
-        return null;
-        $description = get_the_title($this->post_id);
+
+        $description = get_the_content( $this->post_id );
 
         if (!empty($description)) {
             return apply_filters("schemax_{$this->schema_type}_description", $description);
@@ -403,7 +403,7 @@ class Video extends BaseEngine {
      */
     protected function contentUrl() {
 
-        $contentUrl = null;
+        $contentUrl = $this->video_links[0];
 
         if ( ! empty( $contentUrl ) ) {
             return apply_filters("schemax_{$this->schema_type}_contentUrl", $contentUrl);

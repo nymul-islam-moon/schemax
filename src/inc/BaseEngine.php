@@ -45,6 +45,7 @@ abstract class BaseEngine {
      */
     public function __destruct() {
         $this->update_schema();
-        echo "<script src='schemax-$this->schema_type' type='application/ld+json'>$this->schema</script>";
+        $schema = apply_filters("schemax_{$this->schema_type}_schema", $this->schema);
+        echo "<script src='schemax-$this->schema_type' type='application/ld+json'>$schema</script>";
     }
 }

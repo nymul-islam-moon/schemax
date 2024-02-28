@@ -7,7 +7,8 @@ use Schema\Inc\BaseEngine;
 class Audio extends BaseEngine {
 
     private $audio_links, $post_id;
-    public function __construct( $audio_links, $post_id = null ) {
+    public function __construct( $audio_links , $post_id = null ) {
+
         $this->schema_file          = 'audio.json';
 
         parent::__construct();
@@ -51,12 +52,21 @@ class Audio extends BaseEngine {
          * Audio schema contentUrl key
          */
         if ( isset( $audio_arr['contentUrl'] ) ) {
-            $contentUrl = null;
-//            $contentUrl = $this->contentUrl();
-            if (!empty($contentUrl)) {
+            $contentUrl = $this->contentUrl();
+            if ( ! empty( $contentUrl ) ) {
                 $audio_arr['contentUrl'] = $contentUrl;
             } else {
-                unset($audio_arr['contentUrl']);
+                unset( $audio_arr['contentUrl'] );
+            }
+        }
+
+        if ( isset( $audio_arr['additionalContentUrls'] ) ) {
+            $additionalContentUrls = $this->additionalContentUrls();
+
+            if ( !empty( $additionalContentUrls ) ) {
+                $audio_arr['additionalContentUrls'] = $additionalContentUrls;
+            } else {
+                unset( $audio_arr['additionalContentUrls'] );
             }
         }
 
@@ -142,8 +152,7 @@ class Audio extends BaseEngine {
          * Audio schema inLanguage key
          */
         if ( isset( $audio_arr['inLanguage'] ) ) {
-            $inLanguage = null;
-//            $inLanguage = $this->inLanguage();
+            $inLanguage = $this->inLanguage();
             if ( !empty( $inLanguage ) ) {
                 $audio_arr['inLanguage'] = $inLanguage;
             } else {
@@ -239,12 +248,39 @@ class Audio extends BaseEngine {
      * @return mixed|void|null
      */
     protected function description() {
-        return null;
-        $description = get_the_title( $this->post_id );
+
+        $description = get_the_content( $this->post_id );
 
         if (! empty( $description ) ) {
             return apply_filters("schemax_{$this->schema_type}_description", $description);
         }
+    }
+
+    /**
+     * Get ContentUrl
+     *
+     * @return mixed|void|null
+     */
+    protected function contentUrl() {
+        $contentUrl = $this->audio_links[0];
+        return !empty( $contentUrl ) ? apply_filters("schemax_{$this->schema_type}_contentUrl", $contentUrl) : null;
+    }
+
+    /**
+     * Get additionalContentUrls
+     *
+     * @return mixed|null
+     */
+    protected function additionalContentUrls() {
+        $additionalContentUrls = $this->audio_links;
+        return !empty( $additionalContentUrls ) ? apply_filters("schemax_{$this->schema_type}_additionalContentUrls", $additionalContentUrls) : null;
+    }
+
+    protected function inLanguage() {
+
+        $inLanguage = get_bloginfo('language');
+
+        return $inLanguage;
     }
 
 }

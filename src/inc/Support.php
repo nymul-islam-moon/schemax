@@ -11,7 +11,7 @@ class Support {
     }
 
     public function get_support_schema() {
-        $class_methods = get_class_methods($this);
+        $class_methods = get_class_methods( $this );
 
         $support_schemas = [];
 
@@ -27,44 +27,46 @@ class Support {
     }
 
     protected function video( $content ) {
+
+        $video_links = [];
+
+        // Regular expression pattern to match video embed blocks
         $patterns = [
-            '/https?:\/\/(?:www\.)?youtube\.com\/watch\?v=[^&\s]+/',
-            '/https?:\/\/youtu\.be\/[^&\s]+/',
-            '/https?:\/\/(?:www\.)?vimeo\.com\/\d+/',
-            '/https?:\/\/(?:www\.)?instagram\.com\/p\/[^&\s]+/',
-            '/https?:\/\/(?:www\.)?twitter\.com\/[^&\s]+\/status\/\d+/',
-            '/https?:\/\/(?:www\.)?facebook\.com\/[^&\s]+\/videos\/\d+/'
+            '/<video[^>]+src="([^"]+)"/',
+            '/<!-- wp:embed {"url":"([^"]+)"[^>]*?} -->/'
         ];
 
-        $videoLinks = [];
-
-        foreach ( $patterns as $pattern ) {
-            if ( preg_match_all( $pattern, $content, $matches ) ) {
-                $videoLinks = array_merge( $videoLinks, $matches[0] );
+        foreach ( $patterns as $key => $pattern ) {
+            // Match video embed blocks in the content
+            if (preg_match_all($pattern, $content, $matches)) {
+                if (isset($matches[1])) {
+                    $links = $matches[1];
+                    foreach ($links as $link) {
+                        // Add the extracted video link to the list
+                        $video_links[] = $link;
+                    }
+                }
             }
         }
 
-        return !empty( $videoLinks ) ? $videoLinks : [];
+        return !empty( $video_links ) ? $video_links : [];
     }
 
 
     protected function audio( $content ) {
-        // Patterns for common audio file URLs
-        $patterns = [
-            '/https?:\/\/(?:www\.)?[\w\-\.]+\/[\w\-\.]+\/[\w\-\.]+\/[\w\-\.]+\.mp3/',
-            '/https?:\/\/(?:www\.)?[\w\-\.]+\/[\w\-\.]+\/[\w\-\.]+\/[\w\-\.]+\.wav/',
-            '/https?:\/\/(?:www\.)?[\w\-\.]+\/[\w\-\.]+\/[\w\-\.]+\/[\w\-\.]+\.ogg/',
-            '/\.(mp3|wav|ogg)/i'
-        ];
 
-        $audioLinks = [];
+        $audio_links = [];
 
-        foreach ( $patterns as $pattern ) {
-            if ( preg_match_all( $pattern, $content, $matches ) ) {
-                $audioLinks = array_merge( $audioLinks, $matches[0] );
+        $pattern = '/<audio[^>]+src="([^"]+)"/';
+
+        if ( preg_match_all( $pattern, $content, $matches ) ) {
+            if ( isset( $matches[1] ) ) {
+                $links = $matches[1];
+                foreach ( $links as $key => $link ) {
+                    $audio_links = $links;
+                }
             }
         }
-
-        return !empty( $audioLinks ) ? $audioLinks : [];
+        return !empty( $audio_links ) ? $audio_links : [];
     }
 }
