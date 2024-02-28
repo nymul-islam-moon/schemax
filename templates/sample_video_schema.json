@@ -1,0 +1,32 @@
+[
+  {
+    "@context": "http://schema.org/",
+    "@type": "VideoObject",
+    "@id": "http://schema.test:8888/2024/02/audio/#videoobject",
+    "url": "http://schema.test:8888/2024/02/audio/",
+    "headline": "Media files",
+    "datePublished": "2024-02-27T08:34:42+00:00",
+    "dateModified": "2024-02-28T08:10:05+00:00",
+    "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit commodo, etiam litora quis lobortis fringilla per feugiat, ultrices lacus porttitor donec ultricies curabitur quisque. Dictumst class elementum tempus libero suscipit orci morbi mollis fames ad purus et curabitur vivamus, lobortis platea tristique donec nostra nibh condimentum vitae per pulvinar odio inceptos auctor. Sagittis semper risus neque",
+    "transcript": "Lorem ipsum dolor sit amet consectetur adipiscing elit commodo, etiam litora quis lobortis fringilla per feugiat, ultrices lacus porttitor donec ultricies curabitur quisque. Dictumst class elementum tempus libero suscipit orci morbi mollis fames ad purus et curabitur vivamus, lobortis platea tristique donec nostra nibh condimentum vitae per pulvinar odio inceptos auctor. Sagittis semper risus neque tortor etiam duis, condimentum et congue eget sodales orci, pellentesque nam tempus tristique curabitur. Commodo nibh ultrices vestibulum quam hac eget senectus fames ultricies libero, taciti porta iaculis dui accumsan urna aliquam rhoncus viverra consequat quisque, ornare etiam praesent pulvinar aenean id erat mollis per. Luctus lacus sollicitudin iaculis gravida himenaeos primis elementum nam torquent purus dictum natoque, euismod quam congue dui fermentum lobortis velit rutrum nascetur orci conubia.             https://youtu.be/RhHXwlMdLt4?sipA39JYdahQTptS_c",
+    "name": "Media files",
+    "uploadDate": "2024-02-27T08:34:42+00:00",
+    "thumbnailUrl": "https://i.ytimg.com/vi/RhHXwlMdLt4/hqdefault.jpg",
+    "author": {
+      "@type": "Person",
+      "name": "Nymul Islam Moon",
+      "url": "http://schema.test:8888/author/admin/",
+      "sameAs": [
+        "http://schema.test:8888"
+      ],
+      "image": {
+        "@type": "ImageObject",
+        "url": "http://2.gravatar.com/avatar/8054eef90d6d3a9f778446a45df971ea?s=96&d=mm&r=g",
+        "height": 96,
+        "width": 96
+      }
+    },
+    "contentUrl": "https://youtu.be/RhHXwlMdLt4?si=pA39JYdahQTptS_c",
+    "embedUrl": "https://youtu.be/RhHXwlMdLt4?si=pA39JYdahQTptS_c"
+  }
+]

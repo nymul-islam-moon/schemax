@@ -39,6 +39,43 @@ abstract class BaseEngine {
     abstract protected function update_schema();
 
     /**
+     * Get Youtube video thumbnail
+     *
+     * @param $video_id
+     * @param $size
+     * @return false|string
+     */
+    protected function get_thumbnail( $video_id, $size='default' ) {
+
+        if ( ! empty( $video_id ) ) {
+            $thumbnail_url = 'https://img.youtube.com/vi/' . $video_id . '/';
+            // Choose the appropriate size
+            switch ($size) {
+                case 'default':
+                    $thumbnail_url .= 'default.jpg'; // 120x90 pixels
+                    break;
+                case 'medium':
+                    $thumbnail_url .= 'mqdefault.jpg'; // 320x180 pixels
+                    break;
+                case 'high':
+                    $thumbnail_url .= 'hqdefault.jpg'; // 480x360 pixels
+                    break;
+                case 'standard':
+                    $thumbnail_url .= 'sddefault.jpg'; // 640x480 pixels
+                    break;
+                case 'maxres':
+                    $thumbnail_url .= 'maxresdefault.jpg'; // Maximum resolution
+                    break;
+                default:
+                    $thumbnail_url .= 'default.jpg'; // Default size
+            }
+            return $thumbnail_url;
+        } else {
+            return false; // Video ID not found
+        }
+    }
+
+    /**
      * Attach schema data in the script tag with schema type
      *
      * @return void

@@ -15,7 +15,6 @@
     "https://www.example.com/video/124/file.mp4",
     "https://www.example.com/video/125/file.mp4"
   ],
-  "embedUrl": "https://www.example.com/embed/123",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": { "@type": "WatchAction" },
@@ -29,8 +28,8 @@
   },
   "commentCount": 500,
   "interactionCount": "User views: 1500, Likes: 1200, Dislikes: 50, Comments: 500",
-  "dateModified": "2023-01-16T10:30:00+08:00",
   "datePublished": "2023-01-15T08:00:00+08:00",
+  "dateModified": "2023-01-16T10:30:00+08:00",
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "URL_OF_VIDEO_PAGE"
@@ -60,16 +59,6 @@
         "url": "URL_OF_COMMENTER_PROFILE"
       },
       "datePublished": "2023-01-16T12:45:00+08:00"
-    },
-    {
-      "@type": "Comment",
-      "text": "Amazing video! Can't wait for more technological advancements.",
-      "author": {
-        "@type": "Person",
-        "name": "Commenter2",
-        "url": "URL_OF_COMMENTER_PROFILE"
-      },
-      "datePublished": "2023-01-16T14:20:00+08:00"
     }
   ]
 }

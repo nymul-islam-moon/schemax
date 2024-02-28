@@ -108,17 +108,6 @@ class Video extends BaseEngine {
             }
         }
 
-        /**
-         * Video schema embedUrl key
-         */
-        if (isset($video_arr['embedUrl'])) {
-            $embedUrl                                       = $this->embedUrl();
-            if (!empty($embedUrl)) {
-                $video_arr['embedUrl']                    = $embedUrl;
-            } else {
-                unset($video_arr['embedUrl']);
-            }
-        }
 
         /**
          * Video schema interactionStatistic key
@@ -148,7 +137,7 @@ class Video extends BaseEngine {
          * Video schema author key
          */
         if (isset($video_arr['author'])) {
-            $author                                         = $this->author();
+            $author                                         = $this->author( $video_arr['author'] );
             if (!empty($author)) {
                 $video_arr['author']                      = $author;
             } else {
@@ -316,7 +305,7 @@ class Video extends BaseEngine {
          * Video schema comment key
          */
         if ( isset( $video_arr['comment'] ) ) {
-            $comment                                        = $this->comment();
+            $comment                                        = $this->comment( $video_arr['comment'] );
             if ( ! empty( $comment ) ) {
                 $video_arr['comment']                     = $comment;
             } else {
@@ -360,12 +349,19 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function thumbnailUrl() {
-        return null;
-        $thumbnailUrl = get_the_title($this->post_id);
+//        error_log( print_r( $this->video_links, true ) );
+        $thumbnailUrl = [];
+
+        foreach ( $this->video_links as $key => $link ) {
+            $video_id       = $this->get_youtube_video_id( $link );
+            $thumbnailUrl   = $this->get_thumbnail( $video_id );
+        }
 
         if (!empty($thumbnailUrl)) {
             return apply_filters("schemax_{$this->schema_type}_thumbnailUrl", $thumbnailUrl);
         }
+        return [];
+
     }
 
     /**
@@ -374,8 +370,8 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function uploadDate() {
-        return null;
-        $uploadDate = get_the_title($this->post_id);
+
+        $uploadDate = get_post_field( 'post_date', $this->post_id );
 
         if (!empty($uploadDate)) {
             return apply_filters("schemax_{$this->schema_type}_uploadDate", $uploadDate);
@@ -412,19 +408,6 @@ class Video extends BaseEngine {
         return null;
     }
 
-    /**
-     * Get EmbedUrl
-     *
-     * @return mixed|void|null
-     */
-    protected function embedUrl() {
-        return null;
-        $embedUrl = get_the_title($this->post_id);
-
-        if (!empty($embedUrl)) {
-            return apply_filters("schemax_{$this->schema_type}_embedUrl", $embedUrl);
-        }
-    }
 
     /**
      * Get InteractionStatistic
@@ -459,12 +442,31 @@ class Video extends BaseEngine {
      *
      * @return mixed|void|null
      */
-    protected function author() {
-        return null;
-        $author = get_the_title($this->post_id);
+    protected function author( $author ) {
 
-        if (!empty($author)) {
-            return apply_filters("schemax_{$this->schema_type}_author", $author);
+        $author_id = get_post_field( 'post_author', $this->post_id );
+
+        // Get author data
+        $author_data = get_userdata($author_id);
+
+        if ( isset( $author['name'] ) ) {
+            $name   = $author_data->display_name;
+            if ( ! empty( $name ) ) {
+                $author['name']         = $name;
+            }
+        }
+
+        if ( isset( $author['url'] ) ) {
+            $url    = null;
+            if ( ! empty( $url ) ) {
+                $author['url']          = $url;
+            } else {
+                unset( $author['url'] );
+            }
+        }
+
+        if ( ! empty( $author['name'] ) ) {
+            return apply_filters( "schemax_{$this->schema_type}_author", $author );
         }
     }
 
@@ -474,12 +476,13 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function commentCount() {
-        return null;
-        $commentCount = get_the_title($this->post_id);
+        $commentCount       = get_comments_number( $this->post_id );
 
-        if (!empty($commentCount)) {
-            return apply_filters("schemax_{$this->schema_type}_commentCount", $commentCount);
+        if ( ! empty( $commentCount ) ) {
+            return apply_filters( "schemax_{ $this->schema_type }_commentCount", $commentCount );
         }
+
+        return null;
     }
 
     /**
@@ -489,7 +492,7 @@ class Video extends BaseEngine {
      */
     protected function interactionCount() {
         return null;
-        $interactionCount = get_the_title($this->post_id);
+        $interactionCount   = get_the_title($this->post_id);
 
         if (!empty($interactionCount)) {
             return apply_filters("schemax_{$this->schema_type}_interactionCount", $interactionCount);
@@ -502,12 +505,13 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function dateModified() {
-        return null;
-        $dateModified = get_the_title($this->post_id);
 
-        if (!empty($dateModified)) {
-            return apply_filters("schemax_{$this->schema_type}_dateModified", $dateModified);
+        $date_modified = get_post_modified_time('Y-m-d H:i:s', false, $this->post_id);
+
+        if ( ! empty( $date_modified ) ) {
+            return apply_filters("schemax_{$this->schema_type}_dateModified", $date_modified);
         }
+        return null;
     }
 
     /**
@@ -516,12 +520,12 @@ class Video extends BaseEngine {
      * @return mixed|void|null
      */
     protected function datePublished() {
-        return null;
-        $datePublished = get_the_title($this->post_id);
+        $date_published = get_the_date('Y-m-d H:i:s', $this->post_id);
 
-        if (!empty($datePublished)) {
-            return apply_filters("schemax_{$this->schema_type}_datePublished", $datePublished);
+        if (!empty($date_published)) {
+            return apply_filters("schemax_{$this->schema_type}_datePublished", $date_published);
         }
+        return null;
     }
 
     /**
@@ -655,13 +659,66 @@ class Video extends BaseEngine {
      *
      * @return mixed|void|null
      */
-    protected function comment() {
-        return null;
-        $comment = get_the_title($this->post_id);
+    protected function comment( $comment ) {
 
-        if (!empty($comment)) {
-            return apply_filters("schemax_{$this->schema_type}_comment", $comment);
+        $comment_data = [];
+
+        $args = array(
+            'post_id'   => $this->post_id ? $this->post_id : '',
+            'status'    => 'approve'
+        );
+
+        $review_arr     = get_comments( $args );
+
+        if ( ! empty( $review_arr ) ) {
+            foreach ( $review_arr as $key => $review ) {
+                $comment_structure   = $comment[0];
+
+                /**
+                 * comment author name
+                 */
+                $author_name = $review->comment_author;
+                if ( isset( $comment_structure['author'] ) && !empty( $author_name ) ) {
+                    $comment_structure['author']['name']     = $author_name;
+                } else {
+                    unset( $comment_structure['author'] );
+                }
+
+                $comment = $review->comment_content;
+                if ( isset( $comment_structure['comment'] ) && !empty( $comment ) ) {
+                    $comment_structure['comment']            = $comment;
+                } else {
+                    unset( $comment_structure['comment'] );
+                }
+
+                $comment_data[]                              = $comment_structure;
+            }
+
+            if ( empty( $comment_data ) ) {
+                return [];
+            }
+
+            return apply_filters( "schemax_{$this->schema_type}_comment", $comment_data );
+
         }
+
+        return null;
+
+    }
+
+    /**
+     * Get Youtube video id
+     *
+     * @param $link
+     * @return string
+     */
+    private function get_youtube_video_id( $link ) {
+        $video_id = '';
+
+        if (preg_match('/(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $link, $matches)) {
+            $video_id = $matches[1];
+        }
+        return $video_id;
     }
 
 }
