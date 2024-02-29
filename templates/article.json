@@ -71,7 +71,18 @@
   },
   "alternateName": "Shorter Title",
   "dateCreated": "2015-02-03T08:00:00+08:00",
-  "comment": "https://example.com/blog-comments",
+  "comment": [
+    {
+      "@type": "Comment",
+      "text": "This is the first comment.",
+      "author": {
+        "@type": "Person",
+        "name": "John Smith",
+        "url": "https://example.com/profile/johnsmith123",
+      },
+      "datePublished": "2015-02-07T10:00:00+08:00"
+    }
+  ],
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {

@@ -1,4 +1,3 @@
-<script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Book",
@@ -100,9 +99,5 @@
         ]
       }
     }
-  ],
-  "sche_max": [
-    "comment": "this full schema accepts by the schema.org"
   ]
 }
-</script>

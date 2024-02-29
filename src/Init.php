@@ -45,7 +45,7 @@ class Init {
         /**
          * Article Schema
          */
-        if ( 'post' == get_post_type() && is_single() || is_singular() ) {
+        if ( 'post' == get_post_type() && ( is_single() || is_singular() ) && ! is_product() ) {
             new Article( $post->ID );
         }
 
@@ -64,14 +64,14 @@ class Init {
                  * Video Schema
                  */
                 if ( isset( $support_schema_arr['video'] ) ) {
-                    new Video( $support_schema_arr['video'], $post->ID );
+//                    new Video( $support_schema_arr['video'], $post->ID );
                 }
 
                 /**
                  * Audio Schema
                  */
                 if ( isset( $support_schema_arr['audio'] ) ) {
-                    new Audio( $support_schema_arr['audio'], $post->ID );
+//                    new Audio( $support_schema_arr['audio'], $post->ID );
                 }
             }
 

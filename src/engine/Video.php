@@ -54,7 +54,7 @@ class Video extends BaseEngine {
         if (isset($video_arr['description'])) {
             $description                                    = $this->description();
             if (!empty($description)) {
-                $video_arr['description']                 = $description;
+                $video_arr['description']                   = $description;
             } else {
                 unset($video_arr['description']);
             }
@@ -66,7 +66,7 @@ class Video extends BaseEngine {
         if (isset($video_arr['thumbnailUrl'])) {
             $thumbnailUrl                                   = $this->thumbnailUrl();
             if (!empty($thumbnailUrl)) {
-                $video_arr['thumbnailUrl']                = $thumbnailUrl;
+                $video_arr['thumbnailUrl']                  = $thumbnailUrl;
             } else {
                 unset($video_arr['thumbnailUrl']);
             }
@@ -78,7 +78,7 @@ class Video extends BaseEngine {
         if (isset($video_arr['uploadDate'])) {
             $uploadDate                                     = $this->uploadDate();
             if (!empty($uploadDate)) {
-                $video_arr['uploadDate']                  = $uploadDate;
+                $video_arr['uploadDate']                    = $uploadDate;
             } else {
                 unset($video_arr['uploadDate']);
             }
@@ -90,7 +90,7 @@ class Video extends BaseEngine {
         if (isset($video_arr['duration'])) {
             $duration                                       = $this->duration();
             if (!empty($duration)) {
-                $video_arr['duration']                    = $duration;
+                $video_arr['duration']                      = $duration;
             } else {
                 unset($video_arr['duration']);
             }
@@ -115,7 +115,7 @@ class Video extends BaseEngine {
         if (isset($video_arr['interactionStatistic'])) {
             $interactionStatistic                           = $this->interactionStatistic();
             if (!empty($interactionStatistic)) {
-                $video_arr['interactionStatistic']        = $interactionStatistic;
+                $video_arr['interactionStatistic']          = $interactionStatistic;
             } else {
                 unset($video_arr['interactionStatistic']);
             }
@@ -127,7 +127,7 @@ class Video extends BaseEngine {
         if (isset($video_arr['regionsAllowed'])) {
             $regionsAllowed                                 = $this->regionsAllowed();
             if (!empty($regionsAllowed)) {
-                $video_arr['regionsAllowed']              = $regionsAllowed;
+                $video_arr['regionsAllowed']                = $regionsAllowed;
             } else {
                 unset($video_arr['regionsAllowed']);
             }
@@ -139,7 +139,7 @@ class Video extends BaseEngine {
         if (isset($video_arr['author'])) {
             $author                                         = $this->author( $video_arr['author'] );
             if (!empty($author)) {
-                $video_arr['author']                      = $author;
+                $video_arr['author']                        = $author;
             } else {
                 unset($video_arr['author']);
             }
@@ -151,7 +151,7 @@ class Video extends BaseEngine {
         if (isset($video_arr['commentCount'])) {
             $commentCount                                   = $this->commentCount();
             if (!empty($commentCount)) {
-                $video_arr['commentCount']                = $commentCount;
+                $video_arr['commentCount']                  = $commentCount;
             } else {
                 unset($video_arr['commentCount']);
             }
@@ -163,21 +163,9 @@ class Video extends BaseEngine {
         if (isset($video_arr['interactionCount'])) {
             $interactionCount                               = $this->interactionCount();
             if (!empty($interactionCount)) {
-                $video_arr['interactionCount']            = $interactionCount;
+                $video_arr['interactionCount']              = $interactionCount;
             } else {
                 unset($video_arr['interactionCount']);
-            }
-        }
-
-        /**
-         * Video schema dateModified key
-         */
-        if ( isset( $video_arr['dateModified'] ) ) {
-            $dateModified                                   = $this->dateModified();
-            if (!empty($dateModified)) {
-                $video_arr['dateModified']                = $dateModified;
-            } else {
-                unset( $video_arr['dateModified'] );
             }
         }
 
@@ -194,10 +182,23 @@ class Video extends BaseEngine {
         }
 
         /**
+         * Video schema dateModified key
+         */
+        if ( isset( $video_arr['dateModified'] ) ) {
+            $dateModified                                   = $this->dateModified();
+            if (!empty($dateModified)) {
+                $video_arr['dateModified']                  = $dateModified;
+            } else {
+                unset( $video_arr['dateModified'] );
+            }
+        }
+
+
+        /**
          * Video schema mainEntityOfPage key
          */
         if ( isset( $video_arr['mainEntityOfPage'] ) ) {
-            $mainEntityOfPage                               = $this->mainEntityOfPage();
+            $mainEntityOfPage                               = $this->mainEntityOfPage( $video_arr['mainEntityOfPage'] );
             if ( ! empty( $mainEntityOfPage ) ) {
                 $video_arr['mainEntityOfPage']              = $mainEntityOfPage;
             } else {
@@ -533,13 +534,15 @@ class Video extends BaseEngine {
      *
      * @return mixed|void|null
      */
-    protected function mainEntityOfPage() {
-        return null;
-        $mainEntityOfPage = get_the_title($this->post_id);
+    protected function mainEntityOfPage( $mainEntityOfPage ) {
+
+        $mainEntityOfPage['@id'] = get_permalink( $this->post_id );
 
         if (!empty($mainEntityOfPage)) {
             return apply_filters("schemax_{$this->schema_type}_mainEntityOfPage", $mainEntityOfPage);
         }
+
+        return [];
     }
 
     /**
@@ -669,26 +672,49 @@ class Video extends BaseEngine {
         );
 
         $review_arr     = get_comments( $args );
-
         if ( ! empty( $review_arr ) ) {
             foreach ( $review_arr as $key => $review ) {
+
                 $comment_structure   = $comment[0];
+
+                /**
+                 * Comment Text
+                 */
+                $comment_text = $review->comment_content;
+                if ( isset( $comment_structure['text'] ) && !empty( $comment_text ) ) {
+                    $comment_structure['text']      = $comment_text;
+                } else {
+                    unset( $comment_structure['text'] );
+                }
 
                 /**
                  * comment author name
                  */
-                $author_name = $review->comment_author;
-                if ( isset( $comment_structure['author'] ) && !empty( $author_name ) ) {
-                    $comment_structure['author']['name']     = $author_name;
+                $comment_author_name = $review->comment_author;
+                if ( isset( $comment_structure['author'] ) && !empty( $comment_author_name ) ) {
+                    $comment_structure['author']['name']     = $comment_author_name;
                 } else {
                     unset( $comment_structure['author'] );
                 }
 
-                $comment = $review->comment_content;
-                if ( isset( $comment_structure['comment'] ) && !empty( $comment ) ) {
-                    $comment_structure['comment']            = $comment;
+                /**
+                 * comment author url
+                 */
+                $comment_author_url = get_comment_author_url( 2 );
+                if ( isset( $comment_structure['author']['url'] ) && !empty( $comment_author_url ) ) {
+                    $comment_structure['author']['url'] = $comment_author_url;
                 } else {
-                    unset( $comment_structure['comment'] );
+                    unset( $comment_structure['author']['url'] );
+                }
+
+                /**
+                 * Comment date
+                 */
+                $comment_datePublished = get_comment_date('Y-m-d H:i:s', $review->comment_ID);
+                if ( isset( $comment_structure['datePublished'] ) && !empty( $comment_datePublished )) {
+                    $comment_structure['datePublished'] = $comment_datePublished;
+                } else {
+                    unset( $comment_structure['datePublished'] );
                 }
 
                 $comment_data[]                              = $comment_structure;

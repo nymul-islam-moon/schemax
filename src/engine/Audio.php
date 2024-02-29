@@ -88,7 +88,7 @@ class Audio extends BaseEngine {
          */
         if ( isset( $audio_arr['duration'] ) ) {
             $duration = null;
-//            $duration = $this->duration();
+//          $duration = $this->duration();
             if (!empty($duration)) {
                 $audio_arr['duration'] = $duration;
             } else {

@@ -182,6 +182,8 @@ class Product extends BaseEngine {
      */
     protected function review( $review ) {
 
+        $review_data    = [];
+
         $args = array(
             'post_id'   => $this->product ? $this->product->get_id() : '',
             'status'    => 'approve'
@@ -189,7 +191,6 @@ class Product extends BaseEngine {
 
         $review_arr     = get_comments( $args );
 
-        $review_data    = [];
 
         if ( ! empty( $review_arr ) ) {
 

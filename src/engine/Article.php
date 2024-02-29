@@ -24,7 +24,6 @@ class Article extends BaseEngine {
         $this->schema_type      = 'article';
         $this->post_id          = $post_id;
 
-//        error_log( print_r( get_post( $this->post_id ), true ) );
     }
 
     /**
@@ -33,8 +32,8 @@ class Article extends BaseEngine {
      * @return mixed|null
      */
     protected function update_schema() {
-//        error_log( print_r( json_encode( $this->single_article( $this->schema_structure, 'NewsArticle' ) ), true ) );
-        $this->schema            = json_encode( $this->single_article( $this->schema_structure, 'NewsArticle' ) );
+
+        $this->schema            = json_encode( $this->single_article( $this->schema_structure, 'Article' ) );
 
         return apply_filters( "schemax_{$this->schema_type}_update_schema", $this->schema );
     }
@@ -48,7 +47,6 @@ class Article extends BaseEngine {
      */
     protected function single_article( $article_arr, $type ) {
 
-//        error_log( print_r( 'here', true ) );
 
         /**
          * article schema type key
@@ -322,7 +320,7 @@ class Article extends BaseEngine {
          * article schema comment key
          */
         if ( isset( $article_arr['comment'] ) ) {
-            $comment                                    = $this->comment();
+            $comment                                    = $this->comment( $article_arr['comment'] );
             if ( !empty( $comment ) ) {
                 $article_arr['comment']                 = $comment;
             } else {
@@ -758,15 +756,73 @@ class Article extends BaseEngine {
      *
      * @return mixed|null
      */
-    protected function comment() {
+    protected function comment( $comment ) {
+        $comment_data = [];
 
-        $comment = get_comments_link( $this->post_id );
+        $args = array(
+            'post_id'   => $this->post_id ? $this->post_id : '',
+            'status'    => 'approve'
+        );
 
-        if ( ! empty( $comment ) ) {
-            return apply_filters("schemax_{$this->schema_type}_comment", $comment );
+        $review_arr     = get_comments( $args );
+        if ( ! empty( $review_arr ) ) {
+            foreach ( $review_arr as $key => $review ) {
+
+                $comment_structure   = $comment[0];
+
+                /**
+                 * Comment Text
+                 */
+                $comment_text = $review->comment_content;
+                if ( isset( $comment_structure['text'] ) && !empty( $comment_text ) ) {
+                    $comment_structure['text']      = $comment_text;
+                } else {
+                    unset( $comment_structure['text'] );
+                }
+
+                /**
+                 * comment author name
+                 */
+                $comment_author_name = $review->comment_author;
+                if ( isset( $comment_structure['author'] ) && !empty( $comment_author_name ) ) {
+                    $comment_structure['author']['name']     = $comment_author_name;
+                } else {
+                    unset( $comment_structure['author'] );
+                }
+
+                /**
+                 * comment author url
+                 */
+                $comment_author_url = get_comment_author_url( 2 );
+                if ( isset( $comment_structure['author']['url'] ) && !empty( $comment_author_url ) ) {
+                    $comment_structure['author']['url'] = $comment_author_url;
+                } else {
+                    unset( $comment_structure['author']['url'] );
+                }
+
+                /**
+                 * Comment date
+                 */
+                $comment_datePublished = get_comment_date('Y-m-d H:i:s', $review->comment_ID);
+                if ( isset( $comment_structure['datePublished'] ) && !empty( $comment_datePublished )) {
+                    $comment_structure['datePublished'] = $comment_datePublished;
+                } else {
+                    unset( $comment_structure['datePublished'] );
+                }
+
+                $comment_data[]                              = $comment_structure;
+            }
+
+            if ( empty( $comment_data ) ) {
+                return [];
+            }
+
+            return apply_filters( "schemax_{$this->schema_type}_comment", $comment_data );
+
         }
 
         return null;
+
     }
 
     /**
