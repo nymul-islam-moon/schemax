@@ -292,14 +292,23 @@ class Website extends BaseEngine {
      * @return mixed|void|null
      */
     protected function publisher( $publisher ) {
-        $publisher['name'] = get_bloginfo('name');
-        $publisher['logo'] = [];
 
-        if ( ! empty( $publisher['name'] ) ) {
-            return apply_filters("schemax_{this->schema_type}_publisher", $publisher);
+        $name = get_bloginfo('name');
+        if ( ! empty( $publisher['name'] ) && ! empty( $name ) ) {
+            $publisher['name']  = $name;
+        } else {
+            unset( $publisher['name'] );
         }
 
-        return null;
+        $logo = null;
+        if ( isset( $publisher['logo'] ) && ! empty( $logo ) ) {
+            $publisher['logo'] = $logo;
+        } else {
+            unset( $publisher['logo'] );
+        }
+
+        return apply_filters("schemax_{this->schema_type}_publisher", $publisher);
+
     }
 
     /**

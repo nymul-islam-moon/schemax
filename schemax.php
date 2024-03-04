@@ -87,7 +87,10 @@ if ( ! class_exists( 'Schema' ) ) {
 		 */
 		public function define_constants() {
 			define( 'SCHEMAX_VERSION', self::version );
-			define( 'SCHEMAX_PATH', __FILE__ );
+			define( 'SCHEMAX_FILE', __FILE__ );
+			define( 'SCHEMAX_PATH', __DIR__ );
+			define( 'SCHEMAX_URL', plugins_url( '', SCHEMAX_FILE ) );
+			define( 'SCHEMAX_ASSETS', SCHEMAX_URL . '/assets' );
 		}
 
 		/**

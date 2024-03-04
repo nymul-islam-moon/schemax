@@ -26,7 +26,7 @@ abstract class BaseEngine {
      */
     protected function read_schema( $schema_file ) {
 
-        $schema_data = file_get_contents( dirname( SCHEMAX_PATH ) . '/templates/' . $schema_file );
+        $schema_data = file_get_contents( SCHEMAX_ASSETS . '/templates/' . $schema_file );
 
         return json_decode( $schema_data, true );
     }
