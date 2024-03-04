@@ -6,6 +6,10 @@ use Schema\Inc\BaseEngine;
 
 
 class Website extends BaseEngine {
+    /**
+     * @var mixed|null
+     */
+    private $post_id;
 
     /**
      * Website schema constructor
@@ -164,12 +168,12 @@ class Website extends BaseEngine {
         /**
          * WebSite schema hasPart key
          */
-        if (isset($website_arr['hasPart'])) {
-            $hasPart = $this->hasPart();
-            if (!empty($hasPart)) {
+        if ( isset( $website_arr['hasPart'] ) ) {
+            $hasPart = $this->hasPart( $website_arr['hasPart'] );
+            if ( ! empty( $hasPart ) ) {
                 $website_arr['hasPart'] = $hasPart;
             } else {
-                unset($website_arr['hasPart']);
+                unset( $website_arr['hasPart'] );
             }
         }
 
@@ -293,6 +297,9 @@ class Website extends BaseEngine {
      */
     protected function publisher( $publisher ) {
 
+        /**
+         * Get name
+         */
         $name = get_bloginfo('name');
         if ( ! empty( $publisher['name'] ) && ! empty( $name ) ) {
             $publisher['name']  = $name;
@@ -300,6 +307,9 @@ class Website extends BaseEngine {
             unset( $publisher['name'] );
         }
 
+        /**
+         * Get logo
+         */
         $logo = null;
         if ( isset( $publisher['logo'] ) && ! empty( $logo ) ) {
             $publisher['logo'] = $logo;
@@ -318,6 +328,9 @@ class Website extends BaseEngine {
      */
     protected function mainEntity( $mainEntity ) {
 
+        /**
+         * Get name
+         */
         $name   = get_the_title( $this->post_id );
         if ( isset( $mainEntity['name'] ) && ! empty( $name ) ) {
             $mainEntity['name']         = $name;
@@ -325,6 +338,9 @@ class Website extends BaseEngine {
             return null;
         }
 
+        /**
+         * Get image
+         */
         $image = $this->mainEntity_image();
         if ( isset( $mainEntity['image'] ) && ! empty( $image ) ) {
             $mainEntity['image'] = $image;
@@ -332,6 +348,9 @@ class Website extends BaseEngine {
             unset( $mainEntity['image'] );
         }
 
+        /**
+         * Get priceRange
+         */
         $priceRange = null;
         if ( isset( $mainEntity['priceRange'] ) && ! empty( $priceRange ) ) {
             $mainEntity['priceRange'] = $priceRange;
@@ -339,6 +358,9 @@ class Website extends BaseEngine {
             unset( $mainEntity['priceRange'] );
         }
 
+        /**
+         * Get telephone
+         */
         $telephone = null;
         if ( isset( $mainEntity['telephone'] ) && ! empty( $telephone ) ) {
             $mainEntity['telephone'] = $telephone;
@@ -346,6 +368,9 @@ class Website extends BaseEngine {
             unset( $mainEntity['telephone'] );
         }
 
+        /**
+         * Get address
+         */
         $address = [];
         if ( isset( $mainEntity['address'] ) && ! empty( $address ) ) {
             $mainEntity['address'] = $address;
@@ -353,6 +378,9 @@ class Website extends BaseEngine {
             unset( $mainEntity['address'] );
         }
 
+        /**
+         * Get aggregateRating
+         */
         $aggregateRating = null;
         if ( isset( $mainEntity['aggregateRating'] ) && ! empty( $aggregateRating ) ) {
             $mainEntity['aggregateRating'] = $aggregateRating;
@@ -363,6 +391,11 @@ class Website extends BaseEngine {
         return apply_filters("schemax_{this->schema_type}_mainEntity", $mainEntity);
     }
 
+    /**
+     * Get mainEntity_image
+     *
+     * @return null
+     */
     protected function mainEntity_image() {
 
         return null;
@@ -403,7 +436,7 @@ class Website extends BaseEngine {
      *
      * @return mixed|void|null
      */
-    protected function hasPart() {
+    protected function hasPart( $hasPart ) {
         $hasPart = null;
 
         if (!empty($hasPart)) {

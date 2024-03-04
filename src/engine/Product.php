@@ -732,9 +732,6 @@ class Product extends BaseEngine {
 
     protected function offers_shippingDetails( $shippingDetails ) { // TODO this method is incomplete for lacking of necessary information
 
-//        error_log( print_r( $shippingDetails, true ) );
-//        error_log( print_r( $shipping_class, true ) );
-
         $shipping_destination = $this->shippingDetails_shippingDestination( $shippingDetails[0]['shippingDestination'] );
 
         if ( isset( $shippingDetails[0]['shippingDestination'] ) && !empty( $shipping_destination ) ) {

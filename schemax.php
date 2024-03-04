@@ -46,7 +46,7 @@ if( ! function_exists('is_plugin_active') ) {
 }
 
 if ( ! class_exists( 'Schema' ) ) {
-	final class Schema {
+	final class Schemax {
 
 		/**
 		 * Plugin version
@@ -130,6 +130,6 @@ if ( ! class_exists( 'Schema' ) ) {
  * @return \Schemax
  */
 function schemax() {
-    return Schema::init();
+    return Schemax::init();
 }
 schemax();
