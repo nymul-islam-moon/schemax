@@ -64,14 +64,14 @@ class Init {
                  * Video Schema
                  */
                 if ( isset( $support_schema_arr['video'] ) ) {
-//                    new Video( $support_schema_arr['video'], $post->ID );
+                    new Video( $support_schema_arr['video'], $post->ID );
                 }
 
                 /**
                  * Audio Schema
                  */
                 if ( isset( $support_schema_arr['audio'] ) ) {
-//                    new Audio( $support_schema_arr['audio'], $post->ID );
+                    new Audio( $support_schema_arr['audio'], $post->ID );
                 }
             }
 

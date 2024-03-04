@@ -41,7 +41,7 @@ defined('ABSPATH') or die('Hay, You can not access the area');
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use Schema\Src;
+use Schema;
 
 if( ! function_exists('is_plugin_active') ) {
     include_once( ABSPATH . 'wp-admin/includes/plugin.php');
@@ -99,8 +99,9 @@ if ( ! class_exists( 'Schema' ) ) {
 		}
 
 	}
-	function schema() {
-		return new Schema();
-	}
-	schema();
 }
+
+function schema() {
+    return new Schema();
+}
+schema();
