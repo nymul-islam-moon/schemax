@@ -39,7 +39,7 @@ class Init {
          * Website Schema
          */
         if ( ! is_admin() ) {
-            new Website();
+            new Website( $post->ID );
         }
 
         /**
@@ -58,6 +58,9 @@ class Init {
 
             $support_schema_arr = $support_schema->get_support_schema();
 
+            /**
+             * Check if the support schema array empty or not
+             */
             if ( is_array( $support_schema_arr ) ) {
 
                 /**
@@ -74,8 +77,6 @@ class Init {
                     new Audio( $support_schema_arr['audio'], $post->ID );
                 }
             }
-
         }
-
 	}
 }

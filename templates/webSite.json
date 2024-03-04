@@ -2,7 +2,7 @@
   "@context": "https://schema.org",
   "@type": "WebSite",
   "@id": "https://jay.holtslander.ca/#website",
-  "name": "Jay Holtslander",
+  "name": "",
   "url": "https://jay.holtslander.ca",
   "headline": "Like a page title",
   "description": "Personal website of Jay Holtslander. Co-founder of CodeCore Bootcamp.",
