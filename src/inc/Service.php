@@ -7,7 +7,7 @@ class Service {
     public $schema_root_path;
 
     public function __construct() {
-        $this->schema_root_path = dirname( SCHEMA_PLUGIN_PATH ) . '/templates/';
+        $this->schema_root_path = dirname( SCHEMAX_PATH ) . '/templates/';
     }
 
 

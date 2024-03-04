@@ -41,8 +41,6 @@ defined('ABSPATH') or die('Hay, You can not access the area');
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use Schema;
-
 if( ! function_exists('is_plugin_active') ) {
     include_once( ABSPATH . 'wp-admin/includes/plugin.php');
 }
@@ -62,9 +60,25 @@ if ( ! class_exists( 'Schema' ) ) {
 		 */
 		public function __construct() {
 			$this->define_constants();
-            add_action( 'plugins_loaded', [ $this, 'activate' ] );
-//			register_activation_hook( __FILE__, [ $this, 'activate' ] );
+
+            register_activation_hook( __FILE__, [ $this, 'activate' ] );
+
+            add_action( 'plugins_loaded', [ $this, 'init_plugin' ] );
 		}
+
+        /**
+         * Initialize a singleton instance
+         *
+         * @return false|self
+         */
+        public static function init() {
+            static $instance    = false;
+
+            if ( ! $instance ) {
+                $instance       = new self();
+            }
+            return $instance;
+        }
 
 		/**
 		 * Define the required plugin constants
@@ -72,7 +86,8 @@ if ( ! class_exists( 'Schema' ) ) {
 		 * @return void
 		 */
 		public function define_constants() {
-			define( 'SCHEMA_PLUGIN_PATH', __FILE__ );
+			define( 'SCHEMAX_VERSION', self::version );
+			define( 'SCHEMAX_PATH', __FILE__ );
 		}
 
 		/**
@@ -82,7 +97,14 @@ if ( ! class_exists( 'Schema' ) ) {
 		 */
 		public function activate() {
 
-			flush_rewrite_rules();
+            $installed = get_option( 'schemax_installed' );
+
+            if ( ! $installed ) {
+                update_option( 'schemax_installed', time() );
+            }
+
+            update_option( 'schemax_version', SCHEMAX_VERSION );
+
 
 			add_action( 'init', [ $this, 'init_plugin' ] );
 		}
@@ -93,15 +115,18 @@ if ( ! class_exists( 'Schema' ) ) {
 		 * @return void
 		 */
 		public function init_plugin() {
-
-			$installer = new Schema\Init();
-            $installer->run();
+            new Schema\Init();
 		}
 
 	}
 }
 
-function schema() {
-    return new Schema();
+/**
+ * Initialize the main plugin
+ *
+ * @return \Schemax
+ */
+function schemax() {
+    return Schema::init();
 }
-schema();
+schemax();
