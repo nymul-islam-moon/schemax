@@ -78,7 +78,7 @@
       "author": {
         "@type": "Person",
         "name": "John Smith",
-        "url": "https://example.com/profile/johnsmith123",
+        "url": "https://example.com/profile/johnsmith123"
       },
       "datePublished": "2015-02-07T10:00:00+08:00"
     }

@@ -54,26 +54,26 @@ class Init {
         $support_schema = null;
         if ( ! empty( $post ) ) {
             $support_schema = new Support( $post->post_content );
-//
-//            $support_schema_arr = $support_schema->get_support_schema();
-//
-//            if ( is_array( $support_schema_arr ) ) {
-//
-//                /**
-//                 * Video Schema
-//                 */
-//                if ( isset( $support_schema_arr['video'] ) ) {
-//                    new Video( $support_schema_arr['video'], $post->ID );
-//                }
-//
-//                /**
-//                 * Audio Schema
-//                 */
-//                if ( isset( $support_schema_arr['audio'] ) ) {
-//                    new Audio( $support_schema_arr['audio'], $post->ID );
-//                }
-//            }
-//
+
+            $support_schema_arr = $support_schema->get_support_schema();
+
+            if ( is_array( $support_schema_arr ) ) {
+
+                /**
+                 * Video Schema
+                 */
+                if ( isset( $support_schema_arr['video'] ) ) {
+                    new Video( $support_schema_arr['video'], $post->ID );
+                }
+
+                /**
+                 * Audio Schema
+                 */
+                if ( isset( $support_schema_arr['audio'] ) ) {
+                    new Audio( $support_schema_arr['audio'], $post->ID );
+                }
+            }
+
         }
 
 	}

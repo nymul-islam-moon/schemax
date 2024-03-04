@@ -18,12 +18,13 @@ class Article extends BaseEngine {
      */
     public function __construct( $post_id = null ) {
 
+
         $this->schema_file      = 'article.json';
+
         parent::__construct();
 
         $this->schema_type      = 'article';
         $this->post_id          = $post_id;
-
     }
 
     /**
