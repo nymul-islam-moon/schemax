@@ -7,6 +7,7 @@ use Schema\Engine\Article;
 use Schema\Engine\Video;
 use Schema\Engine\Audio;
 use Schema\Inc\Support;
+use Schema\Engine\Website;
 
 class Init {
 
@@ -37,9 +38,9 @@ class Init {
         /**
          * Website Schema
          */
-//        if ( ! is_admin() && ! defined( 'DOING_AJAX' ) ) {
-//            new Website();
-//        }
+        if ( ! is_admin() ) {
+            new Website();
+        }
 
         /**
          * Article Schema

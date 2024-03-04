@@ -15,7 +15,6 @@ abstract class BaseEngine {
      * BaseEngine __construct method
      */
     protected function __construct() {
-
         $this->schema_structure = $this->read_schema( $this->schema_file );
     }
 
