@@ -106,10 +106,10 @@ class Website extends BaseEngine {
          */
         if ( isset( $website_arr['author'] ) ) {
             $author = $this->author( $website_arr['author'] );
-            if (!empty($author)) {
+            if ( ! empty( $author ) ) {
                 $website_arr['author'] = $author;
             } else {
-                unset($website_arr['author']);
+                unset( $website_arr['author'] );
             }
         }
 
@@ -117,7 +117,7 @@ class Website extends BaseEngine {
          * WebSite schema publisher key
          */
         if ( isset( $website_arr['publisher'] ) ) {
-            $publisher = $this->publisher();
+            $publisher = $this->publisher( $website_arr['publisher'] );
             if (!empty($publisher)) {
                 $website_arr['publisher'] = $publisher;
             } else {
@@ -128,8 +128,8 @@ class Website extends BaseEngine {
         /**
          * WebSite schema mainEntity key
          */
-        if (isset($website_arr['mainEntity'])) {
-            $mainEntity = $this->mainEntity();
+        if ( isset( $website_arr['mainEntity'] ) ) {
+            $mainEntity = $this->mainEntity( $website_arr['mainEntity'] );
             if (!empty($mainEntity)) {
                 $website_arr['mainEntity'] = $mainEntity;
             } else {
@@ -141,7 +141,7 @@ class Website extends BaseEngine {
          * WebSite schema potentialAction key
          */
         if (isset($website_arr['potentialAction'])) {
-            $potentialAction = $this->potentialAction();
+            $potentialAction = $this->potentialAction( $website_arr['potentialAction'] );
             if (!empty($potentialAction)) {
                 $website_arr['potentialAction'] = $potentialAction;
             } else {
@@ -187,6 +187,8 @@ class Website extends BaseEngine {
         if ( ! empty( $name ) ) {
             return apply_filters("schemax_{this->schema_type}_name", $name);
         }
+
+        return null;
     }
 
     /**
@@ -200,6 +202,8 @@ class Website extends BaseEngine {
         if (!empty($url)) {
             return apply_filters("schemax_{this->schema_type}_url", $url);
         }
+
+        return null;
     }
 
     /**
@@ -213,6 +217,8 @@ class Website extends BaseEngine {
         if (!empty($headline)) {
             return apply_filters("schemax_{this->schema_type}_headline", $headline);
         }
+
+        return null;
     }
 
     /**
@@ -226,6 +232,8 @@ class Website extends BaseEngine {
         if (!empty($description)) {
             return apply_filters("schemax_{this->schema_type}_description", $description);
         }
+
+        return null;
     }
 
     /**
@@ -235,11 +243,13 @@ class Website extends BaseEngine {
      */
     protected function image() {
 //        error_log( print_r( wc_get_product( $this->post_id->get_image_url() ), true ) );
-        $image = '';
+        $image = null;
 
-        if (!empty($image)) {
+        if ( ! empty( $image ) ) {
             return apply_filters("schemax_{this->schema_type}_image", $image);
         }
+
+        return null;
     }
 
     /**
@@ -253,6 +263,8 @@ class Website extends BaseEngine {
         if (!empty($inLanguage)) {
             return apply_filters("schemax_{this->schema_type}_inLanguage", $inLanguage);
         }
+
+        return null;
     }
 
     /**
@@ -265,11 +277,13 @@ class Website extends BaseEngine {
 
         $author_info = get_userdata($author_id);
 
+        $author['name'] = $author_info->display_name;
 
-
-        if (!empty($author)) {
+        if ( ! empty( $author['name'] ) ) {
             return apply_filters("schemax_{this->schema_type}_author", $author);
         }
+
+        return null;
     }
 
     /**
@@ -277,12 +291,15 @@ class Website extends BaseEngine {
      *
      * @return mixed|void|null
      */
-    protected function publisher() {
-        $publisher = get_the_title($this->post_id);
+    protected function publisher( $publisher ) {
+        $publisher['name'] = get_bloginfo('name');
+        $publisher['logo'] = [];
 
-        if (!empty($publisher)) {
+        if ( ! empty( $publisher['name'] ) ) {
             return apply_filters("schemax_{this->schema_type}_publisher", $publisher);
         }
+
+        return null;
     }
 
     /**
@@ -290,12 +307,56 @@ class Website extends BaseEngine {
      *
      * @return mixed|void|null
      */
-    protected function mainEntity() {
-        $mainEntity = get_the_title($this->post_id);
+    protected function mainEntity( $mainEntity ) {
 
-        if (!empty($mainEntity)) {
-            return apply_filters("schemax_{this->schema_type}_mainEntity", $mainEntity);
+        $name   = get_the_title( $this->post_id );
+        if ( isset( $mainEntity['name'] ) && ! empty( $name ) ) {
+            $mainEntity['name']         = $name;
+        } else {
+            return null;
         }
+
+        $image = $this->mainEntity_image();
+        if ( isset( $mainEntity['image'] ) && ! empty( $image ) ) {
+            $mainEntity['image'] = $image;
+        } else {
+            unset( $mainEntity['image'] );
+        }
+
+        $priceRange = null;
+        if ( isset( $mainEntity['priceRange'] ) && ! empty( $priceRange ) ) {
+            $mainEntity['priceRange'] = $priceRange;
+        } else {
+            unset( $mainEntity['priceRange'] );
+        }
+
+        $telephone = null;
+        if ( isset( $mainEntity['telephone'] ) && ! empty( $telephone ) ) {
+            $mainEntity['telephone'] = $telephone;
+        } else {
+            unset( $mainEntity['telephone'] );
+        }
+
+        $address = [];
+        if ( isset( $mainEntity['address'] ) && ! empty( $address ) ) {
+            $mainEntity['address'] = $address;
+        } else {
+            unset( $mainEntity['address'] );
+        }
+
+        $aggregateRating = null;
+        if ( isset( $mainEntity['aggregateRating'] ) && ! empty( $aggregateRating ) ) {
+            $mainEntity['aggregateRating'] = $aggregateRating;
+        } else {
+            unset( $mainEntity['aggregateRating'] );
+        }
+
+        return apply_filters("schemax_{this->schema_type}_mainEntity", $mainEntity);
+    }
+
+    protected function mainEntity_image() {
+
+        return null;
     }
 
     /**
@@ -303,12 +364,14 @@ class Website extends BaseEngine {
      *
      * @return mixed|void|null
      */
-    protected function potentialAction() {
-        $potentialAction = get_the_title($this->post_id);
+    protected function potentialAction( $potentialAction ) {
+        $potentialAction = null;
 
         if (!empty($potentialAction)) {
             return apply_filters("schemax_{this->schema_type}_potentialAction", $potentialAction);
         }
+
+        return null;
     }
 
     /**
@@ -317,11 +380,13 @@ class Website extends BaseEngine {
      * @return mixed|void|null
      */
     protected function keywords() {
-        $keywords = get_the_title($this->post_id);
+        $keywords = [];
 
         if (!empty($keywords)) {
             return apply_filters("schemax_{this->schema_type}_keywords", $keywords);
         }
+
+        return null;
     }
 
     /**
@@ -330,10 +395,12 @@ class Website extends BaseEngine {
      * @return mixed|void|null
      */
     protected function hasPart() {
-        $hasPart = get_the_title($this->post_id);
+        $hasPart = null;
 
         if (!empty($hasPart)) {
             return apply_filters("schemax_{this->schema_type}_hasPart", $hasPart);
         }
+
+        return null;
     }
 }

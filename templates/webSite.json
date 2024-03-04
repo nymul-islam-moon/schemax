@@ -72,26 +72,6 @@
         "name": "Contact",
         "target": "http://google.ca/"
       }
-    },
-    {
-      "@type": "WebPageElement",
-      "@id": "#sidebar",
-      "citation": [
-        "https://domain.com/link",
-        "https://domain2.com/link2",
-        "https://domain2.com/link3"
-      ],
-      "comment": [
-        "This is a user comment that may appear in the sidebar.",
-        "This is another user comment that may be there as well."
-      ]
-    },
-    {
-      "@type": "WebPageElement",
-      "@id": "#footer",
-      "copyrightHolder": "Jay Holtslander",
-      "publisher": "Jay Holtslander",
-      "copyrightYear": 2017
     }
   ]
 }
