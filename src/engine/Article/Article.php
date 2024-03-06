@@ -1,6 +1,6 @@
 <?php
 
-namespace Schema\Engine;
+namespace Schema\Engine\Article;
 
 use Schema\Inc\BaseEngine;
 
@@ -34,7 +34,7 @@ class Article extends BaseEngine {
      */
     protected function update_schema() {
 
-        $this->schema            = json_encode( $this->single_article( $this->schema_structure, 'Article' ) );
+        $this->schema            = json_encode( $this->single_article( $this->schema_structure ) );
 
         return apply_filters( "schemax_{$this->schema_type}_update_schema", $this->schema );
     }
@@ -43,16 +43,16 @@ class Article extends BaseEngine {
      * Update the single article data
      *
      * @param $article_arr
-     * @param $type
      * @return mixed
      */
-    protected function single_article( $article_arr, $type ) {
+    protected function single_article( $article_arr ) {
 
 
         /**
          * article schema type key
          */
-        if ( isset( $article_arr['@type'] ) ) {
+        $type = $this->type();
+        if ( isset( $article_arr['@type'] ) && ! empty( $type ) ) {
             $article_arr['@type']                       = $type;
         }else {
             unset( $article_arr['@type'] );
@@ -133,12 +133,28 @@ class Article extends BaseEngine {
         /**
          * article schema author key
          */
+
         if ( isset( $article_arr['author'] ) ) {
+
             $author                                     = $this->author( $article_arr['author'] );
-            if ( !empty( $author ) ) {
+            if ( ! empty( $author ) ) {
                 $article_arr['author']                  = $author;
             } else {
                 unset( $article_arr['author'] );
+            }
+        }
+
+        /**
+         * article schema editor key
+         */
+
+        if ( isset( $article_arr['editor'] ) ) {
+
+            $editor                                     = $this->editor( $article_arr['editor'] );
+            if ( ! empty( $editor ) ) {
+                $article_arr['editor']                  = $editor;
+            } else {
+                unset( $article_arr['editor'] );
             }
         }
 
@@ -405,6 +421,15 @@ class Article extends BaseEngine {
     }
 
     /**
+     * Get the Type key
+     *
+     * @return string
+     */
+    protected function type() {
+        return 'Article';
+    }
+
+    /**
      * Get the mainEntityOfPage array data
      *
      * @param $mainEntityOfPage
@@ -485,29 +510,95 @@ class Article extends BaseEngine {
      * @param $author
      * @return array
      */
-    protected function author( $author ) {  // TODO this author part is incomplete for some problems
+    protected function author( $author ) {
 
-        $author_ids = get_post_field( 'post_author', $this->post_id );
+        $author_id = get_post_field( 'post_author', $this->post_id );
 
-//        error_log( print_r( var_dump( $author_ids ), true ) );
+        /**
+         * Get author name
+         */
+        $author_name = get_the_author_meta('display_name', $author_id);
 
-//        $author_data = $author[0];
-//
-//        if ( is_array( $author_ids ) ) {
-//
-//        } else {
-//            $author_name = get_the_author_meta( 'display_name', $author_ids );
-//            if ( isset( $author_data['name'] ) && ! empty( $author_name ) ) {
-//                $author_data['name'] = $author_name;
-//            }
-//        }
-//
-//        if (  ) {
-//
-//        }
+        if ( isset( $author['name'] ) && ! empty( $author_name ) ) {
+            $author['name'] = $author_name;
+        } else {
+            return null;
+        }
+
+        /**
+         * Get author url
+         */
+        $author_url = get_author_posts_url( $author_id );
+        if ( isset( $author['url'] ) && ! empty( $author_url ) ) {
+            $author['url']   = $author_url;
+        } else {
+            unset( $author['url'] );
+        }
+
+        /**
+         * Get author logo
+         */
+        $author_avatar_url = get_avatar_url($author_id, ['size' => '96']);
+        if ( isset( $author['logo']['url'] ) && ! empty( $logo ) ) {
+            $author['logo']['url'] = $author_avatar_url;
+        } else {
+            unset( $author['logo'] );
+        }
+
+        $sameAs[] = get_site_url();;
+        if ( isset( $author['sameAs'] ) && ! empty( $sameAs ) ) {
+            $author['sameAs'] = $sameAs;
+        } else {
+            unset( $author['sameAs'] );
+        }
+
+        return apply_filters("schemax_{$this->schema_type}_author", $author );
+    }
 
 
-        return [];
+    protected function editor( $editor ) {
+
+        $editor_id = get_post_field( 'post_author', $this->post_id );
+
+        /**
+         * Get editor name
+         */
+        $editor_name = get_the_author_meta('display_name', $editor_id);
+
+        if ( isset( $editor['name'] ) && ! empty( $editor_name ) ) {
+            $editor['name'] = $editor_name;
+        } else {
+            return null;
+        }
+
+        /**
+         * Get editor url
+         */
+        $editor_url = get_author_posts_url( $editor_id );
+        if ( isset( $editor['url'] ) && ! empty( $editor_url ) ) {
+            $editor['url']   = $editor_url;
+        } else {
+            unset( $editor['url'] );
+        }
+
+        /**
+         * Get editor logo
+         */
+        $editor_avatar_url = get_avatar_url($editor_id, ['size' => '96']);
+        if ( isset( $editor['logo']['url'] ) && ! empty( $logo ) ) {
+            $editor['logo']['url'] = $editor_avatar_url;
+        } else {
+            unset( $editor['logo'] );
+        }
+
+        $sameAs[] = get_site_url();;
+        if ( isset( $editor['sameAs'] ) && ! empty( $sameAs ) ) {
+            $editor['sameAs'] = $sameAs;
+        } else {
+            unset( $editor['sameAs'] );
+        }
+
+        return apply_filters("schemax_{$this->schema_type}_editor", $editor );
     }
 
     /**
@@ -518,7 +609,35 @@ class Article extends BaseEngine {
      */
     public function publisher( $publisher ) {
 
-        return [];
+        $name = get_bloginfo();
+        if ( isset( $publisher['name'] ) && ! empty( $name ) ) {
+            $publisher['name'] = $name;
+        } else {
+            return null;
+        }
+
+        $url = get_site_url();
+        if ( isset( $publisher['url'] ) && ! empty( $url ) ) {
+            $publisher['url']   = $url;
+        } else {
+            unset( $publisher['url'] );
+        }
+
+        $logo = null;
+        if ( isset( $publisher['logo']['url'] ) && ! empty( $logo ) ) {
+            $publisher['logo']['url'] = $logo;
+        } else {
+            unset( $publisher['logo'] );
+        }
+
+        $sameAs = null;
+        if ( isset( $publisher['sameAs'] ) && ! empty( $sameAs ) ) {
+            $publisher['sameAs'] = $sameAs;
+        } else {
+            unset( $publisher['sameAs'] );
+        }
+
+        return apply_filters("schemax_{$this->schema_type}_publisher", $publisher );
     }
 
     /**

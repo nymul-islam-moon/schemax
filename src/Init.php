@@ -2,12 +2,13 @@
 
 namespace Schema;
 
-use Schema\Engine\Product;
-use Schema\Engine\Article;
-use Schema\Engine\Video;
+use Schema\Engine\Article\Article;
+use Schema\Engine\Article\TechArticle;
 use Schema\Engine\Audio;
-use Schema\Inc\Support;
+use Schema\Engine\Product;
+use Schema\Engine\Video;
 use Schema\Engine\Website;
+use Schema\Inc\Support;
 
 class Init {
 
@@ -45,8 +46,13 @@ class Init {
         /**
          * Article Schema
          */
-        if ( 'post' == get_post_type() && ( is_single() || is_singular() ) && ! is_product() ) {
-            new Article( $post->ID );
+        if ( ( 'docs' === get_post_type( $post->ID ) || 'post' == get_post_type( $post->ID ) ) && ( is_single() || is_singular() ) && ! is_product() ) {
+            if ( 'docs' === get_post_type( $post->ID ) ) {
+                new TechArticle( $post->ID );
+            } else {
+                new Article( $post->ID );
+            }
+
         }
 
         /**

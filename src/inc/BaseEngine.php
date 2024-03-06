@@ -77,6 +77,25 @@ abstract class BaseEngine {
     }
 
     /**
+     * Get images from the content
+     *
+     * @param $content
+     * @return string[]
+     */
+    protected function get_images( $content ) {
+        // Define the regular expression to match <img> tags and capture the src attribute
+        $pattern = '/<img[^>]+src="([^">]+)"/';
+
+        // Use preg_match_all to find all matches
+        preg_match_all( $pattern, $content, $matches );
+
+        // The image URLs are stored in the first captured group, which is $matches[1]
+        $image_urls = $matches[1];
+
+        return $image_urls;
+    }
+
+    /**
      * Attach schema data in the script tag with schema type
      *
      * @return void
