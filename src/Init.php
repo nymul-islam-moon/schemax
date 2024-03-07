@@ -5,6 +5,7 @@ namespace Schema;
 use Schema\Engine\Article\Article;
 use Schema\Engine\Article\TechArticle;
 use Schema\Engine\Audio;
+use Schema\Engine\HowTo;
 use Schema\Engine\Product;
 use Schema\Engine\Video;
 use Schema\Engine\Website;
@@ -52,7 +53,6 @@ class Init {
             } else {
                 new Article( $post->ID );
             }
-
         }
 
         /**
@@ -81,6 +81,13 @@ class Init {
                  */
                 if ( isset( $support_schema_arr['audio'] ) ) {
                     new Audio( $support_schema_arr['audio'], $post->ID );
+                }
+
+                /**
+                 * HowTo Schema
+                 */
+                if ( isset( $support_schema_arr['howto'] ) ) {
+                    new HowTo( $post->ID );
                 }
             }
         }

@@ -5,7 +5,9 @@
   "description": "Any kitchen can be much more vibrant with a great tile backsplash. This guide will help you install one with beautiful results, like our example kitchen seen here.",
   "image": {
     "@type": "ImageObject",
-    "url": "https://example.com/photos/1x1/photo.jpg",
+    "url": [
+      "https://example.com/photos/1x1/photo.jpg"
+    ],
     "height": "406",
     "width": "305"
   },

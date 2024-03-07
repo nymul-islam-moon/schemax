@@ -6,10 +6,20 @@ class Support {
 
     protected $content;
 
+    /**
+     * Support class __construct
+     *
+     * @param $content
+     */
     public function __construct( $content ) {
         $this->content      = $content;
     }
 
+    /**
+     * Get all support schema
+     *
+     * @return array
+     */
     public function get_support_schema() {
         $class_methods = get_class_methods( $this );
 
@@ -26,6 +36,12 @@ class Support {
         return $support_schemas;
     }
 
+    /**
+     * Check if video file exist or not
+     *
+     * @param $content
+     * @return array
+     */
     protected function video( $content ) {
 
         $video_links = [];
@@ -52,7 +68,12 @@ class Support {
         return !empty( $video_links ) ? $video_links : [];
     }
 
-
+    /**
+     * Check if audio file exist or not
+     *
+     * @param $content
+     * @return array|string[]
+     */
     protected function audio( $content ) {
 
         $audio_links = [];
@@ -68,5 +89,18 @@ class Support {
             }
         }
         return !empty( $audio_links ) ? $audio_links : [];
+    }
+
+    protected function howto( $content ) {
+
+        $search_for = 'how to';
+        $content_lower = strtolower( $content );
+
+        if ( strpos( $content_lower, $search_for ) ) {
+
+            return true;
+        }
+
+        return false;
     }
 }
