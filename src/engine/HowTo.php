@@ -206,7 +206,66 @@ class HowTo extends BaseEngine {
     }
 
     protected function step( $step ) {
-        return null;
+//        error_log( print_r( $this->content, true ) );
+        $dom = new \DOMDocument();
+        @$dom->loadHTML(mb_convert_encoding( $this->content, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
+
+        $data = [];
+
+        $xpath = new \DOMXPath( $dom );
+        $query = "//li/a";
+        $results = $xpath->query( $query );
+
+        if ( empty( $results ) ) {
+            return null;
+        }
+
+        foreach ( $results as $result ) {
+
+            /**
+             * url property
+             */
+            $url                            = $result->getAttribute('href');
+            if ( isset( $step['url'] ) && ! empty( $url ) ) {
+                $step['url']                = $url;
+            } else {
+                unset( $step['url'] );
+            }
+
+            /**
+             * name property
+             */
+            $name                           = $result->nodeValue;
+            if ( isset( $step['name'] ) && ! empty( $name ) ) {
+                $step['name']               = $name;
+            } else {
+                unset( $step['name'] );
+            }
+
+            /**
+             * itemListElement property
+             */
+            $itemListElement                = null;
+            if ( isset( $step['itemListElement'] ) && ! empty( $itemListElement ) ) {
+                $step['itemListElement']    = $itemListElement;
+            } else {
+                unset( $step['itemListElement'] );
+            }
+
+            /**
+             * image property
+             */
+            $image                          = null;
+            if ( isset( $step['image'] ) && ! empty( $image ) ) {
+                $step['image']              = $image;
+            } else {
+                unset( $step['image'] );
+            }
+
+            $data = $step;
+        }
+
+        return apply_filters( "schemax_{$this->schema_type}_step", $data );
     }
 
     protected function totalTime() {
