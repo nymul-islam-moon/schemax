@@ -5,6 +5,7 @@ namespace Schema;
 use Schema\Engine\Article\Article;
 use Schema\Engine\Article\TechArticle;
 use Schema\Engine\Audio;
+use Schema\Engine\Faq;
 use Schema\Engine\HowTo;
 use Schema\Engine\Product;
 use Schema\Engine\Video;
@@ -49,7 +50,7 @@ class Init {
          */
         if ( ( 'docs' === get_post_type( $post->ID ) || 'post' == get_post_type( $post->ID ) ) && ( is_single() || is_singular() ) && ! is_product() ) {
             if ( 'docs' === get_post_type( $post->ID ) ) {
-                new TechArticle( $post->ID );
+                new TechArticle( $post->ID ); // this section will move to article folder causes this will run only article or blog runs
             } else {
                 new Article( $post->ID );
             }
@@ -88,6 +89,13 @@ class Init {
                  */
                 if ( isset( $support_schema_arr['howto'] ) ) {
                     new HowTo( $post->ID );
+                }
+
+                /**
+                 * Faq Schema
+                 */
+                if ( isset( $support_schema_arr['faq'] ) ) {
+                    new Faq( $post->ID );
                 }
             }
         }

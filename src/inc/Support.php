@@ -12,6 +12,7 @@ class Support {
      * @param $content
      */
     public function __construct( $content ) {
+
         $this->content      = $content;
     }
 
@@ -92,8 +93,21 @@ class Support {
     }
 
     protected function howto( $content ) {
-
+        error_log( print_r( 'here how to', true ) );
         $search_for = 'how to';
+        $content_lower = strtolower( $content );
+
+        if ( strpos( $content_lower, $search_for ) ) {
+
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function faq( $content ) {
+        $search_for = 'FAQ';
+
         $content_lower = strtolower( $content );
 
         if ( strpos( $content_lower, $search_for ) ) {
