@@ -4,16 +4,20 @@ namespace Schema\Inc;
 
 class Support {
 
-    protected $content;
+    protected $post, $content, $title;
 
     /**
      * Support class __construct
      *
-     * @param $content
+     * @param $post_id
      */
-    public function __construct( $content ) {
+    public function __construct( $post_id ) {
 
-        $this->content      = $content;
+        $this->post         = get_post( $post_id );
+
+        $this->title        = get_the_title( $post_id );
+
+        $this->content      = $this->post->post_content;
     }
 
     /**
@@ -22,14 +26,14 @@ class Support {
      * @return array
      */
     public function get_support_schema() {
-        $class_methods = get_class_methods( $this );
+        $class_methods      = get_class_methods( $this );
 
-        $support_schemas = [];
+        $support_schemas    = [];
 
-        foreach ($class_methods as $method) {
+        foreach ( $class_methods as $method ) {
             if ( $method !== '__construct' && $method !== '__destruct' && $method !== 'get_support_schema' ) {
-                if ( ! empty( $this->$method( $this->content ) ) ) {
-                    $support_schemas[$method] = $this->$method( $this->content );
+                if ( ! empty( $this->$method() ) ) {
+                    $support_schemas[$method] = $this->$method();
                 }
             }
         }
@@ -38,12 +42,11 @@ class Support {
     }
 
     /**
-     * Check if video file exist or not
+     * Check if video exist or not
      *
-     * @param $content
      * @return array
      */
-    protected function video( $content ) {
+    protected function video() {
 
         $video_links = [];
 
@@ -55,7 +58,7 @@ class Support {
 
         foreach ( $patterns as $key => $pattern ) {
             // Match video embed blocks in the content
-            if (preg_match_all($pattern, $content, $matches)) {
+            if (preg_match_all($pattern, $this->content, $matches)) {
                 if (isset($matches[1])) {
                     $links = $matches[1];
                     foreach ($links as $link) {
@@ -69,19 +72,19 @@ class Support {
         return !empty( $video_links ) ? $video_links : [];
     }
 
+
     /**
-     * Check if audio file exist or not
+     * Check if audio exist or not
      *
-     * @param $content
      * @return array|string[]
      */
-    protected function audio( $content ) {
+    protected function audio() {
 
         $audio_links = [];
 
         $pattern = '/<audio[^>]+src="([^"]+)"/';
 
-        if ( preg_match_all( $pattern, $content, $matches ) ) {
+        if ( preg_match_all( $pattern, $this->content, $matches ) ) {
             if ( isset( $matches[1] ) ) {
                 $links = $matches[1];
                 foreach ( $links as $key => $link ) {
@@ -92,29 +95,38 @@ class Support {
         return !empty( $audio_links ) ? $audio_links : [];
     }
 
-    protected function howto( $content ) {
-        error_log( print_r( 'here how to', true ) );
-        $search_for = 'how to';
-        $content_lower = strtolower( $content );
+    /**
+     * Check How To content exist or not
+     *
+     * @return true|null
+     */
+    protected function howto() {
 
-        if ( strpos( $content_lower, $search_for ) ) {
+        $search_for = "how to";
+        $content_lower = strtolower( $this->title );
 
+        if ( strpos( $content_lower, $search_for ) !== false ) {
             return true;
         }
 
-        return false;
+        return null;
     }
 
-    protected function faq( $content ) {
-        $search_for = 'FAQ';
+    /**
+     * Check if FAQ exist or not
+     *
+     * @return true|null
+     */
+    protected function faq() {
 
-        $content_lower = strtolower( $content );
+        $search_for = 'faq';
 
-        if ( strpos( $content_lower, $search_for ) ) {
+        $content_lower = strtolower( $this->title );
 
+        if ( strpos( $content_lower, $search_for ) !== false ) {
             return true;
         }
 
-        return false;
+        return null;
     }
 }

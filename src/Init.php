@@ -61,7 +61,7 @@ class Init {
          */
         $support_schema = null;
         if ( ! empty( $post ) ) {
-            $support_schema = new Support( $post->post_content );
+            $support_schema = new Support( $post->ID );
 
             $support_schema_arr = $support_schema->get_support_schema();
 
